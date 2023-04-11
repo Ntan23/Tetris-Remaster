@@ -55,7 +55,7 @@ public class Board : MonoBehaviour
         randomIndex = Random.Range(0, tetrominoes.Length - 1);
 
         spawnPosition = new Vector3Int(Random.Range(-4, 3), 8, 0); 
-        activePiece.Initialize(this, spawnPosition, tetrominoes[4]);
+        activePiece.Initialize(this, spawnPosition, tetrominoes[randomIndex]);
         SetPiece(activePiece);
     }
 
@@ -72,9 +72,6 @@ public class Board : MonoBehaviour
         for (int i = 0; i < piece.blockCoordinates.Length; i++)
         {
             tilePosition = piece.blockCoordinates[i] + piece.piecePosition;
-            // Debug.Log("Block Coordinate : " + piece.blockCoordinates[i]);
-            // Debug.Log("Piece Position : " + piece.piecePosition);
-            // Debug.Log("Tile Position" + tilePosition);
             tilemap.SetTile(tilePosition, piece.tetrominoData.tile);
         }
     }
@@ -93,9 +90,6 @@ public class Board : MonoBehaviour
         for (int i = 0; i < playerPiece.blockCoordinates.Length; i++)
         {
             playerPosition = playerPiece.blockCoordinates[i] + playerPiece.piecePosition;
-            // Debug.Log("Block Coordinate : " + playerPiece.blockCoordinates[i]);
-            // Debug.Log("Piece Position : " + playerPiece.piecePosition);
-            // Debug.Log("Tile Position" + tilePosition);
             tilemap.SetTile(playerPosition, playerPiece.tetrominoData.tile);
         }
     }
@@ -131,11 +125,11 @@ public class Board : MonoBehaviour
 
         for(int i = 0; i < playerPiece.blockCoordinates.Length; i++)
         {
-            tilePosition = playerPiece.blockCoordinates[i] + position;
+            playerPosition = playerPiece.blockCoordinates[i] + position;
 
-            if(!bounds.Contains((Vector2Int)tilePosition)) return false;
+            if(!bounds.Contains((Vector2Int)playerPosition)) return false;
 
-            if(tilemap.HasTile(tilePosition)) return false;
+            if(tilemap.HasTile(playerPosition)) return false;
         }
 
         return true;
@@ -149,4 +143,23 @@ public class Board : MonoBehaviour
 
         return false;
     }
+
+    public bool IsPlayerOnTheLeft(PlayerPiece playerPiece, Piece piece, Vector3Int position, Vector3Int playerPosition)
+    {
+        for(int i = 0; i < piece.blockCoordinates.Length; i++)
+        {
+            tilePosition = piece.blockCoordinates[i] + position;
+
+            for(int j = 0; j < playerPiece.blockCoordinates.Length; j++)
+            {
+                playerPosition = playerPiece.blockCoordinates[j] + playerPosition;
+    
+                if(tilePosition.x > playerPosition.x) return true;
+            }
+        }
+        
+        return false;
+    }
+
+    
 }

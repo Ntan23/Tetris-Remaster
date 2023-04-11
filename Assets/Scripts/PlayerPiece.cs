@@ -16,10 +16,6 @@ public class PlayerPiece : MonoBehaviour
     private bool canMove;
     #endregion
 
-    #region FloatVarible
-    [SerializeField] private float rotateSpeed;
-    #endregion
-
     #region OtherVariables
     public Board board { get; private set; }
     private Tile playerTile;
@@ -104,7 +100,7 @@ public class PlayerPiece : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
-        if(moveLeft) tileTransform = Matrix4x4.Rotate(Quaternion.Euler(0, 0, 30));
+        if(moveLeft) tileTransform = Matrix4x4.Rotate(Quaternion.Euler(0, 0, 60));
         
         if(!moveLeft) tileTransform = Matrix4x4.Rotate(Quaternion.Euler(0, 0, -60));
 
@@ -122,11 +118,8 @@ public class PlayerPiece : MonoBehaviour
 
         if(moveLeft) tileTransform = Matrix4x4.Rotate(Quaternion.Euler(0, 0, 90));
         
-        if(!moveLeft)
-        {
-            tileTransform = Matrix4x4.Rotate(Quaternion.Euler(0, 0, -90));
-        } 
-
+        if(!moveLeft) tileTransform = Matrix4x4.Rotate(Quaternion.Euler(0, 0, -90));
+    
         tileChangeData = new TileChangeData
         {
             position = newPiecePosition,
@@ -141,7 +134,7 @@ public class PlayerPiece : MonoBehaviour
 
     IEnumerator MoveDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         canMove = true;
     }
 }
