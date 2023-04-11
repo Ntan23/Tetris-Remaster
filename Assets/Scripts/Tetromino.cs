@@ -11,11 +11,11 @@ public struct TetrominoData
 {
     public Tetromino tetromino;
     public Tile tile;
-    public Vector2Int[] blocks { get; private set; }
+    public Vector2Int[] blockCoordinates { get; private set; }
 
     public void Initialize()
     {
-        blocks = Data.blocks[tetromino];
+        blockCoordinates = Data.blockCoordinates[tetromino];
     }
 
 }

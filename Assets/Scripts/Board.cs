@@ -5,8 +5,11 @@ public class Board : MonoBehaviour
 {
     #region VectorVariables
     public Vector3Int spawnPosition;
-    public Vector3Int playerSpawnPosition;
+    public Vector3Int playerSpawnPosition { get; private set; }
     private Vector3Int tilePosition;
+    private Vector3Int playerPosition;
+    private Vector3Int playerHeadPosition;
+    public Vector2Int boardSize;
     #endregion;
 
     #region IntegerVariables
@@ -14,12 +17,23 @@ public class Board : MonoBehaviour
     #endregion
 
     #region OtherVariables
-    [SerializeField] private Tile player;
     public Tilemap tilemap { get; private set; }
     public Piece activePiece { get; private set; }
-    public PlayerPiece playerPiece;
+    public PlayerPiece playerPiece { get; private set; }
     public TetrominoData[] tetrominoes;
+    private RectInt bounds;
     #endregion
+
+    //For The Bporad Bounds
+    public RectInt BoardBound
+    {
+        get 
+        {
+            Vector2Int position = new Vector2Int(-boardSize.x / 2 , -boardSize.y / 2);
+
+            return new RectInt(position, boardSize);
+        }
+    }
 
     private void Awake()
     {
@@ -38,33 +52,101 @@ public class Board : MonoBehaviour
 
     public void SpawnPiece()
     {
-        randomIndex = Random.Range(0, tetrominoes.Length);
+        randomIndex = Random.Range(0, tetrominoes.Length - 1);
 
-        activePiece.Initialize(this, spawnPosition, tetrominoes[randomIndex]);
-        Set(this.activePiece);
+        spawnPosition = new Vector3Int(Random.Range(-4, 3), 8, 0); 
+        activePiece.Initialize(this, spawnPosition, tetrominoes[4]);
+        SetPiece(activePiece);
     }
 
     private void SpawnPlayer()
-    {
+    {   
+        playerSpawnPosition = new Vector3Int(Random.Range(-5, 4), -10, 0); 
+
         playerPiece.Initialize(this, playerSpawnPosition, tetrominoes[tetrominoes.Length - 1]);
-        SetPlayer(this.playerPiece);
+        SetPlayer(playerPiece);
     }
 
-    public void Set(Piece piece)
+    public void SetPiece(Piece piece)
     {
-        for (int i = 0; i < piece.blocks.Length; i++)
+        for (int i = 0; i < piece.blockCoordinates.Length; i++)
         {
-            tilePosition = piece.blocks[i] + piece.position;
+            tilePosition = piece.blockCoordinates[i] + piece.piecePosition;
+            // Debug.Log("Block Coordinate : " + piece.blockCoordinates[i]);
+            // Debug.Log("Piece Position : " + piece.piecePosition);
+            // Debug.Log("Tile Position" + tilePosition);
             tilemap.SetTile(tilePosition, piece.tetrominoData.tile);
+        }
+    }
+
+    public void ClearPiece(Piece piece)
+    {
+        for (int i = 0; i < piece.blockCoordinates.Length; i++)
+        {
+            tilePosition = piece.blockCoordinates[i] + piece.piecePosition;
+            tilemap.SetTile(tilePosition, null);
         }
     }
 
     public void SetPlayer(PlayerPiece playerPiece)
     {
-        for (int i = 0; i < playerPiece.blocks.Length; i++)
+        for (int i = 0; i < playerPiece.blockCoordinates.Length; i++)
         {
-            tilePosition = playerPiece.blocks[i] + playerPiece.position;
-            tilemap.SetTile(tilePosition, playerPiece.tetrominoData.tile);
+            playerPosition = playerPiece.blockCoordinates[i] + playerPiece.piecePosition;
+            // Debug.Log("Block Coordinate : " + playerPiece.blockCoordinates[i]);
+            // Debug.Log("Piece Position : " + playerPiece.piecePosition);
+            // Debug.Log("Tile Position" + tilePosition);
+            tilemap.SetTile(playerPosition, playerPiece.tetrominoData.tile);
         }
+    }
+
+    public void ClearPlayer(PlayerPiece playerPiece)
+    {
+        for (int i = 0; i < playerPiece.blockCoordinates.Length; i++)
+        {
+            playerPosition = playerPiece.blockCoordinates[i] + playerPiece.piecePosition;
+            tilemap.SetTile(playerPosition, null);
+        }
+    }
+
+    public bool IsValidPosition(Piece piece, Vector3Int position)
+    {
+        bounds = BoardBound;
+
+        for(int i = 0; i < piece.blockCoordinates.Length; i++)
+        {
+            tilePosition = piece.blockCoordinates[i] + position;
+
+            if(!bounds.Contains((Vector2Int)tilePosition)) return false;
+
+            if(tilemap.HasTile(tilePosition)) return false;
+        }
+
+        return true;
+    }
+
+    public bool IsPlayerValidPosition(PlayerPiece playerPiece, Vector3Int position)
+    {
+        bounds = BoardBound;
+
+        for(int i = 0; i < playerPiece.blockCoordinates.Length; i++)
+        {
+            tilePosition = playerPiece.blockCoordinates[i] + position;
+
+            if(!bounds.Contains((Vector2Int)tilePosition)) return false;
+
+            if(tilemap.HasTile(tilePosition)) return false;
+        }
+
+        return true;
+    }
+
+    public bool IsHitAboveHead(PlayerPiece playerPiece, Vector3Int position)
+    {
+        for(int i = 0; i < playerPiece.blockCoordinates.Length; i++) playerHeadPosition = playerPiece.blockCoordinates[i] + position + new Vector3Int(0, 1, 0);
+        
+        if(tilemap.HasTile(playerHeadPosition)) return true;
+
+        return false;
     }
 }

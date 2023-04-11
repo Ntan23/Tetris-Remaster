@@ -180,7 +180,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 3a49954f5ff82d44e8b237885ef8fb87, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -200,8 +200,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39744904}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0059, y: 0.0271, z: 0}
-  m_LocalScale: {x: 0.51793283, y: 0.5187444, z: 1}
+  m_LocalPosition: {x: -0.03, y: -0.05, z: 0}
+  m_LocalScale: {x: 0.5172901, y: 0.5187444, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -268,9 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPosition: {x: 0, y: 8, z: 0}
-  playerSpawnPosition: {x: 0, y: -10, z: 0}
-  player: {fileID: 11400000, guid: 792c1146a370690449d20670868fae94, type: 2}
-  playerPiece: {fileID: 0}
+  boardSize: {x: 10, y: 20}
   tetrominoes:
   - tetromino: 0
     tile: {fileID: 11400000, guid: 792c1146a370690449d20670868fae94, type: 2}
@@ -287,7 +285,7 @@ MonoBehaviour:
   - tetromino: 6
     tile: {fileID: 11400000, guid: 8ea5913cb72a8344ea59623dc3ce8f6d, type: 2}
   - tetromino: 7
-    tile: {fileID: 11400000, guid: 792c1146a370690449d20670868fae94, type: 2}
+    tile: {fileID: 11400000, guid: 0f084b5cb01034b479dbc78b67073849, type: 2}
 --- !u!114 &228857145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,6 +310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fbc3a3bcddfa01408f95a67dda78ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotateSpeed: 10
 --- !u!1 &333914127
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,30 +580,30 @@ Tilemap:
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 7.060136e+15
+      e00: -0.000020393549
       e01: 0
-      e02: 1.6643015e+10
-      e03: 1.6643015e+10
-      e10: 6.14e-43
+      e02: -3.8750038
+      e03: -3.8750038
+      e10: 8.44e-43
       e11: 0
-      e12: 6.11e-43
-      e13: 6.11e-43
-      e20: -2.0709797e-17
+      e12: 8.41e-43
+      e13: 8.41e-43
+      e20: -6.1614345e+18
       e21: 1e-45
-      e22: -5.464003e-29
-      e23: 2.0962272e+12
-      e30: 4.5905e-41
+      e22: 5.1165844e-29
+      e23: 4.8312554e-10
+      e30: 4.5904e-41
       e31: 0
-      e32: 6.11e-43
-      e33: 6.12e-43
+      e32: 8.42e-43
+      e33: 8.45e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
+    m_Data: {r: 3.434e-41, g: 3.434e-41, b: 3.434e-41, a: 3.434e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -3, y: 0, z: 0}
-  m_Size: {x: 3, y: 10, z: 1}
+  m_Origin: {x: -3, y: -10, z: 0}
+  m_Size: {x: 4, y: 20, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
