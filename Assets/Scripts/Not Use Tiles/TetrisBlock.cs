@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
 {
+    #region EnumVariables
+    private enum Mode{
+        SingleControl, DoubleControl
+    }
+
+    [SerializeField] private Mode mode;
+    #endregion
+
     #region FloatVariables
     private float fallTimer;
     [SerializeField] private float fallTimeDelay;
@@ -29,47 +37,67 @@ public class TetrisBlock : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A)) 
-        {
-            transform.position += new Vector3(-1, 0, 0);
-
-            if(!IsValidMove()) transform.position -= new Vector3(-1, 0, 0);
-        }
-        else if(Input.GetKeyDown(KeyCode.D)) 
-        {
-            transform.position += new Vector3(1, 0, 0);
-
-            if(!IsValidMove()) transform.position -= new Vector3(1, 0, 0);
-        }
-        else if(Input.GetKeyDown(KeyCode.E))
-        {
-            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
-
-            if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
-        } 
-        else if(Input.GetKeyDown(KeyCode.Q))
-        {
-            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
-
-            if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
-        }
-
         fallTimer += Time.deltaTime;
-        
-        if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
-        {
-            transform.position += new Vector3(0, -1, 0);
-            
-            if(!IsValidMove()) 
-            {
-                transform.position -= new Vector3(0, -1, 0);
-                AddToGrid();
-                CheckForLineComplete();
-                this.enabled = false;
-                tetrominoSpawner.SpawnNewTetromino();
-            }
 
-            fallTimer = 0.0f;
+        if(mode == Mode.DoubleControl)
+        {
+            if(Input.GetKeyDown(KeyCode.A)) 
+            {
+                transform.position += new Vector3(-1, 0, 0);
+
+                if(!IsValidMove()) transform.position -= new Vector3(-1, 0, 0);
+            }
+            else if(Input.GetKeyDown(KeyCode.D)) 
+            {
+                transform.position += new Vector3(1, 0, 0);
+
+                if(!IsValidMove()) transform.position -= new Vector3(1, 0, 0);
+            }
+            else if(Input.GetKeyDown(KeyCode.E))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
+
+                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
+            } 
+            else if(Input.GetKeyDown(KeyCode.Q))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
+
+                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
+            } 
+
+            if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
+            {
+                Fall();
+
+                fallTimer = 0.0f;
+            }
+        }
+
+        if(mode == Mode.SingleControl)
+        {
+            if(fallTimer > fallTimeDelay)
+            {
+                Fall();
+
+                fallTimer = 0.0f;
+            }
+        }
+    }
+
+    private void Fall()
+    {
+        transform.position += new Vector3(0, -1, 0);
+                
+        if(!IsValidMove()) 
+        {
+            transform.position -= new Vector3(0, -1, 0);
+            AddToGrid();
+            CheckForLineComplete();  
+            this.enabled = false;
+            
+            if(CanSpawn()) tetrominoSpawner.SpawnNewTetromino();
+            else if(!CanSpawn()) Debug.Log("Game Over");
         }
     }
 
@@ -144,5 +172,15 @@ public class TetrisBlock : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool CanSpawn()
+    {
+        for(int i = 0; i < width; i++)
+        {
+            if(coordinate[i, 17] != null) return false;
+        }
+
+        return true;
     }
 }

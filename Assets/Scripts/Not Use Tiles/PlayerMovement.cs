@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class movementScript : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rb;
     bool isMoving;
     public float rollSpeed;
-    //public Transform circleTarget;
-    // Start is called before the first frame update
+
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -21,18 +20,19 @@ public class movementScript : MonoBehaviour
 
         Vector3 axis;
         Vector2 anchor;
-        if (Input.GetKeyDown(KeyCode.D))
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
             axis = -Vector3.forward;
-            //circleTarget.position = anchor;
+
             StartCoroutine(rollCube(anchor, axis));
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
             axis = Vector3.forward;
-            //circleTarget.position = anchor;
+
             StartCoroutine(rollCube(anchor, axis));
         }
     }
@@ -46,12 +46,10 @@ public class movementScript : MonoBehaviour
         {
             transform.RotateAround(anchor, axis, rollSpeed);
             angleAfter = transform.rotation.z;
-            if(angleAfter - angleBefore >= 90)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.rotation.z));
-            }
+            if(angleAfter - angleBefore >= 90) transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.rotation.z));
             yield return new WaitForSeconds(0.01f);
         }
+
         transform.position = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.rotation.z));
         isMoving = false;
