@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
+    #region EnumVariables
+    private enum Mode {
+        SingleControl, DoubleControl
+    };
+
+    [SerializeField] private Mode mode;
+    #endregion
+
     #region VectorVariables
     public Vector3Int[] blockCoordinates { get; private set; }
     public Vector3Int piecePosition { get; private set; }
@@ -52,7 +60,6 @@ public class Piece : MonoBehaviour
         board.ClearPiece(this);
 
         timer += Time.deltaTime;
-        targetPlayerTimer += Time.deltaTime;
 
         if(timer > 1.0f)
         {
@@ -60,18 +67,25 @@ public class Piece : MonoBehaviour
             Move(Vector2Int.down);
         }
 
-        // if (Input.GetKeyDown(KeyCode.Q)) RotatePiece(-1);
-        // else if (Input.GetKeyDown(KeyCode.E)) RotatePiece(1);
-
-        // if(Input.GetKeyDown(KeyCode.DownArrow)) Move(Vector2Int.down);
-        // if(Input.GetKeyDown(KeyCode.LeftArrow)) Move(Vector2Int.left);
-        // if(Input.GetKeyDown(KeyCode.RightArrow)) Move(Vector2Int.right);
-        
-        if(targetPlayerTimer > 2.0f)
+        if(mode == Mode.SingleControl)
         {
-            targetPlayerTimer = 0.0f;
-            if(board.IsPlayerOnTheLeft(playerPiece, this, piecePosition, playerPiece.piecePosition)) Move(Vector2Int.left);
-            else if(!board.IsPlayerOnTheLeft(playerPiece, this, piecePosition, playerPiece.piecePosition)) Move(Vector2Int.right);
+            targetPlayerTimer += Time.deltaTime;
+
+            if(targetPlayerTimer > 2.0f)
+            {
+                targetPlayerTimer = 0.0f;
+                if(board.IsPlayerOnTheLeft(playerPiece, this, piecePosition, playerPiece.piecePosition)) Move(Vector2Int.left);
+                else if(!board.IsPlayerOnTheLeft(playerPiece, this, piecePosition, playerPiece.piecePosition)) Move(Vector2Int.right);
+            }
+        }
+
+        if(mode == Mode.DoubleControl)
+        {
+            if (Input.GetKeyDown(KeyCode.Q)) RotatePiece(-1);
+            else if (Input.GetKeyDown(KeyCode.E)) RotatePiece(1);
+
+            if(Input.GetKeyDown(KeyCode.LeftArrow)) Move(Vector2Int.left);
+            if(Input.GetKeyDown(KeyCode.RightArrow)) Move(Vector2Int.right);
         }
 
         board.SetPiece(this);

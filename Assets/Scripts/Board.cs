@@ -9,6 +9,8 @@ public class Board : MonoBehaviour
     private Vector3Int tilePosition;
     private Vector3Int playerPosition;
     private Vector3Int playerHeadPosition;
+    private Vector3Int playerNextLocation;
+    private Vector3Int playerLeftRightLocation;
     public Vector2Int boardSize;
     #endregion;
 
@@ -137,9 +139,12 @@ public class Board : MonoBehaviour
 
     public bool IsHitAboveHead(PlayerPiece playerPiece, Vector3Int position)
     {
-        for(int i = 0; i < playerPiece.blockCoordinates.Length; i++) playerHeadPosition = playerPiece.blockCoordinates[i] + position + new Vector3Int(0, 1, 0);
-        
-        if(tilemap.HasTile(playerHeadPosition)) return true;
+        for(int i = 0; i < playerPiece.blockCoordinates.Length; i++) 
+        {
+            playerHeadPosition = playerPiece.blockCoordinates[i] + position + new Vector3Int(0, 1, 0);
+
+            if(tilemap.HasTile(playerHeadPosition)) return true;
+        }
 
         return false;
     }
@@ -161,5 +166,17 @@ public class Board : MonoBehaviour
         return false;
     }
 
+    //Direction --> -1 Left , 1 Right
+    public bool PlayerCanMoveUp(PlayerPiece playerPiece, Vector3Int position, int direction)
+    {   
+        for(int i = 0; i < playerPiece.blockCoordinates.Length; i++) 
+        {
+            playerNextLocation = playerPiece.blockCoordinates[i] + position + new Vector3Int(direction, 1, 0);
+            playerLeftRightLocation = playerPiece.blockCoordinates[i] + position + new Vector3Int(direction, 0, 0);
+
+            if(!tilemap.HasTile(playerNextLocation) && tilemap.HasTile(playerLeftRightLocation) && bounds.Contains((Vector2Int) playerNextLocation)) return true;
+        }   
     
+        return false;
+    }
 }

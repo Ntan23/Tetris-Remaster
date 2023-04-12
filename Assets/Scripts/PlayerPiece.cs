@@ -55,12 +55,14 @@ public class PlayerPiece : MonoBehaviour
         {
             moveLeft = true;
             canMove = false;
+            if(board.PlayerCanMoveUp(this, piecePosition, -1)) Move(Vector2Int.up);
             Move(Vector2Int.left);
         }
         if(Input.GetKeyDown(KeyCode.D) && canMove)
         {
             moveLeft = false;
             canMove = false;
+            if(board.PlayerCanMoveUp(this, piecePosition, 1)) Move(Vector2Int.up);
             Move(Vector2Int.right);
         } 
 
