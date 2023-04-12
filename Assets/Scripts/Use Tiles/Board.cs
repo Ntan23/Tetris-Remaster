@@ -19,7 +19,8 @@ public class Board : MonoBehaviour
     #endregion
 
     #region OtherVariables
-    public Tilemap tilemap { get; private set; }
+    public Tilemap tilemap;
+    public Tilemap playerTilemap;
     public Piece activePiece { get; private set; }
     public PlayerPiece playerPiece { get; private set; }
     public TetrominoData[] tetrominoes;
@@ -92,7 +93,7 @@ public class Board : MonoBehaviour
         for (int i = 0; i < playerPiece.blockCoordinates.Length; i++)
         {
             playerPosition = playerPiece.blockCoordinates[i] + playerPiece.piecePosition;
-            tilemap.SetTile(playerPosition, playerPiece.tetrominoData.tile);
+            playerTilemap.SetTile(playerPosition, playerPiece.tetrominoData.tile);
         }
     }
 
@@ -101,7 +102,7 @@ public class Board : MonoBehaviour
         for (int i = 0; i < playerPiece.blockCoordinates.Length; i++)
         {
             playerPosition = playerPiece.blockCoordinates[i] + playerPiece.piecePosition;
-            tilemap.SetTile(playerPosition, null);
+            playerTilemap.SetTile(playerPosition, null);
         }
     }
 
@@ -174,7 +175,21 @@ public class Board : MonoBehaviour
             playerNextLocation = playerPiece.blockCoordinates[i] + position + new Vector3Int(direction, 1, 0);
             playerLeftRightLocation = playerPiece.blockCoordinates[i] + position + new Vector3Int(direction, 0, 0);
 
-            if(!tilemap.HasTile(playerNextLocation) && tilemap.HasTile(playerLeftRightLocation) && bounds.Contains((Vector2Int) playerNextLocation)) return true;
+            if(!tilemap.HasTile(playerNextLocation) && tilemap.HasTile(playerLeftRightLocation) && bounds.Contains((Vector2Int)playerNextLocation)) return true;
+        }   
+    
+        return false;
+    }
+
+    //Direction --> -1 Left , 1 Right
+    public bool PlayerCanMoveDown(PlayerPiece playerPiece, Vector3Int position, int direction)
+    {   
+        for(int i = 0; i < playerPiece.blockCoordinates.Length; i++) 
+        {
+            playerNextLocation = playerPiece.blockCoordinates[i] + position + new Vector3Int(direction, -1, 0);
+            playerLeftRightLocation = playerPiece.blockCoordinates[i] + position + new Vector3Int(direction, 0, 0);
+
+            if(!tilemap.HasTile(playerNextLocation) && !tilemap.HasTile(playerLeftRightLocation) && bounds.Contains((Vector2Int)playerNextLocation)) return true;
         }   
     
         return false;

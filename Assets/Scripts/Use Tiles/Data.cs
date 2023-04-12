@@ -49,7 +49,8 @@ public static class Data
         { Tetromino.J, WallKicksJLOSTZ },
         { Tetromino.L, WallKicksJLOSTZ },
         { Tetromino.S, WallKicksJLOSTZ },
-        { Tetromino.Z, WallKicksJLOSTZ }
+        { Tetromino.Z, WallKicksJLOSTZ },
+        { Tetromino.Player, null}
     };
 
 }

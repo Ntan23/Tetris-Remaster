@@ -14,10 +14,14 @@ public class Piece : MonoBehaviour
     public Vector3Int[] blockCoordinates { get; private set; }
     public Vector3Int piecePosition { get; private set; }
     private Vector3Int newPiecePosition;
+    private Vector2Int translation;
     #endregion
 
     #region FloatVariables
-    private float timer;
+    [SerializeField] private float stepDelay;
+    private float stepTime;
+    [SerializeField] private float lockDelay;
+    private float lockTime;
     private float targetPlayerTimer;
     #endregion
 
@@ -27,6 +31,8 @@ public class Piece : MonoBehaviour
 
     #region IntegerVariables
     private int rotationIndex;
+    private int originalRotationIndex;
+    private int wallKickIndex;
     #endregion
 
     #region OtherVariables
@@ -39,7 +45,6 @@ public class Piece : MonoBehaviour
     {
         playerPiece = GetComponent<PlayerPiece>();
          
-        timer = 0.0f;
         targetPlayerTimer = 0.0f;
     }
 
@@ -49,6 +54,8 @@ public class Piece : MonoBehaviour
         this.board = board;
         this.piecePosition = position;
         rotationIndex = 0;
+        stepTime = Time.time + stepDelay;
+        lockTime = 0.0f;
 
         if(blockCoordinates == null) blockCoordinates = new Vector3Int[data.blockCoordinates.Length];
 
@@ -59,19 +66,13 @@ public class Piece : MonoBehaviour
     {
         board.ClearPiece(this);
 
-        timer += Time.deltaTime;
-
-        if(timer > 1.0f)
-        {
-            timer = 0.0f;
-            Move(Vector2Int.down);
-        }
+        lockTime += Time.deltaTime;
 
         if(mode == Mode.SingleControl)
         {
             targetPlayerTimer += Time.deltaTime;
 
-            if(targetPlayerTimer > 2.0f)
+            if(targetPlayerTimer > 1.8f)
             {
                 targetPlayerTimer = 0.0f;
                 if(board.IsPlayerOnTheLeft(playerPiece, this, piecePosition, playerPiece.piecePosition)) Move(Vector2Int.left);
@@ -88,16 +89,37 @@ public class Piece : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.RightArrow)) Move(Vector2Int.right);
         }
 
+        if(Time.time >= stepTime) Step();
+
         board.SetPiece(this);
+    }
+
+    private void Step()
+    {
+        stepTime = Time.time + stepDelay;
+
+        Move(Vector2Int.down);
+
+        if(lockTime >= lockDelay) Lock();
+    }
+
+    private void Lock()
+    {
+        board.SetPiece(this);
+        board.SpawnPiece();
     }
 
     private bool Move(Vector2Int moveDirection)
     {
         newPiecePosition = this.piecePosition + (Vector3Int)moveDirection;
 
-        isValid = this.board.IsValidPosition(this, newPiecePosition);
+        isValid = board.IsValidPosition(this, newPiecePosition);
 
-        if(isValid) this.piecePosition = newPiecePosition;
+        if(isValid) 
+        {
+            piecePosition = newPiecePosition;
+            lockTime = 0.0f;
+        }
 
         return isValid;
     }
@@ -105,16 +127,32 @@ public class Piece : MonoBehaviour
     void HardDrop()
     {
         while(Move(Vector2Int.down)) continue;
+
+        Lock();
     }
 
     void RotatePiece(int direction)
     {
+        originalRotationIndex = rotationIndex;
         rotationIndex = Wrap(rotationIndex + direction, 0, 4);
+
+        ApplyRotation(direction);
+
+        if(!CheckWallKicks(rotationIndex, direction))
+        {
+            rotationIndex = originalRotationIndex;
+            ApplyRotation(-direction);
+        }
+    }
+
+    private void ApplyRotation(int direction)
+    {
+        Vector3 blockCoordinate;
+        int x,y;
 
         for(int i = 0; i < blockCoordinates.Length; i++)
         {
-            Vector3 blockCoordinate = blockCoordinates[i];
-            int x,y;
+            blockCoordinate = blockCoordinates[i];
 
             switch(tetrominoData.tetromino)
             {
@@ -134,6 +172,29 @@ public class Piece : MonoBehaviour
 
             blockCoordinates[i] = new Vector3Int(x, y, 0);
         }
+    }
+
+    private bool CheckWallKicks(int rotationIndex, int rotationDirection)
+    {   
+        wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
+
+        for(int i = 0; i < tetrominoData.wallKicks.GetLength(1); i++)
+        {
+            translation = tetrominoData.wallKicks[wallKickIndex, i];
+
+            if(Move(translation)) return true;
+        }
+
+        return false;
+    }
+
+    private int GetWallKickIndex(int rotationIndex, int rotationDirection)
+    {
+        wallKickIndex = rotationIndex * 2;
+
+        if(rotationDirection < 0) wallKickIndex--;
+
+        return Wrap(wallKickIndex, 0, tetrominoData.wallKicks.GetLength(0));
     }
 
     private int Wrap(int input, int min, int max)

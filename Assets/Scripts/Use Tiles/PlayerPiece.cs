@@ -19,7 +19,7 @@ public class PlayerPiece : MonoBehaviour
     #region OtherVariables
     public Board board { get; private set; }
     private Tile playerTile;
-    private Tilemap tilemap;
+    [SerializeField] private Tilemap tilemap;
     public TetrominoData tetrominoData { get; private set; }
     private TileChangeData tileChangeData;
     private Matrix4x4 tileTransform;
@@ -27,7 +27,7 @@ public class PlayerPiece : MonoBehaviour
 
     void Start()
     {
-        tilemap = GetComponentInChildren<Tilemap>();
+        // tilemap = GetComponentInChildren<Tilemap>();
         canMove = true;
     }
 
@@ -55,15 +55,35 @@ public class PlayerPiece : MonoBehaviour
         {
             moveLeft = true;
             canMove = false;
-            if(board.PlayerCanMoveUp(this, piecePosition, -1)) Move(Vector2Int.up);
-            Move(Vector2Int.left);
+
+            if(!board.PlayerCanMoveUp(this, piecePosition, -1) && !board.PlayerCanMoveDown(this, piecePosition, -1)) Move(Vector2Int.left);
+            else if(board.PlayerCanMoveUp(this, piecePosition, -1)) 
+            {
+                Move(Vector2Int.up);
+                Move(Vector2Int.left);
+            }
+            else if(board.PlayerCanMoveDown(this, piecePosition, -1)) 
+            {
+                Move(Vector2Int.left);
+                Move(Vector2Int.down);
+            }
         }
         if(Input.GetKeyDown(KeyCode.D) && canMove)
         {
             moveLeft = false;
             canMove = false;
-            if(board.PlayerCanMoveUp(this, piecePosition, 1)) Move(Vector2Int.up);
-            Move(Vector2Int.right);
+            
+            if(!board.PlayerCanMoveUp(this, piecePosition, 1) && !board.PlayerCanMoveDown(this, piecePosition, 1)) Move(Vector2Int.right);
+            else if(board.PlayerCanMoveUp(this, piecePosition, 1)) 
+            {
+                Move(Vector2Int.up);
+                Move(Vector2Int.right);
+            }
+            else if(board.PlayerCanMoveDown(this, piecePosition, 1)) 
+            {
+                Move(Vector2Int.right);
+                Move(Vector2Int.down);
+            }
         } 
 
         board.SetPlayer(this);
