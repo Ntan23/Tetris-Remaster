@@ -16,11 +16,13 @@ public class TetrominoSpawner : MonoBehaviour
     private int index;
     [SerializeField] private GameObject[] tetrominoes;
     [SerializeField] private Transform tetrominoesParent;
+    [SerializeField] private NextPieceUI nextPieceUI;
 
     void Start() 
     {
         index = Random.Range(0, tetrominoes.Length);
-        SpawnNewTetromino();
+        nextPieceUI.UpdateSprite(index);
+        StartCoroutine(FirstSpawn());
     }
     
     public void SpawnNewTetromino() 
@@ -30,5 +32,13 @@ public class TetrominoSpawner : MonoBehaviour
         obj.transform.SetParent(tetrominoesParent);
 
         index = Random.Range(0, tetrominoes.Length);
+
+        nextPieceUI.UpdateSprite(index);
+    }
+
+    IEnumerator FirstSpawn()
+    {
+        yield return new WaitForSeconds(2.0f);
+        SpawnNewTetromino();
     }
 }

@@ -20,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region OtherVariables
-    [SerializeField] private Transform playableArea;
     private Rigidbody2D rb;
     private GameManager gm;
 
@@ -30,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
-        transform.position = new Vector2(playableArea.transform.localScale.x / 2, playableArea.transform.localScale.y);
+        transform.position = new Vector2(5, 22);
     }
 
     void Update()
@@ -59,17 +58,18 @@ public class PlayerMovement : MonoBehaviour
 
             if(nextPosition.x >= -0.1f) StartCoroutine(rollCube(anchor, axis, false));
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            foreach(bool yes in detectionCollider)
-            {
-                Debug.Log("Test " + detectionCollider);
-            }
-            
-        }
+        
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     foreach(bool yes in detectionCollider)
+        //     {
+        //         Debug.Log("Test " + detectionCollider);
+        //     }
+        // }
         if (detectionCollider[0] && detectionCollider[2]) gm.GameOver(); //kalo stuck kanan kiri ada 2 block ya tewas 
         if (AtTheTop()) gm.LevelUp();
     }
+
     //direction true = kanan 
     //!direction = kiri
     private IEnumerator rollCube(Vector3 anchor, Vector3 axis, bool direction)
@@ -166,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool AtTheTop()
     {
-        if(transform.position.y == 15) return true;
+        if(transform.position.y == 18) return true;
         else return false;
     }
 }

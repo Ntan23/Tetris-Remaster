@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     #region IntegerVariable
     private static int boardWidth = 10;
-    private static int boardHeight = 20;
+    private static int boardHeight = 23;
     private int lineCount;
     private int levelIndex;
     private int score;
@@ -77,42 +77,13 @@ public class GameManager : MonoBehaviour
             if(HasLine(i)) 
             {
                 lineCount++;
+                AddLineCompleteScore();
                 DeleteLine(i);
                 MoveRowDown(i);
             }
         }
 
-        if(levelIndex <= 3)
-        {
-            if(levelIndex == 1)
-            {
-                if(lineCount == 1) AddScore(40);
-                if(lineCount == 2) AddScore(100);
-                if(lineCount == 3) AddScore(300);
-                if(lineCount >= 4) AddScore(1200);
-            }
-            else if(levelIndex == 2)
-            {
-                if(lineCount == 1) AddScore(80);
-                if(lineCount == 2) AddScore(200);
-                if(lineCount == 3) AddScore(600);
-                if(lineCount >= 4) AddScore(2400);
-            }
-            else if(levelIndex == 3)
-            {
-                if(lineCount == 1) AddScore(120);
-                if(lineCount == 2) AddScore(300);
-                if(lineCount == 3) AddScore(900);
-                if(lineCount >= 4) AddScore(3600);
-            }
-        }
-        else if(levelIndex > 3)
-        {
-            if(lineCount == 1) AddScore(40 * (levelIndex + 1));
-            if(lineCount == 2) AddScore(100 * (levelIndex + 1));
-            if(lineCount == 3) AddScore(300 * (levelIndex + 1));
-            if(lineCount >= 4) AddScore(1200 * (levelIndex + 1));
-        }
+        lineCount = 0;
     }
 
     private bool HasLine(int verticalCoordinate)
@@ -150,6 +121,41 @@ public class GameManager : MonoBehaviour
         }
     }   
 
+    private void AddLineCompleteScore()
+    {
+        if(levelIndex <= 3)
+        {
+            if(levelIndex == 1)
+            {
+                if(lineCount == 1) AddScore(40);
+                if(lineCount == 2) AddScore(100);
+                if(lineCount == 3) AddScore(300);
+                if(lineCount >= 4) AddScore(1200);
+            }
+            else if(levelIndex == 2)
+            {
+                if(lineCount == 1) AddScore(80);
+                if(lineCount == 2) AddScore(200);
+                if(lineCount == 3) AddScore(600);
+                if(lineCount >= 4) AddScore(2400);
+            }
+            else if(levelIndex == 3)
+            {
+                if(lineCount == 1) AddScore(120);
+                if(lineCount == 2) AddScore(300);
+                if(lineCount == 3) AddScore(900);
+                if(lineCount >= 4) AddScore(3600);
+            }
+        }
+        else if(levelIndex > 3)
+        {
+            if(lineCount == 1) AddScore(40 * (levelIndex + 1));
+            if(lineCount == 2) AddScore(100 * (levelIndex + 1));
+            if(lineCount == 3) AddScore(300 * (levelIndex + 1));
+            if(lineCount >= 4) AddScore(1200 * (levelIndex + 1));
+        }
+    }
+
     public void DeleteAllBlocks()
     {
         for(int i = 0; i < boardWidth; i++)
@@ -169,7 +175,7 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < boardWidth; i++)
         {
-            if(coordinate[i, 17] != null) return true;
+            if(coordinate[i, 22] != null) return true;
         }
 
         return false;
