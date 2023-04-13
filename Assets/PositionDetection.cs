@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PositionDetection : MonoBehaviour
 {
-
     private Transform playerPosition;
     public bool isInside;
 
