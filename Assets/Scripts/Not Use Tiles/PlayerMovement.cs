@@ -4,37 +4,56 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Rigidbody2D rb;
-    bool isMoving;
-    public float rollSpeed;
+    #region BoolVariables
+    private bool isMoving;
+    #endregion
 
-    void Start()
+    #region FloatVariables
+    [SerializeField] private float rollSpeed;
+    #endregion
+
+    #region VectorVariables
+    private Vector3 axis;
+    private Vector3 anchor;
+    private Vector3 nextPosition;
+    #endregion
+
+    #region OtherVariables
+    private Rigidbody2D rb;
+    private GameManager gm;
+    #endregion
+
+    void Start() 
     {
-        rb = gameObject.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        gm = GameManager.Instance;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if(!gm.IsPlaying()) return;
         if (isMoving) return;
-
-        Vector3 axis;
-        Vector2 anchor;
 
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
-            axis = -Vector3.forward;
+            axis = Vector3.back;
 
-            StartCoroutine(rollCube(anchor, axis));
+            nextPosition = transform.position + new Vector3(1, 0, 0);
+            
+            if(nextPosition.x <= 9.1f) StartCoroutine(rollCube(anchor, axis));
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
             axis = Vector3.forward;
 
-            StartCoroutine(rollCube(anchor, axis));
+            nextPosition = transform.position + new Vector3(-1, 0, 0);
+
+            if(nextPosition.x >= -0.1f) StartCoroutine(rollCube(anchor, axis));
         }
+
+        if(AtTheTop()) gm.LevelUp();
     }
 
     private IEnumerator rollCube(Vector3 anchor, Vector3 axis)
@@ -55,11 +74,14 @@ public class PlayerMovement : MonoBehaviour
         isMoving = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public bool IsMoving()
     {
-        if (collision)
-        {
-            Debug.Log("Not Hit");
-        }
+        return isMoving;
+    }
+
+    public bool AtTheTop()
+    {
+        if(transform.position.y == 15) return true;
+        else return false;
     }
 }

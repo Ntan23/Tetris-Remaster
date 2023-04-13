@@ -13,14 +13,22 @@ public class TetrominoSpawner : MonoBehaviour
     }
     #endregion
 
+    private int index;
     [SerializeField] private GameObject[] tetrominoes;
     [SerializeField] private Transform tetrominoesParent;
 
-    void Start() => SpawnNewTetromino();
+    void Start() 
+    {
+        index = Random.Range(0, tetrominoes.Length);
+        SpawnNewTetromino();
+    }
+    
     public void SpawnNewTetromino() 
     {
-        GameObject obj = Instantiate(tetrominoes[Random.Range(0, tetrominoes.Length)], transform.position, Quaternion.identity);
+        GameObject obj = Instantiate(tetrominoes[index], transform.position, Quaternion.identity);
 
         obj.transform.SetParent(tetrominoesParent);
+
+        index = Random.Range(0, tetrominoes.Length);
     }
 }

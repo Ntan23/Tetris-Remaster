@@ -14,12 +14,12 @@ public class TetrisBlock : MonoBehaviour
 
     #region FloatVariables
     private float fallTimer;
-    [SerializeField] private float fallTimeDelay;
+    private float fallTimeDelay;
     #endregion
 
     #region IntegerVariables
-    public static int width = 10;
-    public static int height = 20;
+    private int boardWidth;
+   private int boardHeight;
     private int roundedX;
     private int roundedY;
     #endregion
@@ -29,14 +29,24 @@ public class TetrisBlock : MonoBehaviour
     #endregion
 
     #region OtherVariables
-    private static Transform[,] coordinate = new Transform[width, height];
     private TetrominoSpawner tetrominoSpawner;
+    private GameManager gm;
     #endregion
 
-    void Start() => tetrominoSpawner = TetrominoSpawner.Instance;
+    void Start() 
+    {
+        tetrominoSpawner = TetrominoSpawner.Instance;
+        gm = GameManager.Instance;
+
+        fallTimeDelay = gm.GetBlockFallDelay();
+        boardWidth = gm.GetBoardWidth();
+        boardHeight = gm.GetBoardHeight();
+    }
 
     void Update()
     {
+        if(!gm.IsPlaying()) return;
+
         fallTimer += Time.deltaTime;
 
         if(mode == Mode.DoubleControl)
@@ -53,17 +63,11 @@ public class TetrisBlock : MonoBehaviour
 
                 if(!IsValidMove()) transform.position -= new Vector3(1, 0, 0);
             }
-            else if(Input.GetKeyDown(KeyCode.E))
+            else if(Input.GetKeyDown(KeyCode.W))
             {
-                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
 
-                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
-            } 
-            else if(Input.GetKeyDown(KeyCode.Q))
-            {
-                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), -90);
-
-                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0,0,1), 90);
+                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
             } 
 
             if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
@@ -93,11 +97,12 @@ public class TetrisBlock : MonoBehaviour
         {
             transform.position -= new Vector3(0, -1, 0);
             AddToGrid();
-            CheckForLineComplete();  
-            this.enabled = false;
+            gm.CheckForLineComplete();  
             
-            if(CanSpawn()) tetrominoSpawner.SpawnNewTetromino();
-            else if(!CanSpawn()) Debug.Log("Game Over");
+            if(!gm.BlockAtTheTop()) tetrominoSpawner.SpawnNewTetromino();
+            else if(gm.BlockAtTheTop()) gm.GameOver();
+
+            this.enabled = false;
         }
     }
 
@@ -108,9 +113,9 @@ public class TetrisBlock : MonoBehaviour
             roundedX = Mathf.RoundToInt(children.transform.position.x);
             roundedY = Mathf.RoundToInt(children.transform.position.y);
 
-            if(roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height) return false;
+            if(roundedX < 0 || roundedX >= boardWidth || roundedY < 0 || roundedY >= boardHeight) return false;
 
-            if(coordinate[roundedX, roundedY] != null) return false;
+            if(GameManager.coordinate[roundedX, roundedY] != null) return false;
         }
 
         return true;
@@ -123,64 +128,7 @@ public class TetrisBlock : MonoBehaviour
             roundedX = Mathf.RoundToInt(children.transform.position.x);
             roundedY = Mathf.RoundToInt(children.transform.position.y);
         
-            coordinate[roundedX, roundedY] = children;
+            GameManager.coordinate[roundedX, roundedY] = children;
         }
-    }
-
-    private void CheckForLineComplete()
-    {
-        for(int i = height - 1; i >= 0; i--)
-        {
-            if(HasLine(i)) 
-            {
-                DeleteLine(i);
-                MoveRowDown(i);
-            }
-        }
-    }
-
-    private bool HasLine(int verticalCoordinate)
-    {
-        for(int i = 0; i < width; i++)
-        {
-            if(coordinate[i, verticalCoordinate] == null) return false;
-        }
-
-        return true;
-    }
-
-    private void DeleteLine(int verticalCoordinate)
-    {
-        for(int i = 0; i < width; i++)
-        {
-            Destroy(coordinate[i, verticalCoordinate].gameObject);
-            coordinate[i, verticalCoordinate] = null;
-        }
-    }
-
-    private void MoveRowDown(int verticalCoordinate)
-    {
-        for(int i = verticalCoordinate; i  < height; i++)
-        {
-            for(int j = 0; j < width; j++)
-            {
-                if(coordinate[j, i] != null)
-                {
-                    coordinate[j, i - 1] = coordinate[j, i];
-                    coordinate[j, i] = null;
-                    coordinate[j, i - 1].transform.position -= new Vector3(0, 1, 0);
-                }
-            }
-        }
-    }
-
-    private bool CanSpawn()
-    {
-        for(int i = 0; i < width; i++)
-        {
-            if(coordinate[i, 17] != null) return false;
-        }
-
-        return true;
     }
 }
