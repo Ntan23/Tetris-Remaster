@@ -14,6 +14,7 @@ public class GhostPiece : MonoBehaviour
     private Vector3 position;
     private int roundedX;
     private int roundedY;
+    private bool hasBlock;
     public GameObject currentPiece;
     private GameObject currentGhostPiece;
     [SerializeField] private GameObject[] ghostPieces;
@@ -34,8 +35,13 @@ public class GhostPiece : MonoBehaviour
     {
         if(currentPiece != null)
         {
-            if(IsValidPosition()) position += Vector3.down;
-            else if(!IsValidPosition()) position -= Vector3.down;
+            if(!hasBlock) position += Vector3.down;
+            
+            if(!IsValidPosition()) 
+            {
+                position -= Vector3.down;
+                hasBlock = true;
+            }
             
             currentGhostPiece.transform.position = new Vector3(currentPiece.transform.position.x, position.y, 0);
             currentGhostPiece.transform.rotation = currentPiece.transform.rotation;
