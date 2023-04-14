@@ -5,11 +5,11 @@ using UnityEngine;
 public class HeadCollsionDetection : MonoBehaviour
 {
     private GameManager gm;
-
+    [SerializeField] private bool isTriggered;
     void Start() => gm = GameManager.Instance;
 
-    void OnCollisionEnter2D(Collision2D collisionInfo)
+    void OnTriggerEnter2D(Collider2D collisionInfo)
     {
-        if(collisionInfo.gameObject.CompareTag("FallingBlock") && !GetComponentInParent<PlayerMovement>().IsMoving()) gm.GameOver();
+        if (collisionInfo.gameObject.CompareTag("FallingBlock") && !GetComponentInParent<PlayerMovement>().IsMoving()) gm.GameOver();
     }
 }

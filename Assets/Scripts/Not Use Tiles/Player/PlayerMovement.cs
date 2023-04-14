@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
         {
+            transform.GetChild(0).transform.GetChild(1).GetComponent<SpriteRenderer>().flipX = true;
             if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
             else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
             axis = Vector3.back;
@@ -50,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
         {
+            transform.GetChild(0).transform.GetChild(1).GetComponent<SpriteRenderer>().flipX = false;
             if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
             else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
             axis = Vector3.forward;
@@ -58,8 +60,12 @@ public class PlayerMovement : MonoBehaviour
 
             if(nextPosition.x >= -0.1f) StartCoroutine(RollCube(anchor, axis, false));
         }
-        
-        if(!IsTherePossibleMove()) gm.GameOver();
+
+        if (!IsTherePossibleMove())
+        {
+            gameObject.GetComponent<Animator>().Play("DeathBeep");
+            gm.GameOver();
+        }
         if(AtTheTop()) gm.LevelUp();
     }
 
@@ -70,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
         float angleBefore = transform.rotation.z;
         float angleAfter;
         isMoving = true;
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
         if (detectionCollider[4] && direction) //kanan naik
         {
             for (int i = 0; i < (180 / rollSpeed); i++)
@@ -138,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
         }
         transform.position = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.eulerAngles.z));
+        gameObject.GetComponent<BoxCollider2D>().enabled = true;
         isMoving = false;
     }
 
@@ -148,15 +156,20 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsTherePossibleMove()
     {
-        if(Mathf.RoundToInt(transform.position.x) == 0) if(detectionCollider[2]) return false;
-        
-        if(Mathf.RoundToInt(transform.position.x) == 9) if(detectionCollider[0]) return false;
-        
-        if(Mathf.RoundToInt(transform.position.x) > 0 && Mathf.RoundToInt(transform.position.x) < 9)
+        //Ensure that the player is grounded too
+        if (detectionCollider[6])
         {
-            if(detectionCollider[0] && detectionCollider[2]) return false;
-            if(detectionCollider[0] && detectionCollider[2] && detectionCollider[3] && detectionCollider[4]) return false;
+            if (Mathf.RoundToInt(transform.position.x) == 0) if (detectionCollider[2]) return false;
+
+            if (Mathf.RoundToInt(transform.position.x) == 9) if (detectionCollider[0]) return false;
+
+            if (Mathf.RoundToInt(transform.position.x) > 0 && Mathf.RoundToInt(transform.position.x) < 9)
+            {
+                if (detectionCollider[0] && detectionCollider[2]) return false;
+                if (detectionCollider[0] && detectionCollider[2] && detectionCollider[3] && detectionCollider[4]) return false;
+            }
         }
+
 
         return true;
     }

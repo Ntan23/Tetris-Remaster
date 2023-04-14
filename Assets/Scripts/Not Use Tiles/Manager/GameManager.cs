@@ -32,11 +32,13 @@ public class GameManager : MonoBehaviour
     #region FloatVariables
     [SerializeField] private float blockFallDelay;
     [SerializeField] private float targetTimerDelay;
+    [SerializeField] private float deathTime;
     #endregion
 
     #region BoolVariables
     private bool isHolding;
     private bool isSwapped;
+    private bool isSoundPlayed;
     #endregion
 
     #region OtherVariables
@@ -69,10 +71,12 @@ public class GameManager : MonoBehaviour
 
             isSwapped = true;
         }   
+
     }
 
     public void GameOver()
     {
+        StartCoroutine(DeathCoolDown(deathTime));
         gameState = State.GameOver;
         Debug.Log("Game Over");
     }   
@@ -238,7 +242,7 @@ public class GameManager : MonoBehaviour
 
     public Vector3 GetPlayerPosition()
     {
-        return playerTransform.position;
+        return new Vector3(Mathf.Abs(playerTransform.position.x), Mathf.Abs(playerTransform.position.y));
     }
 
     public float GetTargetTimerDelay()
@@ -249,5 +253,19 @@ public class GameManager : MonoBehaviour
     public int GetSavedPieceIndex()
     {
         return savedPieceIndex;
+    }
+
+    private IEnumerator DeathCoolDown(float coolDown)
+    {
+        if (!isSoundPlayed)
+        {
+            gameObject.GetComponent<AudioSource>().Play();
+            isSoundPlayed = true;
+        }
+        while (coolDown >= 0)
+        {
+            coolDown-= Time.deltaTime;
+            yield return null;
+        }
     }
 }
