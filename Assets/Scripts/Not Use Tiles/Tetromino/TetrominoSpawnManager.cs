@@ -79,9 +79,6 @@ public class TetrominoSpawnManager : MonoBehaviour
     {
         GameObject[] fallingBlocks = GameObject.FindGameObjectsWithTag("FallingBlock");
 
-        for(int i = 0; i < fallingBlocks.Length; i++)
-        {
-            Destroy(fallingBlocks[i]);
-        }
+        for(int i = 0; i < fallingBlocks.Length; i++) Destroy(fallingBlocks[i]);
     }
 }
