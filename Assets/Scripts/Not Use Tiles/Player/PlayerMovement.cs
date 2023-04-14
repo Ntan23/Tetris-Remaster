@@ -165,9 +165,10 @@ public class PlayerMovement : MonoBehaviour
     {
         return isMoving;
     }
+
     public bool AtTheTop()
     {
-        if(transform.position.y == 18) return true;
+        if(transform.position.y == 19) return true;
         else return false;
     }
 }

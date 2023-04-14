@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -25,10 +26,17 @@ public class GameManager : MonoBehaviour
     private int lineCount;
     private int levelIndex;
     private int score;
+    private int savedPieceIndex;
     #endregion
     
     #region FloatVariables
     [SerializeField] private float blockFallDelay;
+    [SerializeField] private float targetTimerDelay;
+    #endregion
+
+    #region BoolVariables
+    private bool isHolding;
+    private bool isSwapped;
     #endregion
 
     #region OtherVariables
@@ -45,6 +53,22 @@ public class GameManager : MonoBehaviour
         tetrominoSpawner = TetrominoSpawnManager.Instance;
 
         levelIndex = 1;
+        targetTimerDelay = 3.0f;
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.C) && !isSwapped)
+        {
+            if(!isHolding)
+            {
+                tetrominoSpawner.SetHoldPieceIndexAndSpawnNewOne();
+                isHolding = true;
+            }
+            else if(isHolding) tetrominoSpawner.SwapTetromino();
+
+            isSwapped = true;
+        }   
     }
 
     public void GameOver()
@@ -58,7 +82,8 @@ public class GameManager : MonoBehaviour
         levelIndex++;
         DeleteAllBlocks();
         if(blockFallDelay > 0.2f) blockFallDelay -= 0.1f;
-        if(tetrominoesParent.childCount == 0) tetrominoSpawner.SpawnNewTetromino();
+        if(targetTimerDelay > 0.5f) targetTimerDelay -= 0.25f;
+        if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
     }
 
     public bool IsPlaying()
@@ -89,11 +114,8 @@ public class GameManager : MonoBehaviour
 
     private bool HasLine(int verticalCoordinate)
     {
-        for(int i = 0; i < boardWidth; i++)
-        {
-            if(coordinate[i, verticalCoordinate] == null) return false;
-        }
-
+        for(int i = 0; i < boardWidth; i++) if(coordinate[i, verticalCoordinate] == null) return false;
+        
         return true;
     }
 
@@ -189,6 +211,16 @@ public class GameManager : MonoBehaviour
         scoreUI.UpdateScoreText();
     }
 
+    IEnumerator WaitForNextSpawn()
+    {
+        yield return new WaitForSeconds(2.0f);
+        tetrominoSpawner.SpawnNewTetromino();
+    }
+
+    public void SetSavedPieceIndex(int index) => savedPieceIndex = index;
+
+    public void SetBackAlreadySwap() => isSwapped = false;
+    
     public int GetBoardWidth()
     {
         return boardWidth;
@@ -207,5 +239,15 @@ public class GameManager : MonoBehaviour
     public Vector3 GetPlayerPosition()
     {
         return playerTransform.position;
+    }
+
+    public float GetTargetTimerDelay()
+    {
+        return targetTimerDelay;
+    }
+
+    public int GetSavedPieceIndex()
+    {
+        return savedPieceIndex;
     }
 }

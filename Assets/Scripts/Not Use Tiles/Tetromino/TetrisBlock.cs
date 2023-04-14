@@ -29,8 +29,9 @@ public class TetrisBlock : MonoBehaviour
     #endregion
 
     #region BoolVariables
-    private bool useHardDrop;
-    private bool moveLeft;
+    private bool isHardDropping;
+    private bool isMovingLeft;
+    private bool isLock;
     #endregion
 
     #region VectorVariables
@@ -50,9 +51,10 @@ public class TetrisBlock : MonoBehaviour
         fallTimeDelay = gm.GetBlockFallDelay();
         boardWidth = gm.GetBoardWidth();
         boardHeight = gm.GetBoardHeight();
+        targetTimeDelay = gm.GetTargetTimerDelay();
 
         originalFallTimeDelay = fallTimeDelay;
-        useHardDrop = false;
+        isHardDropping = false;
     }
 
     void Update()
@@ -65,7 +67,7 @@ public class TetrisBlock : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.A)) 
             {
-                moveLeft = true;
+                isMovingLeft = true;
 
                 if(CanMoveLeftOrRight())
                 {
@@ -76,7 +78,7 @@ public class TetrisBlock : MonoBehaviour
             }
             else if(Input.GetKeyDown(KeyCode.D)) 
             {
-                moveLeft = false;
+                isMovingLeft = false;
 
                 if(CanMoveLeftOrRight())
                 {
@@ -100,7 +102,7 @@ public class TetrisBlock : MonoBehaviour
             else if(Input.GetKeyDown(KeyCode.Space)) 
             {
                 fallTimeDelay /= 1000;
-                useHardDrop = true;
+                isHardDropping = true;
             }
 
             if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
@@ -113,6 +115,14 @@ public class TetrisBlock : MonoBehaviour
 
         if(mode == Mode.SingleControl)
         {
+            targetTimer += Time.deltaTime;
+
+            if(targetTimer > targetTimeDelay && !isLock)
+            {
+                TargetPlayer();
+                targetTimer = 0;
+            }
+
             if(fallTimer > fallTimeDelay)
             {
                 Fall();
@@ -132,12 +142,16 @@ public class TetrisBlock : MonoBehaviour
             AddToGrid();
             gm.CheckForLineComplete();  
 
-            if(!useHardDrop) gm.AddScore(1);
-            else if(useHardDrop) gm.AddScore(5);
+            isLock = true;
+
+            if(!isHardDropping) gm.AddScore(1);
+            else if(isHardDropping) gm.AddScore(5);
 
             if(!gm.BlockAtTheTop()) tetrominoSpawner.SpawnNewTetromino();
             else if(gm.BlockAtTheTop()) gm.GameOver();
 
+            gm.SetBackAlreadySwap();
+            
             this.enabled = false;
         }
     }
@@ -165,22 +179,8 @@ public class TetrisBlock : MonoBehaviour
         {
             roundedX = Mathf.RoundToInt(children.transform.position.x);
 
-            if(moveLeft) 
-            {
-                if(roundedX - 1 == playerRoundedX && children.transform.position.y - gm.GetPlayerPosition().y <= 1.0f) 
-                {
-                    Debug.Log("Check Left");
-                    return false;
-                }
-            }
-            else if(!moveLeft) 
-            {
-                if(roundedX + 1 == playerRoundedX && children.transform.position.y - gm.GetPlayerPosition().y <= 1.0f) 
-                {
-                    Debug.Log("Check Right");
-                    return false;
-                }
-            }
+            if(isMovingLeft) if(roundedX - 1 == playerRoundedX && children.transform.position.y - gm.GetPlayerPosition().y <= 1.0f) return false;
+            else if(!isMovingLeft) if(roundedX + 1 == playerRoundedX && children.transform.position.y - gm.GetPlayerPosition().y <= 1.0f) return false;
         }
 
         return true;
@@ -198,7 +198,18 @@ public class TetrisBlock : MonoBehaviour
     }
 
     private void TargetPlayer()
-    {
+    {   
+        if(gm.GetPlayerPosition().x < transform.position.x) 
+        {
+            transform.position += Vector3.left;
 
+            if(!IsValidMove()) transform.position -= Vector3.left;
+        }
+        else if(gm.GetPlayerPosition().x > transform.position.x)
+        {
+            transform.position += Vector3.right;
+
+            if(!IsValidMove()) transform.position -= Vector3.right;
+        } 
     }
 }
