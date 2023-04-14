@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TetrominoSpawner : MonoBehaviour
+public class TetrominoSpawnManager : MonoBehaviour
 {
     #region Singleton
-    public static TetrominoSpawner Instance;
+    public static TetrominoSpawnManager Instance;
 
     void Awake()
     {

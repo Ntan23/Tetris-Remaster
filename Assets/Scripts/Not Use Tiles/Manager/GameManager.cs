@@ -33,7 +33,8 @@ public class GameManager : MonoBehaviour
 
     #region OtherVariables
     [SerializeField] private Transform tetrominoesParent;
-    private TetrominoSpawner tetrominoSpawner;
+    [SerializeField] private Transform playerTransform;
+    private TetrominoSpawnManager tetrominoSpawner;
     public static Transform[,] coordinate = new Transform[boardWidth, boardHeight];
     [SerializeField] private ScoreUI scoreUI;
     #endregion
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameState = State.IsPlaying;
-        tetrominoSpawner = TetrominoSpawner.Instance;
+        tetrominoSpawner = TetrominoSpawnManager.Instance;
 
         levelIndex = 1;
     }
@@ -77,12 +78,12 @@ public class GameManager : MonoBehaviour
             if(HasLine(i)) 
             {
                 lineCount++;
-                AddLineCompleteScore();
                 DeleteLine(i);
                 MoveRowDown(i);
             }
         }
 
+        AddLineCompleteScore();
         lineCount = 0;
     }
 
@@ -201,5 +202,10 @@ public class GameManager : MonoBehaviour
     public int GetScore()
     {
         return score;
+    }
+
+    public Vector3 GetPlayerPosition()
+    {
+        return playerTransform.position;
     }
 }

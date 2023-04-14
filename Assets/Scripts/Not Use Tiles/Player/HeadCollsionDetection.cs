@@ -10,6 +10,6 @@ public class HeadCollsionDetection : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collisionInfo)
     {
-        if(collisionInfo.gameObject.CompareTag("Block") && !GetComponentInParent<PlayerMovement>().IsMoving()) gm.GameOver();
+        if(collisionInfo.gameObject.CompareTag("FallingBlock") && !GetComponentInParent<PlayerMovement>().IsMoving()) gm.GameOver();
     }
 }

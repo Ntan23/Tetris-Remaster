@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5387195780868315466}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 6096104135359902827}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 2616983400711606400}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -384,7 +384,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 1
   rotationPoint: {x: 0, y: 0, z: 0}
-  shadowPrefab: {fileID: 2790208526504071324, guid: 239c484c555895b40ae545b807576e19, type: 3}
 --- !u!114 &-6488811215255176571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,7 +409,7 @@ GameObject:
   - component: {fileID: 4544212399893375868}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

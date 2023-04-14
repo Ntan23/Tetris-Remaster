@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        collissionDetection();
+        DetectCollision();
         if(!gm.IsPlaying()) return;
         if (isMoving) return;
         
@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
             nextPosition = transform.position + new Vector3(1, 0, 0);
             
-            if(nextPosition.x <= 9.1f) StartCoroutine(rollCube(anchor, axis, true));
+            if(nextPosition.x <= 9.1f) StartCoroutine(RollCube(anchor, axis, true));
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
         {
@@ -56,23 +56,16 @@ public class PlayerMovement : MonoBehaviour
 
             nextPosition = transform.position + new Vector3(-1, 0, 0);
 
-            if(nextPosition.x >= -0.1f) StartCoroutine(rollCube(anchor, axis, false));
+            if(nextPosition.x >= -0.1f) StartCoroutine(RollCube(anchor, axis, false));
         }
         
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     foreach(bool yes in detectionCollider)
-        //     {
-        //         Debug.Log("Test " + detectionCollider);
-        //     }
-        // }
-        if (detectionCollider[0] && detectionCollider[2]) gm.GameOver(); //kalo stuck kanan kiri ada 2 block ya tewas 
-        if (AtTheTop()) gm.LevelUp();
+        if(!IsTherePossibleMove()) gm.GameOver();
+        if(AtTheTop()) gm.LevelUp();
     }
 
     //direction true = kanan 
     //!direction = kiri
-    private IEnumerator rollCube(Vector3 anchor, Vector3 axis, bool direction)
+    private IEnumerator RollCube(Vector3 anchor, Vector3 axis, bool direction)
     {
         float angleBefore = transform.rotation.z;
         float angleAfter;
@@ -146,24 +139,32 @@ public class PlayerMovement : MonoBehaviour
         transform.position = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.eulerAngles.z));
         isMoving = false;
-
     }
 
-    public void collissionDetection()
+    private void DetectCollision()
     {
-        int i = 0;
-        foreach(bool detection in detectionCollider)
+        for(int i = 0; i < detectionCollider.Length; i++) detectionCollider[i] = transform.GetChild(0).transform.GetChild(2).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
+    }
+
+    private bool IsTherePossibleMove()
+    {
+        if(Mathf.RoundToInt(transform.position.x) == 0) if(detectionCollider[2]) return false;
+        
+        if(Mathf.RoundToInt(transform.position.x) == 9) if(detectionCollider[0]) return false;
+        
+        if(Mathf.RoundToInt(transform.position.x) > 0 && Mathf.RoundToInt(transform.position.x) < 9)
         {
-            detectionCollider[i] = transform.GetChild(0).transform.GetChild(2).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
-            i++;
+            if(detectionCollider[0] && detectionCollider[2]) return false;
+            if(detectionCollider[0] && detectionCollider[2] && detectionCollider[3] && detectionCollider[4]) return false;
         }
+
+        return true;
     }
 
     public bool IsMoving()
     {
         return isMoving;
     }
-
     public bool AtTheTop()
     {
         if(transform.position.y == 18) return true;

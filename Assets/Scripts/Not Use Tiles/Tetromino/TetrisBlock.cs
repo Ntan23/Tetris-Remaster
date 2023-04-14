@@ -16,6 +16,8 @@ public class TetrisBlock : MonoBehaviour
     private float fallTimer;
     private float fallTimeDelay;
     private float originalFallTimeDelay;
+    private float targetTimer;
+    private float targetTimeDelay;
     #endregion
 
     #region IntegerVariables
@@ -23,10 +25,12 @@ public class TetrisBlock : MonoBehaviour
     private int boardHeight;
     private int roundedX;
     private int roundedY;
+    private int playerRoundedX;
     #endregion
 
     #region BoolVariables
     private bool useHardDrop;
+    private bool moveLeft;
     #endregion
 
     #region VectorVariables
@@ -34,13 +38,13 @@ public class TetrisBlock : MonoBehaviour
     #endregion
 
     #region OtherVariables
-    private TetrominoSpawner tetrominoSpawner;
+    private TetrominoSpawnManager tetrominoSpawner;
     private GameManager gm;
     #endregion
 
     void Start() 
     {
-        tetrominoSpawner = TetrominoSpawner.Instance;
+        tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
 
         fallTimeDelay = gm.GetBlockFallDelay();
@@ -61,22 +65,38 @@ public class TetrisBlock : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.A)) 
             {
-                transform.position += Vector3.left;
+                moveLeft = true;
 
-                if(!IsValidMove()) transform.position -= Vector3.left;
+                if(CanMoveLeftOrRight())
+                {
+                    transform.position += Vector3.left;
+
+                    if(!IsValidMove()) transform.position -= Vector3.left;
+                }
             }
             else if(Input.GetKeyDown(KeyCode.D)) 
             {
-                transform.position += Vector3.right;
+                moveLeft = false;
 
-                if(!IsValidMove()) transform.position -= Vector3.right;
+                if(CanMoveLeftOrRight())
+                {
+                    transform.position += Vector3.right;
+
+                    if(!IsValidMove()) transform.position -= Vector3.right;
+                }
             }
-            else if(Input.GetKeyDown(KeyCode.W))
+            else if(Input.GetKeyDown(KeyCode.Q))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+
+                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+            } 
+            else if(Input.GetKeyDown(KeyCode.E))
             {
                 transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
 
                 if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
-            } 
+            }
             else if(Input.GetKeyDown(KeyCode.Space)) 
             {
                 fallTimeDelay /= 1000;
@@ -105,7 +125,7 @@ public class TetrisBlock : MonoBehaviour
     private void Fall()
     {
         transform.position += Vector3.down;
-                
+
         if(!IsValidMove()) 
         {
             transform.position += Vector3.up;
@@ -137,6 +157,35 @@ public class TetrisBlock : MonoBehaviour
         return true;
     }
 
+    private bool CanMoveLeftOrRight()
+    {
+        playerRoundedX = Mathf.RoundToInt(gm.GetPlayerPosition().x);
+
+        foreach(Transform children in transform)
+        {
+            roundedX = Mathf.RoundToInt(children.transform.position.x);
+
+            if(moveLeft) 
+            {
+                if(roundedX - 1 == playerRoundedX && children.transform.position.y - gm.GetPlayerPosition().y <= 1.0f) 
+                {
+                    Debug.Log("Check Left");
+                    return false;
+                }
+            }
+            else if(!moveLeft) 
+            {
+                if(roundedX + 1 == playerRoundedX && children.transform.position.y - gm.GetPlayerPosition().y <= 1.0f) 
+                {
+                    Debug.Log("Check Right");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     private void AddToGrid()
     {
         foreach(Transform children in transform)
@@ -146,5 +195,10 @@ public class TetrisBlock : MonoBehaviour
             children.gameObject.tag = "Block";
             GameManager.coordinate[roundedX, roundedY] = children;
         }
+    }
+
+    private void TargetPlayer()
+    {
+
     }
 }

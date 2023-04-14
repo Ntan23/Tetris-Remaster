@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1733112342100661361}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 8056772494257267053}
   m_Layer: 0
   m_Name: I Tetromino
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,7 +162,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 1
   rotationPoint: {x: 0.5, y: 0.5, z: 0}
-  shadowPrefab: {fileID: 5441100407916642603, guid: d69df3e2770b9e34cb9a61111594e93a, type: 3}
 --- !u!114 &8056772494257267053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,7 +187,7 @@ GameObject:
   - component: {fileID: 1632607195858375648}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -299,7 +298,7 @@ GameObject:
   - component: {fileID: 4498009329694449100}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -410,7 +409,7 @@ GameObject:
   - component: {fileID: 7047287345341937032}
   m_Layer: 0
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: FallingBlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
