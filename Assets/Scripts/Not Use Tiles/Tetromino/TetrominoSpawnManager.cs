@@ -21,6 +21,7 @@ public class TetrominoSpawnManager : MonoBehaviour
     #region OtherVariables
     [SerializeField] private GameObject[] tetrominoes;
     [SerializeField] private Transform tetrominoesParent;
+    [SerializeField] private GhostPiece ghostPiece;
     [SerializeField] private NextPieceUI nextPieceUI;
     [SerializeField] private HoldPieceUI holdPieceUI;
     private GameObject objectToSpawn;
@@ -41,6 +42,8 @@ public class TetrominoSpawnManager : MonoBehaviour
         objectToSpawn = Instantiate(tetrominoes[index], transform.position, Quaternion.identity);
         objectToSpawn.transform.SetParent(tetrominoesParent);
 
+        ghostPiece.currentPiece = objectToSpawn;
+        ghostPiece.Initialize(index);
         currentIndex = index;
 
         index = Random.Range(0, tetrominoes.Length);
@@ -51,6 +54,9 @@ public class TetrominoSpawnManager : MonoBehaviour
     {
         objectToSpawn = Instantiate(tetrominoes[gm.GetSavedPieceIndex()], transform.position, Quaternion.identity);
         objectToSpawn.transform.SetParent(tetrominoesParent);
+
+        ghostPiece.currentPiece = objectToSpawn;
+        ghostPiece.Initialize(gm.GetSavedPieceIndex());
     }
 
     IEnumerator FirstSpawn()

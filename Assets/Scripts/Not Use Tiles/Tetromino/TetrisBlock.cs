@@ -41,12 +41,14 @@ public class TetrisBlock : MonoBehaviour
     #region OtherVariables
     private TetrominoSpawnManager tetrominoSpawner;
     private GameManager gm;
+    private GhostPiece ghostPiece;
     #endregion
 
     void Start() 
     {
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
+        ghostPiece = GhostPiece.Instance;
 
         fallTimeDelay = gm.GetBlockFallDelay();
         boardWidth = gm.GetBoardWidth();
@@ -193,6 +195,7 @@ public class TetrisBlock : MonoBehaviour
             roundedX = Mathf.RoundToInt(children.transform.position.x);
             roundedY = Mathf.RoundToInt(children.transform.position.y);
             children.gameObject.tag = "Block";
+            ghostPiece.DestroyGhostPiece();
             GameManager.coordinate[roundedX, roundedY] = children;
         }
     }
