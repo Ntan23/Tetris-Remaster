@@ -13,14 +13,19 @@ public class TetrominoSpawnManager : MonoBehaviour
     }
     #endregion
 
+    #region IntegerVariables
     private int index;
     private int currentIndex;
-    private int previousIndex;
+    #endregion
+
+    #region OtherVariables
     [SerializeField] private GameObject[] tetrominoes;
     [SerializeField] private Transform tetrominoesParent;
     [SerializeField] private NextPieceUI nextPieceUI;
     [SerializeField] private HoldPieceUI holdPieceUI;
+    private GameObject objectToSpawn;
     private GameManager gm;
+    #endregion
 
     void Start() 
     {
@@ -33,8 +38,8 @@ public class TetrominoSpawnManager : MonoBehaviour
     
     public void SpawnNewTetromino() 
     {
-        GameObject obj = Instantiate(tetrominoes[index], transform.position, Quaternion.identity);
-        obj.transform.SetParent(tetrominoesParent);
+        objectToSpawn = Instantiate(tetrominoes[index], transform.position, Quaternion.identity);
+        objectToSpawn.transform.SetParent(tetrominoesParent);
 
         currentIndex = index;
 
@@ -44,7 +49,8 @@ public class TetrominoSpawnManager : MonoBehaviour
 
     private void SpawnHoldTetromino()
     {
-        GameObject obj = Instantiate(tetrominoes[gm.GetSavedPieceIndex()], transform.position, Quaternion.identity);
+        objectToSpawn = Instantiate(tetrominoes[gm.GetSavedPieceIndex()], transform.position, Quaternion.identity);
+        objectToSpawn.transform.SetParent(tetrominoesParent);
     }
 
     IEnumerator FirstSpawn()
@@ -67,7 +73,6 @@ public class TetrominoSpawnManager : MonoBehaviour
         SpawnHoldTetromino();
         gm.SetSavedPieceIndex(currentIndex);
         holdPieceUI.UpdateSprite(currentIndex);
-        currentIndex = gm.GetSavedPieceIndex();
     }
 
     private void ClearAllFallingBlocks()
