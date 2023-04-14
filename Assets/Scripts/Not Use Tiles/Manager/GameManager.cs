@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float blockFallDelay;
     [SerializeField] private float targetTimerDelay;
     [SerializeField] private float deathTime;
+    private float startTimer;
     #endregion
 
     #region BoolVariables
@@ -60,18 +61,22 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C) && !isSwapped)
+        startTimer += Time.deltaTime;
+
+        if(startTimer > 3.0f)
         {
-            if(!isHolding)
+            if(Input.GetKeyDown(KeyCode.C) && !isSwapped)
             {
-                tetrominoSpawner.SetHoldPieceIndexAndSpawnNewOne();
-                isHolding = true;
-            }
-            else if(isHolding) tetrominoSpawner.SwapTetromino();
+                if(!isHolding)
+                {
+                    tetrominoSpawner.SetHoldPieceIndexAndSpawnNewOne();
+                    isHolding = true;
+                }
+                else if(isHolding) tetrominoSpawner.SwapTetromino();
 
-            isSwapped = true;
-        }   
-
+                isSwapped = true;
+            }  
+        } 
     }
 
     public void GameOver()
