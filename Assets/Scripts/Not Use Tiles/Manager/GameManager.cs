@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,10 +50,12 @@ public class GameManager : MonoBehaviour
     public static Transform[,] coordinate = new Transform[boardWidth, boardHeight];
     [SerializeField] private ScoreUI scoreUI;
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private GameObject blackScreen;
     #endregion
 
     void Start()
     {
+        LeanTween.value(blackScreen, UpdateAlpha, 1f, 0f, 2.5f);
         gameState = State.IsPlaying;
         tetrominoSpawner = TetrominoSpawnManager.Instance;
 
@@ -80,12 +83,26 @@ public class GameManager : MonoBehaviour
         } 
     }
 
+    private void UpdateAlpha(float alpha)
+    {
+        blackScreen.GetComponent<CanvasGroup>().alpha = alpha;
+    }
+
+    public void GameOverImminant()
+    {
+        gameState = State.GameOver;
+        playerAnimator.Play("Teleport");
+        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
+        playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        StartCoroutine(ImminantDelay());
+        
+    }
+
     public void GameOver()
     {
-        playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         StartCoroutine(DeathCoolDown(deathTime));
         gameState = State.GameOver;
-        Debug.Log("Game Over");
     }   
 
     public void LevelUp()
@@ -276,5 +293,15 @@ public class GameManager : MonoBehaviour
             coolDown -= Time.deltaTime;
             yield return null;
         }
+        LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(0);
+    }
+
+    private IEnumerator ImminantDelay()
+    {
+        LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(0);
     }
 }

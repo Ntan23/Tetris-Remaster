@@ -215,4 +215,9 @@ public class TetrisBlock : MonoBehaviour
             if(!IsValidMove()) transform.position -= Vector3.right;
         } 
     }
+
+    public bool GetIsHardDropping()
+    {
+        return isHardDropping;
+    }
 }

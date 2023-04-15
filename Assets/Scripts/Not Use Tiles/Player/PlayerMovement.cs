@@ -216,4 +216,9 @@ public class PlayerMovement : MonoBehaviour
             dustEffect.Play();
         }
     }
+
+    private void ThannosSlap()
+    {
+        gameObject.SetActive(false);
+    }
 }

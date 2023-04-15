@@ -7,6 +7,7 @@ public class PlayerMainMenu : MonoBehaviour
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
+    public bool cantMove;
     #endregion
 
     #region FloatVariables
@@ -43,28 +44,33 @@ public class PlayerMainMenu : MonoBehaviour
 
     void Update()
     {
-        DetectCollision();
-        HeroLandingEffect();
-        if (isMoving) return;
-
-        if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
+        //Only for Start
+        if(!cantMove)
         {
-            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
-            if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
-            else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
-            axis = Vector3.back;
+            DetectCollision();
+            HeroLandingEffect();
+            if (isMoving) return;
 
-            StartCoroutine(RollCube(anchor, axis, true));
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
-        {
-            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
-            if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
-            else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
-            axis = Vector3.forward;
+            if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
+            {
+                transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+                if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
+                else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
+                axis = Vector3.back;
 
-            StartCoroutine(RollCube(anchor, axis, false));
+                StartCoroutine(RollCube(anchor, axis, true));
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
+            {
+                transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
+                if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
+                else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
+                axis = Vector3.forward;
+
+                StartCoroutine(RollCube(anchor, axis, false));
+            }
         }
+
     }
 
     //direction true = kanan 
