@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(DeathCoolDown(deathTime));
         gameState = State.GameOver;
     }   

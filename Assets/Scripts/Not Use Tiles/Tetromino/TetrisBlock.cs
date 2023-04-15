@@ -55,7 +55,6 @@ public class TetrisBlock : MonoBehaviour
         boardWidth = gm.GetBoardWidth();
         boardHeight = gm.GetBoardHeight();
         targetTimeDelay = gm.GetTargetTimerDelay();
-        dustEffect = gameObject.transform.GetChild(4).GetComponent<ParticleSystem>();
 
         originalFallTimeDelay = fallTimeDelay;
         isHardDropping = false;
@@ -107,7 +106,6 @@ public class TetrisBlock : MonoBehaviour
             {
                 fallTimeDelay /= 1000;
                 isHardDropping = true;
-                dustEffect.Play();
             }
         
             if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
