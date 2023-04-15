@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 1268965715146754505}
   m_Layer: 0
   m_Name: I Tetromino Shadow
-  m_TagString: Tetromino
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
