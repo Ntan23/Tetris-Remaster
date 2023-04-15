@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,23 +8,32 @@ public class PlayerMovement : MonoBehaviour
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
+    private bool runOnce;
     #endregion
 
     #region FloatVariables
     [SerializeField] private float rollSpeed;
+    [SerializeField] private float distance;
     #endregion
 
     #region VectorVariables
     private Vector3 axis;
     private Vector3 anchor;
     private Vector3 nextPosition;
+    private Vector3 firstPos;
     #endregion
 
     #region OtherVariables
     private Rigidbody2D rb;
     private GameManager gm;
-
+    private ParticleSystem dustEffect;
     #endregion
+
+    private void Awake()
+    {
+        dustEffect = gameObject.transform.GetChild(0).GetChild(2).GetComponent<ParticleSystem>();
+        firstPos.y = transform.position.y;
+    }
 
     void Start() 
     {
@@ -35,12 +45,13 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         DetectCollision();
-        if(!gm.IsPlaying()) return;
+        HeroLandingEffect();
+        if (!gm.IsPlaying()) return;
         if (isMoving) return;
         
         if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
         {
-            transform.GetChild(0).transform.GetChild(1).GetComponent<SpriteRenderer>().flipX = true;
+            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
             if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
             else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
             axis = Vector3.back;
@@ -51,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
         {
-            transform.GetChild(0).transform.GetChild(1).GetComponent<SpriteRenderer>().flipX = false;
+            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
             if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
             else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
             axis = Vector3.forward;
@@ -63,7 +74,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (!IsTherePossibleMove())
         {
-            gameObject.GetComponent<Animator>().Play("DeathBeep");
             gm.GameOver();
         }
         if(AtTheTop()) gm.LevelUp();
@@ -73,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
     //!direction = kiri
     private IEnumerator RollCube(Vector3 anchor, Vector3 axis, bool direction)
     {
+        rb.gravityScale = 0;
         float angleBefore = transform.rotation.z;
         float angleAfter;
         isMoving = true;
@@ -145,13 +156,14 @@ public class PlayerMovement : MonoBehaviour
         }
         transform.position = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.eulerAngles.z));
+        rb.gravityScale = 1;
         gameObject.GetComponent<BoxCollider2D>().enabled = true;
         isMoving = false;
     }
 
     private void DetectCollision()
     {
-        for(int i = 0; i < detectionCollider.Length; i++) detectionCollider[i] = transform.GetChild(0).transform.GetChild(2).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
+        for(int i = 0; i < detectionCollider.Length; i++) detectionCollider[i] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
     }
 
     private bool IsTherePossibleMove()
@@ -183,5 +195,25 @@ public class PlayerMovement : MonoBehaviour
     {
         if(transform.position.y == 19) return true;
         else return false;
+    }
+    private void HeroLandingEffect()
+    {
+        //Debug.Log(distance + " Last Pos: " + firstPos.y);
+        if (!detectionCollider[6])
+        {
+            if (!runOnce && !IsMoving())
+            {
+                Debug.Log("Change First Pos");
+                firstPos.y = transform.position.y;
+                runOnce = true;
+            }
+            distance = firstPos.y - transform.position.y;
+        }
+        else if (detectionCollider[6] && distance > 4)
+        {
+            runOnce = false;
+            distance = 0;
+            dustEffect.Play();
+        }
     }
 }

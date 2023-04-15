@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     private TetrominoSpawnManager tetrominoSpawner;
     public static Transform[,] coordinate = new Transform[boardWidth, boardHeight];
     [SerializeField] private ScoreUI scoreUI;
+    [SerializeField] private Animator playerAnimator;
     #endregion
 
     void Start()
@@ -81,6 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         StartCoroutine(DeathCoolDown(deathTime));
         gameState = State.GameOver;
         Debug.Log("Game Over");
@@ -262,6 +264,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator DeathCoolDown(float coolDown)
     {
+        playerAnimator.Play("DeathBeep");
+        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
         if (!isSoundPlayed)
         {
             gameObject.GetComponent<AudioSource>().Play();
@@ -269,7 +273,7 @@ public class GameManager : MonoBehaviour
         }
         while (coolDown >= 0)
         {
-            coolDown-= Time.deltaTime;
+            coolDown -= Time.deltaTime;
             yield return null;
         }
     }
