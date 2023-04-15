@@ -11,6 +11,7 @@ public class PlayerMainMenu : MonoBehaviour
 
     #region FloatVariables
     [SerializeField] private float rollSpeed;
+    float tempSpeed;
     #endregion
 
     #region VectorVariables
@@ -22,7 +23,7 @@ public class PlayerMainMenu : MonoBehaviour
     #region OtherVariables
     private Rigidbody2D rb;
     private GameManager gm;
-
+    [SerializeField] ParticleSystem dustEffect;
     #endregion
 
     void Start()
@@ -33,8 +34,15 @@ public class PlayerMainMenu : MonoBehaviour
 
     void Update()
     {
+        tempSpeed = rb.velocity.y;
         DetectCollision();
         if (isMoving) return;
+        Debug.Log(tempSpeed);
+        if(tempSpeed < -5 && detectionCollider[6])
+        {
+            Debug.Log("Dust Play");
+            dustEffect.Play();
+        }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
         {
