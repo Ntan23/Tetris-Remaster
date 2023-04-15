@@ -12,7 +12,7 @@ public class GhostPiece : MonoBehaviour
     #endregion
 
     [SerializeField] private GameObject[] ghostPieces;
-    public GameObject currentPiece; // Reference to the current Tetromino
+    public GameObject currentPiece;
     private GameObject ghostPiece;
     private GameManager gm;
 
@@ -28,43 +28,6 @@ public class GhostPiece : MonoBehaviour
             MoveDown();
         }
     }
-
-    // void LateUpdate()
-    // {
-    //     if(currentPiece == null) return;
-
-    //     // Clone the current Tetromino and remove the Tetromino script from the clone
-    //     GameObject clone = Instantiate(currentPiece, currentPiece.transform.position, currentPiece.transform.rotation);
-    //     Destroy(clone.GetComponent<TetrisBlock>());
-
-    //     // Disable the collider on the cloned Tetromino
-    //     Collider2D[] colliders = clone.GetComponentsInChildren<Collider2D>();
-
-    //     foreach (Collider2D collider in colliders) collider.enabled = false;
-        
-    //     // Move the cloned Tetromino down one unit at a time until it collides
-    //     Vector3 lastPosition = clone.transform.position;
-
-    //     while (true)
-    //     {
-    //         clone.transform.position += Vector3.down;
-
-    //         if (!IsValidPosition(clone, clone.transform.position)) break;
-            
-    //         lastPosition = clone.transform.position;
-    //     }
-        
-
-    //     // Update the position and rotation of the GhostPiece
-    //     ghostPiece.transform.position = new Vector3(Mathf.Round(lastPosition.x), Mathf.Round(lastPosition.y), 0);
-    //     ghostPiece.transform.rotation = currentPiece.transform.rotation;
-        
-    //     // Destroy the cloned Tetromino
-    //     Destroy(clone);
-
-    //     //Debug.Log("Ghost piece position: " + ghostPiece.transform.position);
-    //     //Debug.Log("Last valid position: " + lastPosition);
-    // }
 
     private void FollowActiveTetromino()
     {
@@ -89,8 +52,6 @@ public class GhostPiece : MonoBehaviour
 
             if(!IsInsidePlayfield(position)) return false;  
 
-            // if(GetBlockAtPosition(position) != null && GetBlockAtPosition(position).transform.parent.CompareTag("Tetromino")) return true;
-
             if(GetBlockAtPosition(position) != null && GetBlockAtPosition(position).transform.parent != ghostPiece.transform) return false;
         }
 
@@ -106,7 +67,7 @@ public class GhostPiece : MonoBehaviour
 
     private bool IsInsidePlayfield(Vector3 position)
     {
-        return (int)position.x >= 0 && (int)position.x < gm.GetBoardWidth() && (int)position.y >= 0;
+        return position.x >= 0 && position.x < gm.GetBoardWidth() && position.y >= 0 && position.y < gm.GetBoardHeight();
     }
 
     private Vector2 RoundPosition(Vector2 position)
