@@ -7,61 +7,70 @@ public class PlayerMainMenu : MonoBehaviour
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
+    public bool cantMove;
     #endregion
 
     #region FloatVariables
     [SerializeField] private float rollSpeed;
-    float tempSpeed;
+    private float distance;
     #endregion
 
     #region VectorVariables
     private Vector3 axis;
     private Vector3 anchor;
     private Vector3 nextPosition;
+    private Vector3 firstPos;
     #endregion
 
     #region OtherVariables
     private Rigidbody2D rb;
     private GameManager gm;
-    [SerializeField] ParticleSystem dustEffect;
+    private ParticleSystem dustEffect;
     #endregion
+
+    private void Awake()
+    {
+        dustEffect = gameObject.transform.GetChild(0).GetChild(2).GetComponent<ParticleSystem>();
+        firstPos.y = transform.position.y;
+    }
 
     void Start()
     {
+
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
     }
 
+
     void Update()
     {
-        tempSpeed = rb.velocity.y;
-        DetectCollision();
-        if (isMoving) return;
-        Debug.Log(tempSpeed);
-        if(tempSpeed < -5 && detectionCollider[6])
+        //Only for Start
+        if(!cantMove)
         {
-            Debug.Log("Dust Play");
-            dustEffect.Play();
+            DetectCollision();
+            HeroLandingEffect();
+            if (isMoving) return;
+
+            if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
+            {
+                transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+                if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
+                else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
+                axis = Vector3.back;
+
+                StartCoroutine(RollCube(anchor, axis, true));
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
+            {
+                transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
+                if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
+                else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
+                axis = Vector3.forward;
+
+                StartCoroutine(RollCube(anchor, axis, false));
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
-        {
-            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
-            if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
-            else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
-            axis = Vector3.back;
-
-            StartCoroutine(RollCube(anchor, axis, true));
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
-        {
-            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
-            if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
-            else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
-            axis = Vector3.forward;
-
-            StartCoroutine(RollCube(anchor, axis, false));
-        }
     }
 
     //direction true = kanan 
@@ -164,5 +173,20 @@ public class PlayerMainMenu : MonoBehaviour
     {
         if (transform.position.y == 19) return true;
         else return false;
+    }
+
+    private void HeroLandingEffect()
+    {
+        distance = firstPos.y - transform.position.y;
+        if (!detectionCollider[6])
+        {
+            firstPos.y = transform.position.y;
+            
+        }
+        else if (detectionCollider[6] && distance > 4)
+        {
+            distance = 0;
+            dustEffect.Play();
+        }
     }
 }

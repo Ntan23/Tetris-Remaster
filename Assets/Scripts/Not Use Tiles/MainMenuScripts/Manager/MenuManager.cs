@@ -12,10 +12,17 @@ public class MenuManager : MonoBehaviour
     bool isPlayerStart;
     bool isPlayerEnd;
     bool runOnceStart;
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private PlayerMainMenu player;
     void Start()
     {
         runOnceStart = false;
         LeanTween.value(blackScreen, UpdateAlpha, 1f, 0f, 1f);
+        if(SceneManager.GetActiveScene().buildIndex == 0 )
+        {
+            playerAnimator.Play("TeleportIncoming");
+            StartCoroutine(DelayStart());
+        }
     }
 
     // Update is called once per frame
@@ -55,13 +62,13 @@ public class MenuManager : MonoBehaviour
     }
 
     IEnumerator FirstChoice(){
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     IEnumerator SecondChoice()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
@@ -75,17 +82,26 @@ public class MenuManager : MonoBehaviour
 
     public void ButtonSetting()
     {
-        if (settingMenu.active)
+        if (settingMenu.activeInHierarchy)
         {
+            player.cantMove = true;
             LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
             StartCoroutine(Delay());
         }
         else
         {
+            player.cantMove = false;
             settingMenu.SetActive(true);
             LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
         }
 
+    }
+
+    private IEnumerator DelayStart()
+    {
+        player.cantMove = true;
+        yield return new WaitForSeconds(0.48f);
+        player.cantMove = false;
     }
 
     private IEnumerator Delay()
