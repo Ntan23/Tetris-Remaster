@@ -48,7 +48,7 @@ public class TetrisBlock : MonoBehaviour
     {
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
-        ghostPiece = FindObjectOfType<GhostPiece>();
+        ghostPiece = GhostPiece.Instance;
 
         fallTimeDelay = gm.GetBlockFallDelay();
         boardWidth = gm.GetBoardWidth();

@@ -5126,8 +5126,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015258789, y: -0.000015259}
-  m_SizeDelta: {x: 320, y: 160}
+  m_AnchoredPosition: {x: -0.0000038146973, y: 0}
+  m_SizeDelta: {x: 198.07, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &54075459
 MonoBehaviour:
@@ -5494,6 +5494,59 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!1 &319828676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 319828677}
+  - component: {fileID: 319828678}
+  m_Layer: 0
+  m_Name: Ghost Piece Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &319828677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319828676}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 410483829}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &319828678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319828676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6d8803ec5dd60d4c9dc0fd6fbb429a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostPieces:
+  - {fileID: 5441100407916642603, guid: d69df3e2770b9e34cb9a61111594e93a, type: 3}
+  - {fileID: 281266375952834352, guid: 4d8310d774b86814bb87681bcf572e10, type: 3}
+  - {fileID: 3526958535453326583, guid: 08a7fbf2600cefa4aaf649d6d38497df, type: 3}
+  - {fileID: 329666141379282968, guid: 594334483b1f5b7499ff3413d9d96006, type: 3}
+  - {fileID: 1180867109209247918, guid: bb2bd6a314f532a459de2cf0f092e2c0, type: 3}
+  - {fileID: 1648616870349964887, guid: 4e8f7cbd828101344b92ca0ef3f147de, type: 3}
+  - {fileID: 2790208526504071324, guid: 239c484c555895b40ae545b807576e19, type: 3}
+  currentPiece: {fileID: 0}
 --- !u!1 &339871151
 GameObject:
   m_ObjectHideFlags: 0
@@ -5697,6 +5750,7 @@ Transform:
   m_Children:
   - {fileID: 9601835}
   - {fileID: 1452307613}
+  - {fileID: 319828677}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7037,17 +7091,10 @@ MonoBehaviour:
   - {fileID: 8287064005876022767, guid: a95433e4db5a55f40ba8e62964e3b106, type: 3}
   - {fileID: 7355578134694575871, guid: 4aa2ead2e34bdc14b85dfda9c725e7a6, type: 3}
   - {fileID: 6443972575367912281, guid: ba6e6a99d7cfddd44b4e0898a8ad8b58, type: 3}
-  shadowTetrominoes:
-  - {fileID: 5441100407916642603, guid: d69df3e2770b9e34cb9a61111594e93a, type: 3}
-  - {fileID: 281266375952834352, guid: 4d8310d774b86814bb87681bcf572e10, type: 3}
-  - {fileID: 3526958535453326583, guid: 08a7fbf2600cefa4aaf649d6d38497df, type: 3}
-  - {fileID: 329666141379282968, guid: 594334483b1f5b7499ff3413d9d96006, type: 3}
-  - {fileID: 1180867109209247918, guid: bb2bd6a314f532a459de2cf0f092e2c0, type: 3}
-  - {fileID: 1648616870349964887, guid: 4e8f7cbd828101344b92ca0ef3f147de, type: 3}
-  - {fileID: 2790208526504071324, guid: 239c484c555895b40ae545b807576e19, type: 3}
   tetrominoesParent: {fileID: 511601783}
   nextPieceUI: {fileID: 1546525448}
   holdPieceUI: {fileID: 286972476}
+  ghostPiece: {fileID: 319828678}
 --- !u!1 &1479483751
 GameObject:
   m_ObjectHideFlags: 0

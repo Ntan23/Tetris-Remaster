@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Block
   - FallingBlock
+  - Tetromino
   layers:
   - Default
   - TransparentFX
