@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
-        transform.position = new Vector2(5, 22);
+        transform.position = new Vector2(5, 25);
     }
 
     void Update()
