@@ -48,7 +48,7 @@ public class TetrisBlock : MonoBehaviour
     {
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
-        ghostPiece = GhostPiece.Instance;
+        ghostPiece = FindObjectOfType<GhostPiece>();
 
         fallTimeDelay = gm.GetBlockFallDelay();
         boardWidth = gm.GetBoardWidth();
@@ -62,7 +62,7 @@ public class TetrisBlock : MonoBehaviour
     void Update()
     {
         if(!gm.IsPlaying()) return;
-
+        
         fallTimer += Time.deltaTime;
 
         if(mode == Mode.DoubleControl)
@@ -106,7 +106,7 @@ public class TetrisBlock : MonoBehaviour
                 fallTimeDelay /= 1000;
                 isHardDropping = true;
             }
-
+        
             if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
             {
                 Fall();
@@ -142,6 +142,7 @@ public class TetrisBlock : MonoBehaviour
         {
             transform.position += Vector3.up;
             AddToGrid();
+            ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
 
             isLock = true;
@@ -195,7 +196,6 @@ public class TetrisBlock : MonoBehaviour
             roundedX = Mathf.RoundToInt(children.transform.position.x);
             roundedY = Mathf.RoundToInt(children.transform.position.y);
             children.gameObject.tag = "Block";
-            ghostPiece.DestroyGhostPiece();
             GameManager.coordinate[roundedX, roundedY] = children;
         }
     }

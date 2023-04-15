@@ -20,12 +20,14 @@ public class TetrominoSpawnManager : MonoBehaviour
 
     #region OtherVariables
     [SerializeField] private GameObject[] tetrominoes;
+    [SerializeField] private GameObject[] shadowTetrominoes;
     [SerializeField] private Transform tetrominoesParent;
-    [SerializeField] private GhostPiece ghostPiece;
     [SerializeField] private NextPieceUI nextPieceUI;
     [SerializeField] private HoldPieceUI holdPieceUI;
     private GameObject objectToSpawn;
+    private GameObject shadow;
     private GameManager gm;
+    private GhostPiece ghostPiece;
     #endregion
 
     void Start() 
@@ -42,8 +44,12 @@ public class TetrominoSpawnManager : MonoBehaviour
         objectToSpawn = Instantiate(tetrominoes[index], transform.position, Quaternion.identity);
         objectToSpawn.transform.SetParent(tetrominoesParent);
 
+        shadow = Instantiate(shadowTetrominoes[index], transform.position, Quaternion.identity);
+        shadow.transform.SetParent(tetrominoesParent);
+
+        ghostPiece = shadow.GetComponent<GhostPiece>();
         ghostPiece.currentPiece = objectToSpawn;
-        ghostPiece.Initialize(index);
+        
         currentIndex = index;
 
         index = Random.Range(0, tetrominoes.Length);
@@ -55,13 +61,16 @@ public class TetrominoSpawnManager : MonoBehaviour
         objectToSpawn = Instantiate(tetrominoes[gm.GetSavedPieceIndex()], transform.position, Quaternion.identity);
         objectToSpawn.transform.SetParent(tetrominoesParent);
 
+        shadow = Instantiate(shadowTetrominoes[gm.GetSavedPieceIndex()], transform.position, Quaternion.identity);
+        shadow.transform.SetParent(tetrominoesParent);
+
+        ghostPiece = shadow.GetComponent<GhostPiece>();
         ghostPiece.currentPiece = objectToSpawn;
-        ghostPiece.Initialize(gm.GetSavedPieceIndex());
     }
 
     IEnumerator FirstSpawn()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(2.5f);
         SpawnNewTetromino();
     }
 
@@ -69,6 +78,7 @@ public class TetrominoSpawnManager : MonoBehaviour
     {
         gm.SetSavedPieceIndex(currentIndex);
         ClearAllFallingBlocks();
+        ghostPiece.DestroyGhostPiece();
         SpawnNewTetromino();
         holdPieceUI.UpdateSprite(gm.GetSavedPieceIndex());
     }
@@ -76,6 +86,7 @@ public class TetrominoSpawnManager : MonoBehaviour
     public void SwapTetromino()
     {
         ClearAllFallingBlocks();
+        ghostPiece.DestroyGhostPiece();
         SpawnHoldTetromino();
         gm.SetSavedPieceIndex(currentIndex);
         holdPieceUI.UpdateSprite(currentIndex);
