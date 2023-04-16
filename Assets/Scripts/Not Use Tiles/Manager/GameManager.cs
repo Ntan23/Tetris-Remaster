@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region OtherVariables
-    [SerializeField] private GameObject particleSystem;
+    [SerializeField] private GameObject particles;
     private ParticleSystem dustEffect;
     [SerializeField] private Transform tetrominoesParent;
     [SerializeField] private Transform playerTransform;
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        dustEffect = particleSystem.GetComponent<ParticleSystem>();
+        dustEffect = particles.GetComponent<ParticleSystem>();
         highscore = PlayerPrefs.GetInt("Highscore",0);
         bestLineCleared = PlayerPrefs.GetInt("BestLineCleared",0);
 
@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour
     public void LevelUp()
     {
         levelIndex++;
+        audioManager.PlayLevelUpSFX();
         DeleteAllBlocks();
         if(blockFallDelay > 0.2f) blockFallDelay -= 0.1f;
         if(targetTimerDelay > 0.5f) targetTimerDelay -= 0.25f;
