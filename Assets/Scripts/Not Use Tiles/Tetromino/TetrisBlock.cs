@@ -4,14 +4,6 @@ using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
 {
-    #region EnumVariables
-    private enum Mode{
-        SingleControl, DoubleControl
-    }
-
-    [SerializeField] private Mode mode;
-    #endregion
-
     #region FloatVariables
     private float fallTimer;
     private float fallTimeDelay;
@@ -44,8 +36,6 @@ public class TetrisBlock : MonoBehaviour
     private AudioManager audioManager;
     #endregion
 
-    void Awake() => modeIndex = PlayerPrefs.GetInt("Mode");
-
     void Start() 
     {
         tetrominoSpawner = TetrominoSpawnManager.Instance;
@@ -58,9 +48,6 @@ public class TetrisBlock : MonoBehaviour
 
         originalFallTimeDelay = fallTimeDelay;
         isHardDropping = false;
-
-        if(modeIndex == 1) mode = Mode.SingleControl;
-        else if(modeIndex == 2) mode = Mode.DoubleControl;
     }
 
     void Update()
@@ -69,7 +56,7 @@ public class TetrisBlock : MonoBehaviour
         
         fallTimer += Time.deltaTime;
 
-        if(mode == Mode.DoubleControl)
+        if(!gm.IsSingleControl())
         {
             if(Input.GetKeyDown(KeyCode.A)) 
             {
@@ -127,7 +114,7 @@ public class TetrisBlock : MonoBehaviour
             }
         }
 
-        if(mode == Mode.SingleControl)
+        if(gm.IsSingleControl())
         {
             targetTimer += Time.deltaTime;
 
@@ -135,6 +122,12 @@ public class TetrisBlock : MonoBehaviour
             {
                 TargetPlayer();
                 targetTimer = 0;
+            }
+
+            if(Input.GetKeyDown(KeyCode.Space)) 
+            {
+                fallTimeDelay /= 1000;
+                isHardDropping = true;
             }
 
             if(fallTimer > fallTimeDelay)

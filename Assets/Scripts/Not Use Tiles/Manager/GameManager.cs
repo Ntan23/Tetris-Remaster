@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     void Awake() 
     {
         if(Instance == null) Instance = this;
+
+        modeIndex = PlayerPrefs.GetInt("Mode");
     }
     #endregion
     
@@ -18,7 +20,12 @@ public class GameManager : MonoBehaviour
         IsPlaying, GameOver, GamePaused
     };
 
+    private enum Mode {
+        SingleControl, DoubleControl
+    };
+
     private State gameState;
+    private Mode gameMode;
     #endregion
 
     #region IntegerVariable
@@ -29,6 +36,7 @@ public class GameManager : MonoBehaviour
     private int levelIndex;
     private int score;
     private int savedPieceIndex;
+    private int modeIndex;
     #endregion
     
     #region FloatVariables
@@ -67,6 +75,9 @@ public class GameManager : MonoBehaviour
 
         levelIndex = 1;
         targetTimerDelay = 3.0f;
+
+        if(modeIndex == 1) gameMode = Mode.SingleControl;
+        if(modeIndex == 2) gameMode = Mode.DoubleControl;
     }
 
     void Update()
@@ -314,6 +325,11 @@ public class GameManager : MonoBehaviour
     public int GetSavedPieceIndex()
     {
         return savedPieceIndex;
+    }
+
+    public bool IsSingleControl()
+    {
+        return gameMode == Mode.SingleControl;
     }
 
     private IEnumerator DeathCoolDown(float coolDown)

@@ -9,8 +9,6 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private bool[] playerChoice = new bool[2];
     [SerializeField] private GameObject blackScreen;
     [SerializeField] private GameObject settingMenu;
-    bool isPlayerStart;
-    bool isPlayerEnd;
     bool runOnceStart;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private PlayerMainMenu player;
@@ -29,12 +27,14 @@ public class MenuManager : MonoBehaviour
     void Update()
     {
         DetectCollider();
-        if(isPlayerStart && !runOnceStart) {
+
+        if(playerChoice[0] && !runOnceStart) 
+        {
             LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
             StartCoroutine(FirstChoice());
             runOnceStart = true;
         }
-        if (isPlayerEnd && !runOnceStart)
+        if(playerChoice[1] && !runOnceStart)
         {
             Debug.Log("Choosen");
             LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
@@ -46,8 +46,6 @@ public class MenuManager : MonoBehaviour
     private void DetectCollider()
     {
         for(int i = 0; i < 2; i++) playerChoice[i] = gameObject.transform.GetChild(i).GetComponent<HitBoxDetection>().isTriggered;
-        isPlayerEnd = playerChoice[1];
-        isPlayerStart = playerChoice[0];
     }
 
     void UpdateAlpha(float alpha)
@@ -81,6 +79,7 @@ public class MenuManager : MonoBehaviour
         
         if(SceneManager.GetActiveScene().buildIndex == 0)
         {
+            Debug.Log("Quit");
             Application.Quit();
         }
     }

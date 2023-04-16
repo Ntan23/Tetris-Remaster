@@ -211,7 +211,6 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!runOnce && !IsMoving())
             {
-                Debug.Log("Change First Pos");
                 firstPos.y = transform.position.y;
                 runOnce = true;
             }

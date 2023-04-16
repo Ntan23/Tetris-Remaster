@@ -16,7 +16,12 @@ public class GhostPiece : MonoBehaviour
     private GameObject ghostPiece;
     private GameManager gm;
 
-    void Start() => gm = GameManager.Instance;
+    void Start() 
+    {
+        gm = GameManager.Instance;
+
+        if(gm.IsSingleControl()) this.enabled = false;
+    } 
 
     public void Initialize(int index) => ghostPiece = Instantiate(ghostPieces[index], currentPiece.transform.position, Quaternion.identity);
     
