@@ -170,7 +170,7 @@ MonoBehaviour:
   blockFallDelay: 1
   targetTimerDelay: 0
   deathTime: 1.5
-  particleSystem: {fileID: 1168147841}
+  particles: {fileID: 1168147841}
   tetrominoesParent: {fileID: 511601783}
   playerTransform: {fileID: 2010761983}
   scoreUI: {fileID: 1775230871}
