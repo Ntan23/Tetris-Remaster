@@ -102,7 +102,7 @@ MonoBehaviour:
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
   - name: ButtonClick
-    clip: {fileID: 8300000, guid: 6ce83f294cdb28e49b61a98e171ce27e, type: 3}
+    clip: {fileID: 8300000, guid: b26cb148a9d63c846b803e1fd63815c3, type: 3}
     volume: 1
     pitch: 1
     loop: 0

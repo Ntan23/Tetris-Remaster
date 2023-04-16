@@ -29,14 +29,14 @@ public class MenuManager : MonoBehaviour
 
         if(playerChoice[0] && !runOnceStart) 
         {
-            LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
+            LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 1.5f);
             StartCoroutine(FirstChoice());
             runOnceStart = true;
         }
         if(playerChoice[1] && !runOnceStart)
         {
             Debug.Log("Choosen");
-            LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
+            LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 1.5f);
             StartCoroutine(SecondChoice());
             runOnceStart = true;
         }
@@ -59,14 +59,14 @@ public class MenuManager : MonoBehaviour
     }
 
     IEnumerator FirstChoice(){
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     IEnumerator SecondChoice()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {

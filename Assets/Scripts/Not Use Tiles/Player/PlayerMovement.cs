@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
             if(nextPosition.x >= -0.1f) StartCoroutine(RollCube(anchor, axis, false));
         }
 
-        if (!IsTherePossibleMove()) gm.GameOver(false);
+        if (!IsTherePossibleMove()) gm.GameOver();
         
         if(AtTheTop()) gm.LevelUp();
     }

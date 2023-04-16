@@ -131,7 +131,7 @@ public class TetrisBlock : MonoBehaviour
             }
 
             if(!gm.BlockAtTheTop()) tetrominoSpawner.SpawnNewTetromino();
-            else if(gm.BlockAtTheTop()) gm.GameOver(false);
+            else if(gm.BlockAtTheTop()) gm.GameOver();
 
             gm.SetBackAlreadySwap();
             

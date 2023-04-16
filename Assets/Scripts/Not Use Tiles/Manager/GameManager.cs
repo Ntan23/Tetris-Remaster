@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject blackScreen;
     private GhostPiece ghostPiece;
     private AudioManager audioManager;
+    [SerializeField] private GameObject settingMenu;
     #endregion
 
     void Start()
@@ -98,24 +99,50 @@ public class GameManager : MonoBehaviour
         } 
     }
 
+    public void ButtonSetting()
+    {
+        if (settingMenu.activeInHierarchy)
+        {
+            Time.timeScale = 1f;
+            LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
+            StartCoroutine(Delay("deActivating"));
+        }
+        else
+        {
+            settingMenu.SetActive(true);
+            LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
+            StartCoroutine(Delay("activating"));
+        }
+    }
+
+    public void ReturnToMenu()
+    {
+        Time.timeScale = 1f;
+        LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
+        playerTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        playerAnimator.Play("Teleport");
+        StartCoroutine(ImminantDelay());
+    }
+
     private void UpdateAlpha(float alpha) => blackScreen.GetComponent<CanvasGroup>().alpha = alpha;
 
-    public void GameOver(bool isHardDropDead)
+    void UpdateScale(float scale)
+    {
+        settingMenu.GetComponent<CanvasGroup>().alpha = scale;
+        settingMenu.GetComponent<RectTransform>().localScale = new Vector3(scale, scale, settingMenu.GetComponent<RectTransform>().localScale.z);
+    }
+
+    public void GameOver()
     {   
         ghostPiece.DestroyGhostPiece();
         CheckScore();
         CheckLineCleared();
         gameState = State.GameOver;
         playerTransform.rotation = Quaternion.Euler(0, 0, 0);
-
-        if(isHardDropDead)
-        {
-            playerAnimator.Play("Teleport");
-            playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-            playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-            StartCoroutine(ImminantDelay());
-        }
-        else if(!isHardDropDead) StartCoroutine(DeathCoolDown(deathTime));
+        playerAnimator.Play("Teleport");
+        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        StartCoroutine(ImminantDelay());
     } 
 
     public void LevelUp()
@@ -149,7 +176,7 @@ public class GameManager : MonoBehaviour
         if(emptyBlockCount == 1) 
         {
             DeleteLine((int) position.y);
-            GameOver(false);
+            GameOver();
         }
         else if(emptyBlockCount != 1) emptyBlockCount = 0;
     }
@@ -342,27 +369,23 @@ public class GameManager : MonoBehaviour
         return savedPieceIndex;
     }
 
-    private IEnumerator DeathCoolDown(float coolDown)
+    private IEnumerator Delay(string condition)
     {
-        playerAnimator.Play("DeathBeep");
-        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-
-        audioManager.PlayBeepingSFX();
-        
-        while (coolDown >= 0)
+        yield return new WaitForSeconds(0.2f);
+        if(condition == "deActivating")
         {
-            coolDown -= Time.deltaTime;
-            yield return null;
+            settingMenu.SetActive(false);
         }
-        LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
-        yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(0);
+        else if(condition == "activating")
+        {
+            Time.timeScale = 0f;
+        }
     }
 
     private IEnumerator ImminantDelay()
     {
-        LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
-        yield return new WaitForSeconds(3f);
+        LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 1.5f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(0);
     }
 }

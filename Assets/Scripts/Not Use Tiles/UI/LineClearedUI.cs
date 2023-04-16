@@ -12,6 +12,6 @@ public class LineClearedUI : MonoBehaviour
 
         UpdateLineClearedText();
     }
-
-    public void UpdateLineClearedText() => lineClearedText.text = "Line Cleared: " + gm.GetLineCleared().ToString();
+        
+    public void UpdateLineClearedText() => lineClearedText.text = "LINE CLEARED : " + gm.GetLineCleared().ToString();
 }
