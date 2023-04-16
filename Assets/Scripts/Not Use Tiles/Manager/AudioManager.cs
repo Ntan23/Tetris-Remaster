@@ -24,7 +24,8 @@ public class AudioManager : MonoBehaviour
         s.source.PlayOneShot(s.clip);
     }
 
-    void Start() {
+    void Start() 
+    {
         foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
@@ -34,7 +35,6 @@ public class AudioManager : MonoBehaviour
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = s.audioMixer;
         }
-        Play("BGM");
     } 
 
     public void PlayBeepingSFX() => Play("Beeping");

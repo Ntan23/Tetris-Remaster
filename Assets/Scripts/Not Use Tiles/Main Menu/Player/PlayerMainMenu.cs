@@ -44,7 +44,7 @@ public class PlayerMainMenu : MonoBehaviour
         gm = GameManager.Instance;
         cameraShake = FindObjectOfType<CameraShake>();
         audioManager = AudioManager.Instance;
-        canMove = true;
+        StartCoroutine(Delay());
     }
 
 
@@ -200,5 +200,11 @@ public class PlayerMainMenu : MonoBehaviour
             audioManager.PlayHugeStomp();
             dustEffect.Play();
         }
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        canMove = true;
     }
 }
