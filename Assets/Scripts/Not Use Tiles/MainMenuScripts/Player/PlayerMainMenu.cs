@@ -7,7 +7,7 @@ public class PlayerMainMenu : MonoBehaviour
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
-    public bool cantMove;
+    public bool canMove;
     #endregion
 
     #region FloatVariables
@@ -36,16 +36,16 @@ public class PlayerMainMenu : MonoBehaviour
 
     void Start()
     {
-
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
+        canMove = true;
     }
 
 
     void Update()
     {
         //Only for Start
-        if(!cantMove)
+        if(canMove)
         {
             DetectCollision();
             HeroLandingEffect();
@@ -161,12 +161,6 @@ public class PlayerMainMenu : MonoBehaviour
     private void DetectCollision()
     {
         for (int i = 0; i < detectionCollider.Length; i++) detectionCollider[i] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
-    }
-
-
-    public bool IsMoving()
-    {
-        return isMoving;
     }
 
     public bool AtTheTop()

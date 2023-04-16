@@ -5,28 +5,31 @@ using UnityEngine;
 public class EyesAnimationScript : MonoBehaviour
 {
     private GameManager gm;
-    bool isDone = true;
+    private Animator animator;
+    private bool isDone;
+    private float timeDelay;
 
     private void Start()
     {
         gm = GameManager.Instance;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        float timeDelay = Random.Range(7, 10);
-        if (isDone)
+        timeDelay = Random.Range(5, 10);
+
+        if(!isDone)
         {
-            isDone = false;
+            isDone = true;
             StartCoroutine(delay(timeDelay));
         }
-       
     }
 
     IEnumerator delay(float t)
     {
         yield return new WaitForSeconds(t);
-        gameObject.GetComponent<Animator>().Play("EyeBlinkAnimation");
-        isDone= true;
+        animator.Play("EyeBlinkAnimation");
+        isDone = false;
     }
 }

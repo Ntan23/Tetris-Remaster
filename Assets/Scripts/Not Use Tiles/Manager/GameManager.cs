@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.C) && !isSwapped)
             {
+                audioManager.PlayBlockHoldSFX();
+
                 if(!isHolding)
                 {
                     tetrominoSpawner.SetHoldPieceIndexAndSpawnNewOne();
@@ -135,7 +137,11 @@ public class GameManager : MonoBehaviour
             if(coordinate[i, (int)position.y] == null) emptyBlockCount++;
         }
 
-        if(emptyBlockCount == 1) GameOver(false);
+        if(emptyBlockCount == 1) 
+        {
+            DeleteLine((int) position.y);
+            GameOver(false);
+        }
         else if(emptyBlockCount != 1) emptyBlockCount = 0;
     }
 
@@ -145,10 +151,10 @@ public class GameManager : MonoBehaviour
         {
             if(HasLine(i)) 
             {
-                emptyBlockCount = 0;
                 lineCount++;
                 DeleteLine(i);
                 MoveRowDown(i);
+                CheckPlayerInLine();
             }
         }
 
@@ -167,8 +173,11 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < boardWidth; i++)
         {
-            Destroy(coordinate[i, verticalCoordinate].gameObject);
-            coordinate[i, verticalCoordinate] = null;
+            if(coordinate[i, verticalCoordinate] != null)
+            {
+                Destroy(coordinate[i, verticalCoordinate].gameObject);
+                coordinate[i, verticalCoordinate] = null;
+            }
         }
     }
 

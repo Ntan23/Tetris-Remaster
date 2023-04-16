@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     #region OtherVariables
     private Rigidbody2D rb;
     private GameManager gm;
+    private AudioManager audioManager;
     private ParticleSystem dustEffect;
     #endregion
 
@@ -37,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start() 
     {
+        audioManager = AudioManager.Instance;
+
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
         transform.position = new Vector2(5, 25);
@@ -85,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
     //!direction = kiri
     private IEnumerator RollCube(Vector3 anchor, Vector3 axis, bool direction)
     {
+        audioManager.PlayPlayerMovementSFX();
         rb.gravityScale = 0;
         float angleBefore = transform.rotation.z;
         float angleAfter;

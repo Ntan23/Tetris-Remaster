@@ -23,6 +23,7 @@ public class TetrisBlock : MonoBehaviour
     #region IntegerVariables
     private int roundedX;
     private int playerRoundedX;
+    private int modeIndex;
     #endregion
 
     #region BoolVariables
@@ -39,20 +40,27 @@ public class TetrisBlock : MonoBehaviour
     private TetrominoSpawnManager tetrominoSpawner;
     private GameManager gm;
     private GhostPiece ghostPiece;
-    ParticleSystem dustEffect;
+    private ParticleSystem dustEffect;
+    private AudioManager audioManager;
     #endregion
+
+    void Awake() => modeIndex = PlayerPrefs.GetInt("Mode");
 
     void Start() 
     {
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
         ghostPiece = GhostPiece.Instance;
+        audioManager = AudioManager.Instance;
 
         fallTimeDelay = gm.GetBlockFallDelay();
         targetTimeDelay = gm.GetTargetTimerDelay();
 
         originalFallTimeDelay = fallTimeDelay;
         isHardDropping = false;
+
+        if(modeIndex == 1) mode = Mode.SingleControl;
+        else if(modeIndex == 2) mode = Mode.DoubleControl;
     }
 
     void Update()
@@ -71,6 +79,8 @@ public class TetrisBlock : MonoBehaviour
                 {
                     transform.position += Vector3.left;
 
+                    if(IsValidMove()) audioManager.PlayBlockMoveSFX();
+
                     if(!IsValidMove()) transform.position -= Vector3.left;
                 }
             }
@@ -82,6 +92,8 @@ public class TetrisBlock : MonoBehaviour
                 {
                     transform.position += Vector3.right;
 
+                    if(IsValidMove()) audioManager.PlayBlockMoveSFX();
+
                     if(!IsValidMove()) transform.position -= Vector3.right;
                 }
             }
@@ -89,11 +101,15 @@ public class TetrisBlock : MonoBehaviour
             {
                 transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
 
+                if(IsValidMove() )audioManager.PlayBlockRotateSFX();
+
                 if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
             } 
             else if(Input.GetKeyDown(KeyCode.E))
             {
                 transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+                
+                if(IsValidMove() )audioManager.PlayBlockRotateSFX();
 
                 if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
             }
@@ -134,6 +150,8 @@ public class TetrisBlock : MonoBehaviour
     {
         transform.position += Vector3.down;
 
+        if(!isHardDropping) audioManager.PlayBlockMoveSFX();
+
         if(!IsValidMove()) 
         {
             transform.position += Vector3.up;
@@ -145,7 +163,11 @@ public class TetrisBlock : MonoBehaviour
             isLock = true;
 
             if(!isHardDropping) gm.AddScore(1);
-            else if(isHardDropping) gm.AddScore(5);
+            else if(isHardDropping) 
+            {
+                audioManager.PlayHardDropSFX();
+                gm.AddScore(5);
+            }
 
             if(!gm.BlockAtTheTop()) tetrominoSpawner.SpawnNewTetromino();
             else if(gm.BlockAtTheTop()) gm.GameOver(false);

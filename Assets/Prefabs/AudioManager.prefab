@@ -59,3 +59,52 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: BlockHold
+    clip: {fileID: 8300000, guid: f6d988885d06d474fb5179d161e6cf62, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: BlockMove
+    clip: {fileID: 8300000, guid: fd0a6925a0f68f24ea09eb98982055a9, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: BlockRotate
+    clip: {fileID: 8300000, guid: ed1d561b27b069f4eb65e35c7943aa5a, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: HardDrop
+    clip: {fileID: 8300000, guid: 8c3a51f2134a0db4aa85bb23097a49a5, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: LevelUp
+    clip: {fileID: 8300000, guid: 9f94a21ee2e8db24aa16118675fc1170, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: PlayerMove
+    clip: {fileID: 8300000, guid: f49fdcb698c7c214cb78d921b673e1ae, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: ButtonClick
+    clip: {fileID: 8300000, guid: 6ce83f294cdb28e49b61a98e171ce27e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}

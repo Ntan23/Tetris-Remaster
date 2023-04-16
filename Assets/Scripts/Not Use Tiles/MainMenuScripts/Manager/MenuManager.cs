@@ -63,15 +63,20 @@ public class MenuManager : MonoBehaviour
 
     IEnumerator FirstChoice(){
         yield return new WaitForSeconds(3f);
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        if(SceneManager.GetActiveScene().buildIndex == 1) PlayerPrefs.SetInt("Mode",1);
     }
 
     IEnumerator SecondChoice()
     {
         yield return new WaitForSeconds(3f);
+
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            PlayerPrefs.SetInt("Mode",2);
         }
         
         if(SceneManager.GetActiveScene().buildIndex == 0)
@@ -82,26 +87,25 @@ public class MenuManager : MonoBehaviour
 
     public void ButtonSetting()
     {
-        if (settingMenu.activeInHierarchy)
+        if(settingMenu.activeInHierarchy)
         {
-            player.cantMove = true;
+            player.canMove = true;
             LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
             StartCoroutine(Delay());
         }
         else
         {
-            player.cantMove = false;
+            player.canMove = false;
             settingMenu.SetActive(true);
             LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
         }
-
     }
 
     private IEnumerator DelayStart()
     {
-        player.cantMove = true;
+        player.canMove = false;
         yield return new WaitForSeconds(0.48f);
-        player.cantMove = false;
+        player.canMove = true;
     }
 
     private IEnumerator Delay()

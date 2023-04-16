@@ -37,4 +37,11 @@ public class AudioManager : MonoBehaviour
     void Start() => Play("BGM");
 
     public void PlayBeepingSFX() => Play("Beeping");
+    public void PlayBlockHoldSFX() => Play("BlockHold");
+    public void PlayBlockMoveSFX() => Play("BlockMove");
+    public void PlayBlockRotateSFX() => Play("BlockRotate");
+    public void PlayHardDropSFX() => Play("HardDrop");
+    public void PlayLevelUpSFX() => Play("LevelUp");
+    public void PlayPlayerMovementSFX() => Play("PlayerMove");
+    public void PlayButtonClickSFX() => Play("ButtonClick");
 }
