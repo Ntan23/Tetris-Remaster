@@ -106,7 +106,7 @@ public class TetrisBlock : MonoBehaviour
         if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
         {
             Fall();
-
+            
             fallTimer = 0.0f;
         }
     }
@@ -118,6 +118,7 @@ public class TetrisBlock : MonoBehaviour
         if(!IsValidMove()) 
         {
             transform.position += Vector3.up;
+
             AddToGrid();
             ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
@@ -130,11 +131,11 @@ public class TetrisBlock : MonoBehaviour
                 gm.AddScore(5);
             }
 
+            gm.SetBackAlreadySwap();
+
             if(!gm.BlockAtTheTop()) tetrominoSpawner.SpawnNewTetromino();
             else if(gm.BlockAtTheTop()) gm.GameOver(false);
 
-            gm.SetBackAlreadySwap();
-            
             this.enabled = false;
         }
     }

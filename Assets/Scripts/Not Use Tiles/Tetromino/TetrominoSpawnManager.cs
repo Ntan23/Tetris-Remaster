@@ -16,6 +16,7 @@ public class TetrominoSpawnManager : MonoBehaviour
     #region IntegerVariables
     private int index;
     private int currentIndex;
+    private int indexChecker;
     #endregion
 
     #region OtherVariables
@@ -33,6 +34,7 @@ public class TetrominoSpawnManager : MonoBehaviour
         gm = GameManager.Instance;
 
         index = Random.Range(0, tetrominoes.Length);
+        indexChecker = index;
         nextPieceUI.UpdateSprite(index);
         StartCoroutine(FirstSpawn());
     }
@@ -48,6 +50,11 @@ public class TetrominoSpawnManager : MonoBehaviour
         currentIndex = index;
 
         index = Random.Range(0, tetrominoes.Length);
+
+        while(index == indexChecker) index = Random.Range(0, tetrominoes.Length);
+        
+        if(index != indexChecker) indexChecker = index;
+
         nextPieceUI.UpdateSprite(index);
     }
 
