@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     private static int boardWidth = 10;
     private static int boardHeight = 23;
     private int lineCount;
+    private int emptyBlockCount;
     private int levelIndex;
     private int score;
     private int savedPieceIndex;
@@ -51,10 +52,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ScoreUI scoreUI;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GameObject blackScreen;
+    private GhostPiece ghostPiece;
+    private AudioManager audioManager;
     #endregion
 
     void Start()
     {
+        ghostPiece = GhostPiece.Instance;
+        audioManager = AudioManager.Instance;
+
         LeanTween.value(blackScreen, UpdateAlpha, 1f, 0f, 2.5f);
         gameState = State.IsPlaying;
         tetrominoSpawner = TetrominoSpawnManager.Instance;
@@ -83,28 +89,23 @@ public class GameManager : MonoBehaviour
         } 
     }
 
-    private void UpdateAlpha(float alpha)
-    {
-        blackScreen.GetComponent<CanvasGroup>().alpha = alpha;
-    }
+    private void UpdateAlpha(float alpha) => blackScreen.GetComponent<CanvasGroup>().alpha = alpha;
 
-    public void GameOverImminant()
+    public void GameOver(bool isHardDropDead)
     {
+        ghostPiece.DestroyGhostPiece();
         gameState = State.GameOver;
-        playerAnimator.Play("Teleport");
-        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
         playerTransform.rotation = Quaternion.Euler(0, 0, 0);
-        playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-        StartCoroutine(ImminantDelay());
-        
-    }
 
-    public void GameOver()
-    {
-        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
-        StartCoroutine(DeathCoolDown(deathTime));
-        gameState = State.GameOver;
-    }   
+        if(isHardDropDead)
+        {
+            playerAnimator.Play("Teleport");
+            playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+            playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+            StartCoroutine(ImminantDelay());
+        }
+        else if(!isHardDropDead) StartCoroutine(DeathCoolDown(deathTime));
+    } 
 
     public void LevelUp()
     {
@@ -125,12 +126,26 @@ public class GameManager : MonoBehaviour
         return blockFallDelay;
     }
 
+    public void CheckPlayerInLine()
+    {
+        Vector2 position = RoundPosition(playerTransform.position);
+
+        for(int i = 0; i < boardWidth; i++)
+        {
+            if(coordinate[i, (int)position.y] == null) emptyBlockCount++;
+        }
+
+        if(emptyBlockCount == 1) GameOver(false);
+        else if(emptyBlockCount != 1) emptyBlockCount = 0;
+    }
+
     public void CheckForLineComplete()
     {
         for(int i = boardHeight - 1; i >= 0; i--)
         {
             if(HasLine(i)) 
             {
+                emptyBlockCount = 0;
                 lineCount++;
                 DeleteLine(i);
                 MoveRowDown(i);
@@ -223,6 +238,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ClearAllFallingBlocks()
+    {
+        GameObject[] fallingBlocks = GameObject.FindGameObjectsWithTag("FallingBlock");
+
+        for(int i = 0; i < fallingBlocks.Length; i++) Destroy(fallingBlocks[i]);
+    }
+
     public bool BlockAtTheTop()
     {
         for(int i = 0; i < boardWidth; i++)
@@ -231,6 +253,21 @@ public class GameManager : MonoBehaviour
         }
 
         return false;
+    }
+    
+    public Transform GetBlockAtPosition(Vector3 position)
+    {
+        return coordinate[(int)position.x, (int)position.y];
+    }
+
+    public bool IsInsidePlayfield(Vector3 position)
+    {
+        return (int)position.x >= 0 && (int)position.x < boardWidth && (int)position.y >= 0 && (int)position.y < boardHeight;
+    }
+
+    public Vector2 RoundPosition(Vector2 position)
+    {
+        return new Vector2(Mathf.Round(position.x), Mathf.Round(position.y));
     }
 
     public void AddScore(int scoreToAdd)
@@ -249,16 +286,6 @@ public class GameManager : MonoBehaviour
     public void SetSavedPieceIndex(int index) => savedPieceIndex = index;
 
     public void SetBackAlreadySwap() => isSwapped = false;
-    
-    public int GetBoardWidth()
-    {
-        return boardWidth;
-    }
-
-    public int GetBoardHeight()
-    {
-        return boardHeight;
-    }
 
     public int GetScore()
     {
@@ -284,11 +311,9 @@ public class GameManager : MonoBehaviour
     {
         playerAnimator.Play("DeathBeep");
         playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-        if (!isSoundPlayed)
-        {
-            gameObject.GetComponent<AudioSource>().Play();
-            isSoundPlayed = true;
-        }
+
+        audioManager.PlayBeepingSFX();
+        
         while (coolDown >= 0)
         {
             coolDown -= Time.deltaTime;

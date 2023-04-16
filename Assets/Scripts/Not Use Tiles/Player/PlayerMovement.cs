@@ -46,12 +46,14 @@ public class PlayerMovement : MonoBehaviour
     {
         DetectCollision();
         HeroLandingEffect();
+
         if (!gm.IsPlaying()) return;
         if (isMoving) return;
-        
+
         if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
         {
             transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+
             if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
             else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
             axis = Vector3.back;
@@ -60,9 +62,11 @@ public class PlayerMovement : MonoBehaviour
             
             if(nextPosition.x <= 9.1f) StartCoroutine(RollCube(anchor, axis, true));
         }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
         {
             transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
+
             if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
             else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
             axis = Vector3.forward;
@@ -72,10 +76,8 @@ public class PlayerMovement : MonoBehaviour
             if(nextPosition.x >= -0.1f) StartCoroutine(RollCube(anchor, axis, false));
         }
 
-        if (!IsTherePossibleMove())
-        {
-            gm.GameOver();
-        }
+        if (!IsTherePossibleMove()) gm.GameOver(false);
+        
         if(AtTheTop()) gm.LevelUp();
     }
 
@@ -88,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
         float angleAfter;
         isMoving = true;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
+
         if (detectionCollider[4] && direction) //kanan naik
         {
             for (int i = 0; i < (180 / rollSpeed); i++)
@@ -158,6 +161,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.eulerAngles.z));
         rb.gravityScale = 1;
         gameObject.GetComponent<BoxCollider2D>().enabled = true;
+        gm.CheckPlayerInLine();
         isMoving = false;
     }
 
@@ -195,6 +199,7 @@ public class PlayerMovement : MonoBehaviour
         if(transform.position.y == 19) return true;
         else return false;
     }
+
     private void HeroLandingEffect()
     {
         //Debug.Log(distance + " Last Pos: " + firstPos.y);

@@ -21,10 +21,7 @@ public class TetrisBlock : MonoBehaviour
     #endregion
 
     #region IntegerVariables
-    private int boardWidth;
-    private int boardHeight;
     private int roundedX;
-    private int roundedY;
     private int playerRoundedX;
     #endregion
 
@@ -52,8 +49,6 @@ public class TetrisBlock : MonoBehaviour
         ghostPiece = GhostPiece.Instance;
 
         fallTimeDelay = gm.GetBlockFallDelay();
-        boardWidth = gm.GetBoardWidth();
-        boardHeight = gm.GetBoardHeight();
         targetTimeDelay = gm.GetTargetTimerDelay();
 
         originalFallTimeDelay = fallTimeDelay;
@@ -107,7 +102,7 @@ public class TetrisBlock : MonoBehaviour
                 fallTimeDelay /= 1000;
                 isHardDropping = true;
             }
-        
+
             if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
             {
                 Fall();
@@ -145,6 +140,7 @@ public class TetrisBlock : MonoBehaviour
             AddToGrid();
             ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
+            gm.CheckPlayerInLine();
 
             isLock = true;
 
@@ -152,7 +148,7 @@ public class TetrisBlock : MonoBehaviour
             else if(isHardDropping) gm.AddScore(5);
 
             if(!gm.BlockAtTheTop()) tetrominoSpawner.SpawnNewTetromino();
-            else if(gm.BlockAtTheTop()) gm.GameOver();
+            else if(gm.BlockAtTheTop()) gm.GameOver(false);
 
             gm.SetBackAlreadySwap();
             
@@ -162,14 +158,15 @@ public class TetrisBlock : MonoBehaviour
 
     private bool IsValidMove()
     {
+        Vector2 position;
+
         foreach(Transform children in transform)
         {
-            roundedX = Mathf.RoundToInt(children.transform.position.x);
-            roundedY = Mathf.RoundToInt(children.transform.position.y);
+            position = gm.RoundPosition(children.transform.position);
 
-            if(roundedX < 0 || roundedX >= boardWidth || roundedY < 0 || roundedY >= boardHeight) return false;
+            if(!gm.IsInsidePlayfield(position)) return false;
 
-            if(GameManager.coordinate[roundedX, roundedY] != null) return false;
+            if(gm.GetBlockAtPosition(position) != null) return false;
         }
 
         return true;
@@ -192,12 +189,15 @@ public class TetrisBlock : MonoBehaviour
 
     private void AddToGrid()
     {
+        Vector2 position;
+
         foreach(Transform children in transform)
         {
-            roundedX = Mathf.RoundToInt(children.transform.position.x);
-            roundedY = Mathf.RoundToInt(children.transform.position.y);
+            position = gm.RoundPosition(children.transform.position);
+         
             children.gameObject.tag = "Block";
-            GameManager.coordinate[roundedX, roundedY] = children;
+
+            GameManager.coordinate[(int)position.x, (int)position.y] = children;
         }
     }
 

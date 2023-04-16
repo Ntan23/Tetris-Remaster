@@ -22,7 +22,7 @@ public class GhostPiece : MonoBehaviour
     
     void LateUpdate()
     {
-        if(currentPiece != null)
+        if(currentPiece != null && gm.IsPlaying())
         {
             FollowActiveTetromino();
             MoveDown();
@@ -48,31 +48,16 @@ public class GhostPiece : MonoBehaviour
 
         foreach (Transform block in ghostPiece.transform)
         {
-            position = RoundPosition(block.position);
+            position = gm.RoundPosition(block.position);
 
-            if(!IsInsidePlayfield(position)) return false;  
+            if(!gm.IsInsidePlayfield(position)) return false;  
 
-            if(GetBlockAtPosition(position) != null && GetBlockAtPosition(position).transform.parent != ghostPiece.transform) return false;
+            if(gm.GetBlockAtPosition(position) != null && gm.GetBlockAtPosition(position).transform.parent != ghostPiece.transform) return false;
         }
 
         return true;
     }   
 
     public void DestroyGhostPiece() => Destroy(ghostPiece);
-
-    private Transform GetBlockAtPosition(Vector3 position)
-    {
-        return GameManager.coordinate[(int)position.x, (int)position.y];
-    }
-
-    private bool IsInsidePlayfield(Vector3 position)
-    {
-        return position.x >= 0 && position.x < gm.GetBoardWidth() && position.y >= 0 && position.y < gm.GetBoardHeight();
-    }
-
-    private Vector2 RoundPosition(Vector2 position)
-    {
-        return new Vector2(Mathf.Round(position.x), Mathf.Round(position.y));
-    }
 }
 

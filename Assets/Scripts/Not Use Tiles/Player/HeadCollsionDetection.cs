@@ -12,10 +12,11 @@ public class HeadCollsionDetection : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collisionInfo)
     {
         tetrisBlock = FindObjectOfType<TetrisBlock>();
+        
         if(tetrisBlock != null)
         {
-            if (collisionInfo.gameObject.CompareTag("FallingBlock") && tetrisBlock.GetIsHardDropping()) gm.GameOverImminant();
+            if (collisionInfo.gameObject.CompareTag("FallingBlock") && tetrisBlock.GetIsHardDropping()) gm.GameOver(true);
+            else if (collisionInfo.gameObject.CompareTag("FallingBlock") && !tetrisBlock.GetIsHardDropping()) gm.GameOver(false);
         }
-        else if (collisionInfo.gameObject.CompareTag("FallingBlock")) gm.GameOver();
     }
 }

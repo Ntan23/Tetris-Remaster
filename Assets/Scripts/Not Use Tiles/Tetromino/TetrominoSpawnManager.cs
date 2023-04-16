@@ -69,7 +69,7 @@ public class TetrominoSpawnManager : MonoBehaviour
     public void SetHoldPieceIndexAndSpawnNewOne()
     {
         gm.SetSavedPieceIndex(currentIndex);
-        ClearAllFallingBlocks();
+        gm.ClearAllFallingBlocks();
         ghostPiece.DestroyGhostPiece();
         SpawnNewTetromino();
         holdPieceUI.UpdateSprite(gm.GetSavedPieceIndex());
@@ -77,17 +77,10 @@ public class TetrominoSpawnManager : MonoBehaviour
 
     public void SwapTetromino()
     {
-        ClearAllFallingBlocks();
+        gm.ClearAllFallingBlocks();
         ghostPiece.DestroyGhostPiece();
         SpawnHoldTetromino();
         gm.SetSavedPieceIndex(currentIndex);
         holdPieceUI.UpdateSprite(currentIndex);
-    }
-
-    private void ClearAllFallingBlocks()
-    {
-        GameObject[] fallingBlocks = GameObject.FindGameObjectsWithTag("FallingBlock");
-
-        for(int i = 0; i < fallingBlocks.Length; i++) Destroy(fallingBlocks[i]);
     }
 }
