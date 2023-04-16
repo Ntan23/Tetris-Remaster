@@ -29,7 +29,7 @@ public class PlayerMainMenu : MonoBehaviour
     private Rigidbody2D rb;
     private GameManager gm;
     private ParticleSystem dustEffect;
-    private AudioManager am;
+    private AudioManager audioManager;
     #endregion
 
     private void Awake()
@@ -42,7 +42,7 @@ public class PlayerMainMenu : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
-        am = FindObjectOfType<AudioManager>();
+        audioManager = AudioManager.Instance;
         canMove = true;
     }
 
@@ -85,7 +85,7 @@ public class PlayerMainMenu : MonoBehaviour
         float angleBefore = transform.rotation.z;
         float angleAfter;
         isMoving = true;
-        am.PlayPlayerMovementSFX();
+        audioManager.PlayPlayerMovementSFX();
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         if (detectionCollider[4] && direction) //kanan naik
         {
@@ -195,7 +195,7 @@ public class PlayerMainMenu : MonoBehaviour
             runOnce = false;
             firstPos.y = transform.position.y;
             distance = 0;
-            am.PlayHugeStomp();
+            audioManager.PlayHugeStomp();
             dustEffect.Play();
         }
     }
