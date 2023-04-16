@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
     void Awake() 
     {
         if(Instance == null) Instance = this;
-
-        modeIndex = PlayerPrefs.GetInt("Mode");
     }
     #endregion
     
@@ -20,23 +18,20 @@ public class GameManager : MonoBehaviour
         IsPlaying, GameOver, GamePaused
     };
 
-    private enum Mode {
-        SingleControl, DoubleControl
-    };
-
     private State gameState;
-    private Mode gameMode;
     #endregion
 
     #region IntegerVariable
     private static int boardWidth = 10;
     private static int boardHeight = 23;
     private int lineCount;
+    private int lineCleared;
+    private int bestLineCleared;
     private int emptyBlockCount;
     private int levelIndex;
     private int score;
+    private int highscore;
     private int savedPieceIndex;
-    private int modeIndex;
     #endregion
     
     #region FloatVariables
@@ -58,6 +53,7 @@ public class GameManager : MonoBehaviour
     private TetrominoSpawnManager tetrominoSpawner;
     public static Transform[,] coordinate = new Transform[boardWidth, boardHeight];
     [SerializeField] private ScoreUI scoreUI;
+    [SerializeField] private LineClearedUI lineClearedUI;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GameObject blackScreen;
     private GhostPiece ghostPiece;
@@ -66,6 +62,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        highscore = PlayerPrefs.GetInt("Highscore",0);
+        bestLineCleared = PlayerPrefs.GetInt("BestLineCleared",0);
+
         ghostPiece = GhostPiece.Instance;
         audioManager = AudioManager.Instance;
 
@@ -75,9 +74,6 @@ public class GameManager : MonoBehaviour
 
         levelIndex = 1;
         targetTimerDelay = 3.0f;
-
-        if(modeIndex == 1) gameMode = Mode.SingleControl;
-        if(modeIndex == 2) gameMode = Mode.DoubleControl;
     }
 
     void Update()
@@ -105,8 +101,10 @@ public class GameManager : MonoBehaviour
     private void UpdateAlpha(float alpha) => blackScreen.GetComponent<CanvasGroup>().alpha = alpha;
 
     public void GameOver(bool isHardDropDead)
-    {
+    {   
         ghostPiece.DestroyGhostPiece();
+        CheckScore();
+        CheckLineCleared();
         gameState = State.GameOver;
         playerTransform.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -162,6 +160,7 @@ public class GameManager : MonoBehaviour
         {
             if(HasLine(i)) 
             {
+                lineCleared++;
                 lineCount++;
                 DeleteLine(i);
                 MoveRowDown(i);
@@ -170,6 +169,7 @@ public class GameManager : MonoBehaviour
         }
 
         AddLineCompleteScore();
+        lineClearedUI.UpdateLineClearedText();
         lineCount = 0;
     }
 
@@ -274,6 +274,16 @@ public class GameManager : MonoBehaviour
 
         return false;
     }
+
+    private void CheckScore()
+    {
+        if(score > highscore) PlayerPrefs.SetInt("Highscore", score);
+    }
+
+    private void CheckLineCleared()
+    {
+        if(lineCleared > bestLineCleared) PlayerPrefs.SetInt("BestLineCleared", lineCleared);
+    }
     
     public Transform GetBlockAtPosition(Vector3 position)
     {
@@ -312,6 +322,11 @@ public class GameManager : MonoBehaviour
         return score;
     }
 
+    public int GetLineCleared()
+    {
+        return lineCleared;
+    }
+
     public Vector3 GetPlayerPosition()
     {
         return new Vector3(Mathf.Abs(playerTransform.position.x), Mathf.Abs(playerTransform.position.y));
@@ -325,11 +340,6 @@ public class GameManager : MonoBehaviour
     public int GetSavedPieceIndex()
     {
         return savedPieceIndex;
-    }
-
-    public bool IsSingleControl()
-    {
-        return gameMode == Mode.SingleControl;
     }
 
     private IEnumerator DeathCoolDown(float coolDown)

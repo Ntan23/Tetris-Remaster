@@ -13,8 +13,5 @@ public class ScoreUI : MonoBehaviour
         UpdateScoreText();
     }
 
-    public void UpdateScoreText()
-    {
-        scoreText.text = "Score : " + gm.GetScore().ToString();
-    }
+    public void UpdateScoreText() => scoreText.text = "Score : " + gm.GetScore().ToString();
 }

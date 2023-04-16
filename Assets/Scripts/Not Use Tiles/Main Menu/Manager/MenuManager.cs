@@ -23,7 +23,6 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         DetectCollider();
@@ -63,8 +62,6 @@ public class MenuManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-
-        if(SceneManager.GetActiveScene().buildIndex == 1) PlayerPrefs.SetInt("Mode",1);
     }
 
     IEnumerator SecondChoice()
@@ -73,8 +70,7 @@ public class MenuManager : MonoBehaviour
 
         if(SceneManager.GetActiveScene().buildIndex == 1)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            PlayerPrefs.SetInt("Mode",2);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
         }
         
         if(SceneManager.GetActiveScene().buildIndex == 0)

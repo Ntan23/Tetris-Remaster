@@ -8,7 +8,6 @@ public class PlayerMainMenu : MonoBehaviour
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
     public bool canMove;
-    public bool cantMove;
     private bool runOnce;
     #endregion
 

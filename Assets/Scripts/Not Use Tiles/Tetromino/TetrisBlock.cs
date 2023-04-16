@@ -21,7 +21,6 @@ public class TetrisBlock : MonoBehaviour
     #region BoolVariables
     private bool isHardDropping;
     private bool isMovingLeft;
-    private bool isLock;
     #endregion
 
     #region VectorVariables
@@ -56,86 +55,59 @@ public class TetrisBlock : MonoBehaviour
         
         fallTimer += Time.deltaTime;
 
-        if(!gm.IsSingleControl())
+        if(Input.GetKeyDown(KeyCode.A)) 
         {
-            if(Input.GetKeyDown(KeyCode.A)) 
+            isMovingLeft = true;
+
+            if(CanMoveLeftOrRight())
             {
-                isMovingLeft = true;
+                transform.position += Vector3.left;
 
-                if(CanMoveLeftOrRight())
-                {
-                    transform.position += Vector3.left;
+                if(IsValidMove()) audioManager.PlayBlockMoveSFX();
 
-                    if(IsValidMove()) audioManager.PlayBlockMoveSFX();
-
-                    if(!IsValidMove()) transform.position -= Vector3.left;
-                }
-            }
-            else if(Input.GetKeyDown(KeyCode.D)) 
-            {
-                isMovingLeft = false;
-
-                if(CanMoveLeftOrRight())
-                {
-                    transform.position += Vector3.right;
-
-                    if(IsValidMove()) audioManager.PlayBlockMoveSFX();
-
-                    if(!IsValidMove()) transform.position -= Vector3.right;
-                }
-            }
-            else if(Input.GetKeyDown(KeyCode.Q))
-            {
-                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
-
-                if(IsValidMove() )audioManager.PlayBlockRotateSFX();
-
-                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
-            } 
-            else if(Input.GetKeyDown(KeyCode.E))
-            {
-                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
-                
-                if(IsValidMove() )audioManager.PlayBlockRotateSFX();
-
-                if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
-            }
-            else if(Input.GetKeyDown(KeyCode.Space)) 
-            {
-                fallTimeDelay /= 1000;
-                isHardDropping = true;
-            }
-
-            if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
-            {
-                Fall();
-
-                fallTimer = 0.0f;
+                if(!IsValidMove()) transform.position -= Vector3.left;
             }
         }
-
-        if(gm.IsSingleControl())
+        else if(Input.GetKeyDown(KeyCode.D)) 
         {
-            targetTimer += Time.deltaTime;
+            isMovingLeft = false;
 
-            if(targetTimer > targetTimeDelay && !isLock)
+            if(CanMoveLeftOrRight())
             {
-                TargetPlayer();
-                targetTimer = 0;
-            }
+                transform.position += Vector3.right;
 
-            if(Input.GetKeyDown(KeyCode.Space)) 
-            {
-                fallTimeDelay /= 1000;
-                isHardDropping = true;
-            }
+                if(IsValidMove()) audioManager.PlayBlockMoveSFX();
 
-            if(fallTimer > fallTimeDelay)
-            {
-                Fall();
-
-                fallTimer = 0.0f;
+                if(!IsValidMove()) transform.position -= Vector3.right;
             }
+        }
+        else if(Input.GetKeyDown(KeyCode.Q))
+        {
+            transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+
+            if(IsValidMove() )audioManager.PlayBlockRotateSFX();
+
+            if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+        } 
+        else if(Input.GetKeyDown(KeyCode.E))
+        {
+            transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+                
+            if(IsValidMove() )audioManager.PlayBlockRotateSFX();
+
+            if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+        }
+        else if(Input.GetKeyDown(KeyCode.Space)) 
+        {
+            fallTimeDelay /= 1000;
+            isHardDropping = true;
+        }
+
+        if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
+        {
+            Fall();
+
+            fallTimer = 0.0f;
         }
     }
 
@@ -150,8 +122,6 @@ public class TetrisBlock : MonoBehaviour
             ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
             gm.CheckPlayerInLine();
-
-            isLock = true;
 
             if(!isHardDropping) gm.AddScore(1);
             else if(isHardDropping) 
@@ -214,21 +184,21 @@ public class TetrisBlock : MonoBehaviour
         }
     }
 
-    private void TargetPlayer()
-    {   
-        if(gm.GetPlayerPosition().x < transform.position.x) 
-        {
-            transform.position += Vector3.left;
+    // private void TargetPlayer()
+    // {   
+    //     if(gm.GetPlayerPosition().x < transform.position.x) 
+    //     {
+    //         transform.position += Vector3.left;
 
-            if(!IsValidMove()) transform.position -= Vector3.left;
-        }
-        else if(gm.GetPlayerPosition().x > transform.position.x)
-        {
-            transform.position += Vector3.right;
+    //         if(!IsValidMove()) transform.position -= Vector3.left;
+    //     }
+    //     else if(gm.GetPlayerPosition().x > transform.position.x)
+    //     {
+    //         transform.position += Vector3.right;
 
-            if(!IsValidMove()) transform.position -= Vector3.right;
-        } 
-    }
+    //         if(!IsValidMove()) transform.position -= Vector3.right;
+    //     } 
+    // }
 
     public bool GetIsHardDropping()
     {

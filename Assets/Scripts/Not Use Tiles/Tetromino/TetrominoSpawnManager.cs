@@ -42,11 +42,8 @@ public class TetrominoSpawnManager : MonoBehaviour
         objectToSpawn = Instantiate(tetrominoes[index], transform.position, Quaternion.identity);
         objectToSpawn.transform.SetParent(tetrominoesParent);
 
-        if(!gm.IsSingleControl())
-        {
-            ghostPiece.currentPiece = objectToSpawn;
-            ghostPiece.Initialize(index);
-        }
+        ghostPiece.currentPiece = objectToSpawn;
+        ghostPiece.Initialize(index);
         
         currentIndex = index;
 
@@ -59,11 +56,8 @@ public class TetrominoSpawnManager : MonoBehaviour
         objectToSpawn = Instantiate(tetrominoes[gm.GetSavedPieceIndex()], transform.position, Quaternion.identity);
         objectToSpawn.transform.SetParent(tetrominoesParent);
 
-        if(!gm.IsSingleControl())
-        {
-            ghostPiece.currentPiece = objectToSpawn;
-            ghostPiece.Initialize(gm.GetSavedPieceIndex());
-        }
+        ghostPiece.currentPiece = objectToSpawn;
+        ghostPiece.Initialize(gm.GetSavedPieceIndex());
     }
 
     IEnumerator FirstSpawn()
