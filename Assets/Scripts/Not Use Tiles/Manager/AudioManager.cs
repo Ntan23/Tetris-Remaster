@@ -21,7 +21,7 @@ public class AudioManager : MonoBehaviour
 
         if(s == null) return;
 
-        s.source.PlayOneShot(s.clip);
+        s.source.Play();
     }
 
     void Start() 
@@ -35,6 +35,8 @@ public class AudioManager : MonoBehaviour
             s.source.loop = s.loop;
             s.source.outputAudioMixerGroup = s.audioMixer;
         }
+
+        Play("BGM");
     } 
 
     public void PlayBeepingSFX() => Play("Beeping");
