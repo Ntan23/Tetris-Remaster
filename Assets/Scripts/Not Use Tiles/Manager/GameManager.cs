@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region OtherVariables
+    [SerializeField] private GameObject particleSystem;
+    private ParticleSystem dustEffect;
     [SerializeField] private Transform tetrominoesParent;
     [SerializeField] private Transform playerTransform;
     private TetrominoSpawnManager tetrominoSpawner;
@@ -63,6 +65,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        dustEffect = particleSystem.GetComponent<ParticleSystem>();
         highscore = PlayerPrefs.GetInt("Highscore",0);
         bestLineCleared = PlayerPrefs.GetInt("BestLineCleared",0);
 
@@ -211,7 +214,7 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < boardWidth; i++)
         {
-            if(coordinate[i, verticalCoordinate] != null)
+            if (coordinate[i, verticalCoordinate] != null)
             {
                 Destroy(coordinate[i, verticalCoordinate].gameObject);
                 coordinate[i, verticalCoordinate] = null;

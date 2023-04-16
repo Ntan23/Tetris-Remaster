@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private GameManager gm;
     private AudioManager audioManager;
     private ParticleSystem dustEffect;
+    private CameraShake cameraShake;
     #endregion
 
     private void Awake()
@@ -40,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     void Start() 
     {
         audioManager = AudioManager.Instance;
-
+        cameraShake = FindObjectOfType<CameraShake>();
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
         transform.position = new Vector2(5, 25);
@@ -225,6 +226,7 @@ public class PlayerMovement : MonoBehaviour
             runOnce = false;
             firstPos.y = transform.position.y;
             distance = 0;
+            cameraShake.ShakeCamera(2, 1);
             audioManager.PlayHugeStomp();
             dustEffect.Play();
         }

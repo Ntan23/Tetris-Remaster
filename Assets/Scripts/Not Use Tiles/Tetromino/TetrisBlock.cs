@@ -33,10 +33,12 @@ public class TetrisBlock : MonoBehaviour
     private GhostPiece ghostPiece;
     private ParticleSystem dustEffect;
     private AudioManager audioManager;
+    private CameraShake cameraShake;
     #endregion
 
     void Start() 
     {
+        dustEffect = GameObject.FindGameObjectWithTag("HardDropParticle").GetComponent<ParticleSystem>();
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
         ghostPiece = GhostPiece.Instance;
@@ -44,6 +46,7 @@ public class TetrisBlock : MonoBehaviour
 
         fallTimeDelay = gm.GetBlockFallDelay();
         targetTimeDelay = gm.GetTargetTimerDelay();
+        cameraShake = FindObjectOfType<CameraShake>();
 
         originalFallTimeDelay = fallTimeDelay;
         isHardDropping = false;
@@ -126,6 +129,8 @@ public class TetrisBlock : MonoBehaviour
             if(!isHardDropping) gm.AddScore(1);
             else if(isHardDropping) 
             {
+                dustEffect.Play();
+                cameraShake.ShakeCamera(2, 1);
                 audioManager.PlayHardDropSFX();
                 gm.AddScore(5);
             }
@@ -182,6 +187,8 @@ public class TetrisBlock : MonoBehaviour
 
             GameManager.coordinate[(int)position.x, (int)position.y] = children;
         }
+
+        dustEffect.transform.position = transform.position;
     }
 
     // private void TargetPlayer()
