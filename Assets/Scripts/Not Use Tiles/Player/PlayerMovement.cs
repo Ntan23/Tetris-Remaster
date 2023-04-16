@@ -201,7 +201,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool AtTheTop()
     {
-        if(transform.position.y == 19) return true;
+        if(transform.position.y == 18) return true;
         else return false;
     }
 

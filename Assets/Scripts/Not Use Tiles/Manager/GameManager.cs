@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -150,9 +152,18 @@ public class GameManager : MonoBehaviour
 
     public void LevelUp()
     {
-        levelIndex++;
-        audioManager.PlayLevelUpSFX();
         DeleteAllBlocks();
+
+        levelIndex++;
+        /*if (levelIndex % 2 == 0)
+        {
+            Debug.Log("changeTinttoRed");
+        }
+        else
+        {
+            LeanTween.value(globalVolumeGameObject, Color.red, Color.blue, 1f);
+        }*/
+        audioManager.PlayLevelUpSFX();
         if(blockFallDelay > 0.2f) blockFallDelay -= 0.1f;
         if(targetTimerDelay > 0.5f) targetTimerDelay -= 0.25f;
         if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
