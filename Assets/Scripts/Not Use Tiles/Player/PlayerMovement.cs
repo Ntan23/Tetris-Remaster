@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 anchor;
     private Vector3 nextPosition;
     private Vector3 firstPos;
+    private Vector3 lastPos;
     #endregion
 
     #region OtherVariables
@@ -94,7 +95,6 @@ public class PlayerMovement : MonoBehaviour
         float angleAfter;
         isMoving = true;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-
         if (detectionCollider[4] && direction) //kanan naik
         {
             for (int i = 0; i < (180 / rollSpeed); i++)
@@ -215,12 +215,18 @@ public class PlayerMovement : MonoBehaviour
                 firstPos.y = transform.position.y;
                 runOnce = true;
             }
-            distance = firstPos.y - transform.position.y;
         }
-        else if (detectionCollider[6] && distance > 4)
+        if (detectionCollider[6])
+        {
+            lastPos.y = transform.position.y;
+        }
+        distance = firstPos.y - lastPos.y;
+        if (detectionCollider[6] && distance > 4)
         {
             runOnce = false;
+            firstPos.y = transform.position.y;
             distance = 0;
+            audioManager.PlayHugeStomp();
             dustEffect.Play();
         }
     }
@@ -228,5 +234,10 @@ public class PlayerMovement : MonoBehaviour
     private void ThannosSlap()
     {
         gameObject.SetActive(false);
+    }
+
+    private void PlayTeleportAudio()
+    {
+        audioManager.PlayTeleport();
     }
 }

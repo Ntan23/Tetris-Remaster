@@ -60,23 +60,23 @@ MonoBehaviour:
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
   - name: BlockHold
-    clip: {fileID: 8300000, guid: f6d988885d06d474fb5179d161e6cf62, type: 3}
+    clip: {fileID: 8300000, guid: 3c85dbc0028ebf04ebef0e95b60544bb, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
   - name: BlockMove
-    clip: {fileID: 8300000, guid: fd0a6925a0f68f24ea09eb98982055a9, type: 3}
+    clip: {fileID: 8300000, guid: b26cb148a9d63c846b803e1fd63815c3, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
   - name: BlockRotate
-    clip: {fileID: 8300000, guid: ed1d561b27b069f4eb65e35c7943aa5a, type: 3}
+    clip: {fileID: 8300000, guid: b26cb148a9d63c846b803e1fd63815c3, type: 3}
     volume: 1
-    pitch: 1
+    pitch: 1.57
     loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
@@ -97,12 +97,26 @@ MonoBehaviour:
   - name: PlayerMove
     clip: {fileID: 8300000, guid: f49fdcb698c7c214cb78d921b673e1ae, type: 3}
     volume: 1
-    pitch: 1
+    pitch: 0.8
     loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
   - name: ButtonClick
     clip: {fileID: 8300000, guid: 6ce83f294cdb28e49b61a98e171ce27e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: Teleport
+    clip: {fileID: 8300000, guid: bad3141a21c27494b930c90e676d41cd, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: HugeStomp
+    clip: {fileID: 8300000, guid: 4ce2a7e17c8c72f45800e1f86bf9e846, type: 3}
     volume: 1
     pitch: 1
     loop: 0

@@ -36,6 +36,7 @@ public class MenuManager : MonoBehaviour
         }
         if (isPlayerEnd && !runOnceStart)
         {
+            Debug.Log("Choosen");
             LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 2.5f);
             StartCoroutine(SecondChoice());
             runOnceStart = true;
@@ -44,8 +45,7 @@ public class MenuManager : MonoBehaviour
 
     private void DetectCollider()
     {
-        int i = 0;
-        foreach (bool hitBoxes in playerChoice) playerChoice[i] = gameObject.transform.GetChild(i).GetComponent<HitBoxDetection>().isTriggered;
+        for(int i = 0; i < 2; i++) playerChoice[i] = gameObject.transform.GetChild(i).GetComponent<HitBoxDetection>().isTriggered;
         isPlayerEnd = playerChoice[1];
         isPlayerStart = playerChoice[0];
     }

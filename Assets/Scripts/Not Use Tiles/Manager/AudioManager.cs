@@ -44,4 +44,6 @@ public class AudioManager : MonoBehaviour
     public void PlayLevelUpSFX() => Play("LevelUp");
     public void PlayPlayerMovementSFX() => Play("PlayerMove");
     public void PlayButtonClickSFX() => Play("ButtonClick");
+    public void PlayHugeStomp() => Play("HugeStomp");
+    public void PlayTeleport() => Play("Teleport");
 }

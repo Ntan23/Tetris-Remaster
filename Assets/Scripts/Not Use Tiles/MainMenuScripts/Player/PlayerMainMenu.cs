@@ -8,6 +8,8 @@ public class PlayerMainMenu : MonoBehaviour
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
     public bool canMove;
+    public bool cantMove;
+    private bool runOnce;
     #endregion
 
     #region FloatVariables
@@ -20,12 +22,14 @@ public class PlayerMainMenu : MonoBehaviour
     private Vector3 anchor;
     private Vector3 nextPosition;
     private Vector3 firstPos;
+    private Vector3 lastPos;
     #endregion
 
     #region OtherVariables
     private Rigidbody2D rb;
     private GameManager gm;
     private ParticleSystem dustEffect;
+    private AudioManager am;
     #endregion
 
     private void Awake()
@@ -38,6 +42,7 @@ public class PlayerMainMenu : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
+        am = FindObjectOfType<AudioManager>();
         canMove = true;
     }
 
@@ -80,6 +85,7 @@ public class PlayerMainMenu : MonoBehaviour
         float angleBefore = transform.rotation.z;
         float angleAfter;
         isMoving = true;
+        am.PlayPlayerMovementSFX();
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         if (detectionCollider[4] && direction) //kanan naik
         {
@@ -133,7 +139,6 @@ public class PlayerMainMenu : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
         }
-
         else
         {
             for (int i = 0; i < (90 / rollSpeed); i++)
@@ -171,15 +176,26 @@ public class PlayerMainMenu : MonoBehaviour
 
     private void HeroLandingEffect()
     {
-        distance = firstPos.y - transform.position.y;
         if (!detectionCollider[6])
         {
-            firstPos.y = transform.position.y;
-            
+            if (!runOnce && !isMoving)
+            {
+                Debug.Log("Change First Pos");
+                firstPos.y = transform.position.y;
+                runOnce = true;
+            }
         }
-        else if (detectionCollider[6] && distance > 4)
+        if (detectionCollider[6])
         {
+            lastPos.y = transform.position.y;
+        }
+        distance = firstPos.y - lastPos.y;
+        if (detectionCollider[6] && distance > 4)
+        {
+            runOnce = false;
+            firstPos.y = transform.position.y;
             distance = 0;
+            am.PlayHugeStomp();
             dustEffect.Play();
         }
     }

@@ -150,8 +150,6 @@ public class TetrisBlock : MonoBehaviour
     {
         transform.position += Vector3.down;
 
-        if(!isHardDropping) audioManager.PlayBlockMoveSFX();
-
         if(!IsValidMove()) 
         {
             transform.position += Vector3.up;
