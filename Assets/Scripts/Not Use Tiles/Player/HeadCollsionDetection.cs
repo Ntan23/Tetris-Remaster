@@ -9,6 +9,10 @@ public class HeadCollsionDetection : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collisionInfo)
     {
-        if (collisionInfo.gameObject.CompareTag("FallingBlock")) gm.GameOver();
+        if (collisionInfo.gameObject.CompareTag("FallingBlock"))
+        {
+            Debug.Log("Hit");
+            gm.GameOver();
+        } 
     }
 }

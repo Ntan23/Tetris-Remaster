@@ -54,6 +54,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (!gm.IsPlaying()) return;
         if (isMoving) return;
+        
+        if(detectionCollider[6]) 
+        {
+            Debug.Log("Check");
+            gm.CheckPlayerInLine();
+        }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
         {

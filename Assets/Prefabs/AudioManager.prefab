@@ -105,7 +105,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: b26cb148a9d63c846b803e1fd63815c3, type: 3}
     volume: 1
     pitch: 1
-    loop: 1
+    loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
   - name: Teleport

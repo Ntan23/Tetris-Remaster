@@ -102,10 +102,14 @@ public class GameManager : MonoBehaviour
                 isSwapped = true;
             }  
         } 
+
+        if(Input.GetKeyDown(KeyCode.Escape)) ButtonSetting();
     }
 
     public void ButtonSetting()
     {
+        audioManager.PlayBeepingSFX();
+
         if (settingMenu.activeInHierarchy)
         {
             Time.timeScale = 1f;
@@ -119,7 +123,6 @@ public class GameManager : MonoBehaviour
             StartCoroutine(Delay("activating"));
         }
     }
-
     public void ReturnToMenu()
     {
         Time.timeScale = 1f;
@@ -139,14 +142,13 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {   
+        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
         ghostPiece.DestroyGhostPiece();
         CheckScore();
         CheckLineCleared();
         gameState = State.GameOver;
-        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
         playerAnimator.Play("Teleport");
         playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-        playerTransform.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         StartCoroutine(ImminantDelay());
     } 
 
@@ -401,6 +403,6 @@ public class GameManager : MonoBehaviour
     {
         LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 1.5f);
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }

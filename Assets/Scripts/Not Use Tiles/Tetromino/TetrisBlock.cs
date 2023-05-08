@@ -28,6 +28,7 @@ public class TetrisBlock : MonoBehaviour
     #endregion
 
     #region OtherVariables
+    private Transform playerTransform;
     private TetrominoSpawnManager tetrominoSpawner;
     private GameManager gm;
     private GhostPiece ghostPiece;
@@ -39,6 +40,8 @@ public class TetrisBlock : MonoBehaviour
     void Start() 
     {
         dustEffect = GameObject.FindGameObjectWithTag("HardDropParticle").GetComponent<ParticleSystem>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
         ghostPiece = GhostPiece.Instance;
@@ -96,7 +99,7 @@ public class TetrisBlock : MonoBehaviour
         {
             transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
                 
-            if(IsValidMove() )audioManager.PlayBlockRotateSFX();
+            if(IsValidMove()) audioManager.PlayBlockRotateSFX();
 
             if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
         }
@@ -122,7 +125,7 @@ public class TetrisBlock : MonoBehaviour
         {
             transform.position += Vector3.up;
 
-            AddToGrid();
+            if(!ThereIsPlayer()) AddToGrid();
             ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
             gm.CheckPlayerInLine();
@@ -159,6 +162,20 @@ public class TetrisBlock : MonoBehaviour
         }
 
         return true;
+    }
+
+    private bool ThereIsPlayer()
+    {
+        Vector2 position;
+
+        foreach(Transform children in transform)
+        {
+            position = gm.RoundPosition(children.transform.position);
+
+            if(position.y - playerTransform.position.y <= 1 && position.x == playerTransform.position.x) return true;
+        }
+
+        return false;
     }
 
     private bool CanMoveLeftOrRight()

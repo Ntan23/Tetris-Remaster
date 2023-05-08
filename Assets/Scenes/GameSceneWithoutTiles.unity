@@ -178,7 +178,6 @@ MonoBehaviour:
   playerAnimator: {fileID: 2010761984}
   blackScreen: {fileID: 1956208543}
   settingMenu: {fileID: 2098027904}
-  globalVolumeGameObject: {fileID: 1582246511}
 --- !u!1 &31788981
 GameObject:
   m_ObjectHideFlags: 0
@@ -19405,7 +19404,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.007909656, y: 0.5150987}
+  m_Offset: {x: -0.011429459, y: 0.6}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -19416,7 +19415,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6718924, y: 0.080197334}
+  m_Size: {x: 0.45473248, y: 0.080197334}
   m_EdgeRadius: 0
 --- !u!1 &1907894305
 GameObject:
