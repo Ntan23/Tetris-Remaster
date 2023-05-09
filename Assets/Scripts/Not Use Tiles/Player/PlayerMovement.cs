@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
     private bool runOnce;
+    private bool isFalling;
     #endregion
 
     #region FloatVariables
@@ -55,10 +56,13 @@ public class PlayerMovement : MonoBehaviour
         if (!gm.IsPlaying()) return;
         if (isMoving) return;
         
-        if(detectionCollider[6]) 
+        if(rb.velocity.y < 0f && !detectionCollider[6]) isFalling = true;
+        
+        if(isFalling && detectionCollider[6]) 
         {
             Debug.Log("Check");
             gm.CheckPlayerInLine();
+            isFalling = false;
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])

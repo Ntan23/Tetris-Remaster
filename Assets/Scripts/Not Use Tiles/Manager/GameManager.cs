@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     private bool isHolding;
     private bool isSwapped;
     private bool isSoundPlayed;
+    private bool pause;
     #endregion
 
     #region OtherVariables
@@ -103,10 +104,14 @@ public class GameManager : MonoBehaviour
             }  
         } 
 
-        if(Input.GetKeyDown(KeyCode.Escape)) ButtonSetting();
+        if(Input.GetKeyDown(KeyCode.Escape) && !pause) 
+        {
+            pause = true;
+            PlayPauseGame();
+        }
     }
 
-    public void ButtonSetting()
+    public void PlayPauseGame()
     {
         audioManager.PlayBeepingSFX();
 
@@ -129,7 +134,7 @@ public class GameManager : MonoBehaviour
         LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
         playerTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
         playerAnimator.Play("Teleport");
-        StartCoroutine(ImminantDelay());
+        StartCoroutine(ImminantDelay("Menu"));
     }
 
     private void UpdateAlpha(float alpha) => blackScreen.GetComponent<CanvasGroup>().alpha = alpha;
@@ -149,7 +154,7 @@ public class GameManager : MonoBehaviour
         gameState = State.GameOver;
         playerAnimator.Play("Teleport");
         playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-        StartCoroutine(ImminantDelay());
+        StartCoroutine(ImminantDelay("Selection"));
     } 
 
     public void LevelUp()
@@ -388,7 +393,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Delay(string condition)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.25f);
+
         if(condition == "deActivating")
         {
             settingMenu.SetActive(false);
@@ -397,12 +403,16 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0f;
         }
+
+        pause = false;
     }
 
-    private IEnumerator ImminantDelay()
+    private IEnumerator ImminantDelay(string type)
     {
         LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 1.5f);
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene(1);
+
+        if(type == "Menu") SceneManager.LoadScene(0);
+        else if(type == "Selection") SceneManager.LoadScene(1);
     }
 }

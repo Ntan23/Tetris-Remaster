@@ -21,6 +21,7 @@ public class TetrisBlock : MonoBehaviour
     #region BoolVariables
     private bool isHardDropping;
     private bool isMovingLeft;
+    private bool isChecked;
     #endregion
 
     #region VectorVariables
@@ -119,13 +120,18 @@ public class TetrisBlock : MonoBehaviour
 
     private void Fall()
     {
-        transform.position += Vector3.down;
+        if(IsValidMove()) 
+        {
+            if(ThereIsPlayer()) return;
+            else if(!ThereIsPlayer()) transform.position += Vector3.down;
+        }
 
         if(!IsValidMove()) 
         {
             transform.position += Vector3.up;
 
             if(!ThereIsPlayer()) AddToGrid();
+            
             ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
             gm.CheckPlayerInLine();
@@ -167,12 +173,15 @@ public class TetrisBlock : MonoBehaviour
     private bool ThereIsPlayer()
     {
         Vector2 position;
+        Vector2 playerPosition;
+
+        playerPosition = gm.RoundPosition(playerTransform.position);
 
         foreach(Transform children in transform)
         {
             position = gm.RoundPosition(children.transform.position);
 
-            if(position.y - playerTransform.position.y <= 1 && position.x == playerTransform.position.x) return true;
+            if(position.y - playerPosition.y == 1 && position.x == playerPosition.x) return true;
         }
 
         return false;
