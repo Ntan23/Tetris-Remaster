@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
     private bool isSwapped;
     private bool isSoundPlayed;
     private bool pause;
+    private bool canLevelUp;
+    private bool isDead;
     #endregion
 
     #region OtherVariables
@@ -81,6 +83,8 @@ public class GameManager : MonoBehaviour
 
         levelIndex = 1;
         targetTimerDelay = 3.0f;
+
+        canLevelUp = true;
     }
 
     void Update()
@@ -147,18 +151,18 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {   
-        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
+        Debug.Log("Game Over");
+        isDead = true;
         ghostPiece.DestroyGhostPiece();
         CheckScore();
         CheckLineCleared();
         gameState = State.GameOver;
-        playerAnimator.Play("Teleport");
-        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-        StartCoroutine(ImminantDelay("Selection"));
+        StartCoroutine(DeathAnimationDelay());
     } 
 
     public void LevelUp()
-    {
+    {   
+        Debug.Log("Level Up");
         DeleteAllBlocks();
 
         levelIndex++;
@@ -174,7 +178,11 @@ public class GameManager : MonoBehaviour
         if(blockFallDelay > 0.2f) blockFallDelay -= 0.1f;
         if(targetTimerDelay > 0.5f) targetTimerDelay -= 0.25f;
         if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
+
+        canLevelUp = false;
     }
+
+    public bool ChangeBackCanLevelUp() => canLevelUp = true;
 
     public bool IsPlaying()
     {
@@ -391,6 +399,16 @@ public class GameManager : MonoBehaviour
         return savedPieceIndex;
     }
 
+    public bool GetCanLevelUp()
+    {
+        return canLevelUp;
+    }
+
+    public bool GetIsDead()
+    {
+        return isDead;
+    }
+
     private IEnumerator Delay(string condition)
     {
         yield return new WaitForSeconds(0.25f);
@@ -414,5 +432,14 @@ public class GameManager : MonoBehaviour
 
         if(type == "Menu") SceneManager.LoadScene(0);
         else if(type == "Selection") SceneManager.LoadScene(1);
+    }
+
+    private IEnumerator DeathAnimationDelay()
+    {
+        playerTransform.rotation = Quaternion.Euler(Vector3.zero).normalized;
+        yield return new WaitForSeconds(0.2f);
+        playerAnimator.Play("Teleport");
+        playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        StartCoroutine(ImminantDelay("Selection"));
     }
 }

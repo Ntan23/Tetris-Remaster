@@ -5,6 +5,7 @@ using UnityEngine;
 public class HeadCollsionDetection : MonoBehaviour
 {
     private GameManager gm;
+
     void Start() => gm = GameManager.Instance;
 
     void OnTriggerEnter2D(Collider2D collisionInfo)
@@ -12,7 +13,7 @@ public class HeadCollsionDetection : MonoBehaviour
         if (collisionInfo.gameObject.CompareTag("FallingBlock"))
         {
             GetComponentInParent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-            gm.GameOver();
+            if(!gm.GetIsDead()) gm.GameOver();
         } 
     }
 }

@@ -16,12 +16,14 @@ public class TetrisBlock : MonoBehaviour
     private int roundedX;
     private int playerRoundedX;
     private int modeIndex;
+    private int i;
     #endregion
 
     #region BoolVariables
     private bool isHardDropping;
     private bool isMovingLeft;
     private bool isChecked;
+    private bool isHit;
     #endregion
 
     #region VectorVariables
@@ -36,6 +38,7 @@ public class TetrisBlock : MonoBehaviour
     private ParticleSystem dustEffect;
     private AudioManager audioManager;
     private CameraShake cameraShake;
+    private RaycastHit2D hit;
     #endregion
 
     void Start() 
@@ -115,6 +118,24 @@ public class TetrisBlock : MonoBehaviour
             Fall();
             
             fallTimer = 0.0f;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        foreach(Transform children in transform)
+        {
+            hit = Physics2D.Raycast(children.position, Vector2.down);
+
+            if(hit.collider != null)
+            {
+                if(hit.distance <= 0.5f && hit.collider.CompareTag("Player") && !isHit) 
+                {
+                    Debug.Log("Hit"); 
+                    if(!gm.GetIsDead()) gm.GameOver();
+                    isHit = true;
+                }
+            }
         }
     }
 

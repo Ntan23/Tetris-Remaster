@@ -6617,9 +6617,9 @@ GameObject:
   - component: {fileID: 585613563}
   - component: {fileID: 585613565}
   - component: {fileID: 585613564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DustEffect
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11487,7 +11487,7 @@ GameObject:
   - component: {fileID: 587907971}
   - component: {fileID: 587907973}
   - component: {fileID: 587907972}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11633,9 +11633,9 @@ GameObject:
   - component: {fileID: 823355841}
   - component: {fileID: 823355843}
   - component: {fileID: 823355842}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (1)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12079,7 +12079,7 @@ GameObject:
   - component: {fileID: 993712329}
   - component: {fileID: 993712331}
   - component: {fileID: 993712330}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12304,7 +12304,7 @@ GameObject:
   - component: {fileID: 1033146841}
   - component: {fileID: 1033146843}
   - component: {fileID: 1033146842}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18315,7 +18315,7 @@ GameObject:
   - component: {fileID: 1424881293}
   - component: {fileID: 1424881295}
   - component: {fileID: 1424881294}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18443,7 +18443,7 @@ GameObject:
   - component: {fileID: 1479483752}
   - component: {fileID: 1479483754}
   - component: {fileID: 1479483753}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18590,9 +18590,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1528568294}
   - component: {fileID: 1528568295}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Non-RotatingPart
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18700,7 +18700,7 @@ GameObject:
   - component: {fileID: 1552026547}
   - component: {fileID: 1552026549}
   - component: {fileID: 1552026548}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19091,7 +19091,7 @@ GameObject:
   - component: {fileID: 1799825784}
   - component: {fileID: 1799825786}
   - component: {fileID: 1799825785}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PositionHitbox (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19240,9 +19240,9 @@ GameObject:
   - component: {fileID: 1834700864}
   - component: {fileID: 1834700866}
   - component: {fileID: 1834700865}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Eyes
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19357,9 +19357,9 @@ GameObject:
   - component: {fileID: 1873011565}
   - component: {fileID: 1873011567}
   - component: {fileID: 1873011566}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Head Detection
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19404,7 +19404,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.011429459, y: 0.5142077}
+  m_Offset: {x: -0.002676487, y: 0.5142077}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -19415,7 +19415,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.45473248, y: 0.25178194}
+  m_Size: {x: 0.75376225, y: 0.25178194}
   m_EdgeRadius: 0
 --- !u!1 &1907894305
 GameObject:
@@ -19918,7 +19918,7 @@ GameObject:
   - component: {fileID: 2010761979}
   - component: {fileID: 2010761981}
   - component: {fileID: 2010761984}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -19970,7 +19970,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
   m_Constraints: 0
 --- !u!114 &2010761981
 MonoBehaviour:
@@ -20321,9 +20321,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2106015069}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hitboxes
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -9,7 +9,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
     private bool runOnce;
+    private bool runFirstTime;
     private bool isFalling;
+    private bool canCheckPosition;
     #endregion
 
     #region FloatVariables
@@ -46,10 +48,18 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         gm = GameManager.Instance;
         transform.position = new Vector2(5, 25);
+
+        runFirstTime = true;
     }
 
     void Update()
     {
+        if(runFirstTime)
+        {
+            StartCoroutine(Wait());
+            runFirstTime = false;
+        }
+
         DetectCollision();
         HeroLandingEffect();
 
@@ -93,7 +103,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (!IsTherePossibleMove()) gm.GameOver();
         
-        if(AtTheTop()) gm.LevelUp();
+        if(AtTheTop() && canCheckPosition)
+        {
+            if(gm.GetCanLevelUp()) 
+            {
+                gm.LevelUp();
+                StartCoroutine(WaitForPositionCheck());
+            }
+        } 
     }
 
     //direction true = kanan 
@@ -211,7 +228,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool AtTheTop()
     {
-        if(transform.position.y == 18) return true;
+        if(Mathf.RoundToInt(transform.position.y) == 18) return true;
         else return false;
     }
 
@@ -250,5 +267,17 @@ public class PlayerMovement : MonoBehaviour
     private void PlayTeleportAudio()
     {
         audioManager.PlayTeleport();
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(2.0f);
+        canCheckPosition = true;
+    }
+
+    IEnumerator WaitForPositionCheck()
+    {
+        yield return new WaitForSeconds(3.0f);
+        gm.ChangeBackCanLevelUp();
     }
 }
