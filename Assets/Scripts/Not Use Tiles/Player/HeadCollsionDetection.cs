@@ -13,7 +13,11 @@ public class HeadCollsionDetection : MonoBehaviour
         if (collisionInfo.gameObject.CompareTag("FallingBlock"))
         {
             GetComponentInParent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-            if(!gm.GetIsDead()) gm.GameOver();
+            if(gm.IsPlaying()) 
+            {
+                Debug.Log("Hit By Head Detection");
+                gm.GameOver();
+            }
         } 
     }
 }

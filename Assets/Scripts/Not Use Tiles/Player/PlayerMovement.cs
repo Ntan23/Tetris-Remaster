@@ -12,11 +12,13 @@ public class PlayerMovement : MonoBehaviour
     private bool runFirstTime;
     private bool isFalling;
     private bool canCheckPosition;
+    private bool moveFirstTime;
     #endregion
 
     #region FloatVariables
     [SerializeField] private float rollSpeed;
     [SerializeField] private float distance;
+    private float timer;
     #endregion
 
     #region VectorVariables
@@ -50,6 +52,8 @@ public class PlayerMovement : MonoBehaviour
         transform.position = new Vector2(5, 25);
 
         runFirstTime = true;
+        moveFirstTime = true;
+        timer = 0.5f;
     }
 
     void Update()
@@ -70,39 +74,15 @@ public class PlayerMovement : MonoBehaviour
         
         if(isFalling && detectionCollider[6]) 
         {
-            Debug.Log("Check");
             gm.CheckPlayerInLine();
             isFalling = false;
-        }
+        }   
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
-        {
-            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+        if(Input.GetKeyDown(KeyCode.RightArrow) && !Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
+        if(Input.GetKeyDown(KeyCode.LeftArrow) && !Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
 
-            if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
-            else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
-            axis = Vector3.back;
-
-            nextPosition = transform.position + new Vector3(1, 0, 0);
-            
-            if(nextPosition.x <= 9.1f) StartCoroutine(RollCube(anchor, axis, true));
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
-        {
-            transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
-
-            if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
-            else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
-            axis = Vector3.forward;
-
-            nextPosition = transform.position + new Vector3(-1, 0, 0);
-
-            if(nextPosition.x >= -0.1f) StartCoroutine(RollCube(anchor, axis, false));
-        }
-
-        if (!IsTherePossibleMove()) gm.GameOver();
-        
+        if (!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
+    
         if(AtTheTop() && canCheckPosition)
         {
             if(gm.GetCanLevelUp()) 
@@ -111,6 +91,32 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(WaitForPositionCheck());
             }
         } 
+    }
+
+    private void MoveRight()
+    {
+        transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+
+        if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
+        else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
+        axis = Vector3.back;
+
+        nextPosition = transform.position + new Vector3(1, 0, 0);
+                    
+        if(nextPosition.x <= 9.1f) StartCoroutine(RollCube(anchor, axis, true));
+    }
+
+    private void MoveLeft()
+    {
+        transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
+
+        if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
+        else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
+        axis = Vector3.forward;
+
+        nextPosition = transform.position + new Vector3(-1, 0, 0);
+
+        if(nextPosition.x >= -0.1f) StartCoroutine(RollCube(anchor, axis, false));
     }
 
     //direction true = kanan 
@@ -123,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
         float angleAfter;
         isMoving = true;
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
+
         if (detectionCollider[4] && direction) //kanan naik
         {
             for (int i = 0; i < (180 / rollSpeed); i++)
@@ -175,7 +182,6 @@ public class PlayerMovement : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
         }
-
         else
         {
             for (int i = 0; i < (90 / rollSpeed); i++)
@@ -189,6 +195,7 @@ public class PlayerMovement : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
         }
+
         transform.position = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.eulerAngles.z));
         rb.gravityScale = 1;
@@ -268,7 +275,7 @@ public class PlayerMovement : MonoBehaviour
     {
         audioManager.PlayTeleport();
     }
-
+    
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(2.0f);

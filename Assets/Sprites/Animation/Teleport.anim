@@ -22,36 +22,34 @@ AnimationClip:
     - time: 0
       value: {fileID: 1139134610, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
     - time: 0.05
-      value: {fileID: 457005639, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.1
       value: {fileID: -2080745684, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.15
+    - time: 0.1
       value: {fileID: 1591007037, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.2
+    - time: 0.15
       value: {fileID: 1493477984, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.25
+    - time: 0.2
       value: {fileID: -1514371369, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.3
+    - time: 0.25
       value: {fileID: 456022278, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.35
+    - time: 0.3
       value: {fileID: -856980145, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.4
+    - time: 0.35
       value: {fileID: -1972147839, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.45
+    - time: 0.4
       value: {fileID: 1150860084, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.5
+    - time: 0.45
       value: {fileID: -894706756, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.55
+    - time: 0.5
       value: {fileID: 1340047157, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.6
+    - time: 0.55
       value: {fileID: -271137724, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - time: 0.65
+    - time: 0.6
       value: {fileID: 1293530175, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
+    - time: 0.65
+      value: {fileID: 0}
     - time: 0.7
       value: {fileID: 0}
     - time: 0.75
-      value: {fileID: 0}
-    - time: 0.8
       value: {fileID: 0}
     attribute: m_Sprite
     path: 
@@ -73,7 +71,6 @@ AnimationClip:
       isPPtrCurve: 1
     pptrCurveMapping:
     - {fileID: 1139134610, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
-    - {fileID: 457005639, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
     - {fileID: -2080745684, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
     - {fileID: 1591007037, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
     - {fileID: 1493477984, guid: d3f397fef30f0fa4d8aab343f337d80f, type: 3}
@@ -94,7 +91,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.85
+    m_StopTime: 0.8
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -121,7 +118,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.85
+  - time: 0.75
     functionName: ThannosSlap
     data: 
     objectReferenceParameter: {fileID: 0}

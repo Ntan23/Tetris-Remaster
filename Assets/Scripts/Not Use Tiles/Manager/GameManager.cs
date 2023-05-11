@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour
     private bool isSoundPlayed;
     private bool pause;
     private bool canLevelUp;
-    private bool isDead;
     #endregion
 
     #region OtherVariables
@@ -152,12 +151,11 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {   
         Debug.Log("Game Over");
-        isDead = true;
         ghostPiece.DestroyGhostPiece();
         CheckScore();
         CheckLineCleared();
         gameState = State.GameOver;
-        StartCoroutine(DeathAnimationDelay());
+        StartCoroutine(RotateBackPlayer());
     } 
 
     public void LevelUp()
@@ -404,11 +402,6 @@ public class GameManager : MonoBehaviour
         return canLevelUp;
     }
 
-    public bool GetIsDead()
-    {
-        return isDead;
-    }
-
     private IEnumerator Delay(string condition)
     {
         yield return new WaitForSeconds(0.25f);
@@ -434,10 +427,10 @@ public class GameManager : MonoBehaviour
         else if(type == "Selection") SceneManager.LoadScene(1);
     }
 
-    private IEnumerator DeathAnimationDelay()
+    private IEnumerator RotateBackPlayer()
     {
-        playerTransform.rotation = Quaternion.Euler(Vector3.zero).normalized;
         yield return new WaitForSeconds(0.2f);
+        playerTransform.rotation = Quaternion.Euler(0, 0, 0);
         playerAnimator.Play("Teleport");
         playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
         StartCoroutine(ImminantDelay("Selection"));

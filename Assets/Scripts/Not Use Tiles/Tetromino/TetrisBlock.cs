@@ -16,14 +16,12 @@ public class TetrisBlock : MonoBehaviour
     private int roundedX;
     private int playerRoundedX;
     private int modeIndex;
-    private int i;
     #endregion
 
     #region BoolVariables
     private bool isHardDropping;
     private bool isMovingLeft;
     private bool isChecked;
-    private bool isHit;
     #endregion
 
     #region VectorVariables
@@ -31,6 +29,7 @@ public class TetrisBlock : MonoBehaviour
     #endregion
 
     #region OtherVariables
+    private GameObject player;
     private Transform playerTransform;
     private TetrominoSpawnManager tetrominoSpawner;
     private GameManager gm;
@@ -38,13 +37,16 @@ public class TetrisBlock : MonoBehaviour
     private ParticleSystem dustEffect;
     private AudioManager audioManager;
     private CameraShake cameraShake;
+    private PlayerMovement playerMovement;
     private RaycastHit2D hit;
     #endregion
 
     void Start() 
     {
         dustEffect = GameObject.FindGameObjectWithTag("HardDropParticle").GetComponent<ParticleSystem>();
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerTransform = player.transform;
+        playerMovement = player.GetComponent<PlayerMovement>();
 
         tetrominoSpawner = TetrominoSpawnManager.Instance;
         gm = GameManager.Instance;
@@ -109,7 +111,7 @@ public class TetrisBlock : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Space)) 
         {
-            fallTimeDelay /= 1000;
+            fallTimeDelay = 0.005f;
             isHardDropping = true;
         }
 
@@ -123,18 +125,43 @@ public class TetrisBlock : MonoBehaviour
 
     void FixedUpdate()
     {
-        foreach(Transform children in transform)
+        foreach(Transform children in transform) 
         {
             hit = Physics2D.Raycast(children.position, Vector2.down);
 
-            if(hit.collider != null)
+            Debug.DrawRay(children.position, Vector2.down * 100, Color.white);
+
+            if(isHardDropping && playerMovement.IsMoving())
             {
-                if(hit.distance <= 0.5f && hit.collider.CompareTag("Player") && !isHit) 
+                //player.transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).gameObject.tag = "Player";
+
+                if(hit.collider != null)
                 {
-                    Debug.Log("Hit"); 
-                    if(!gm.GetIsDead()) gm.GameOver();
-                    isHit = true;
+                    if(hit.distance <= 0.5f && hit.collider.CompareTag("Player"))
+                    {
+                        if(gm.IsPlaying())
+                        {
+                            Debug.Log("Hit When HardDropping & Player Move");
+                            gm.GameOver();
+                        }
+                    }
                 }
+            }
+            else
+            {
+                // if(player.transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).gameObject.CompareTag("Player")) player.transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).gameObject.tag = "Untagged";
+
+                // if(hit.collider != null)
+                // {
+                //     if(hit.distance <= 0.5f && hit.collider.CompareTag("Player")) 
+                //     {
+                //         if(gm.IsPlaying()) 
+                //         {
+                //             Debug.Log("Hit");
+                //             gm.GameOver();
+                //         }
+                //     }
+                // }
             }
         }
     }
@@ -151,7 +178,7 @@ public class TetrisBlock : MonoBehaviour
         {
             transform.position += Vector3.up;
 
-            if(!ThereIsPlayer()) AddToGrid();
+            AddToGrid();
             
             ghostPiece.DestroyGhostPiece();
             gm.CheckForLineComplete();  
@@ -231,9 +258,11 @@ public class TetrisBlock : MonoBehaviour
         {
             position = gm.RoundPosition(children.transform.position);
          
-            children.gameObject.tag = "Block";
-
-            GameManager.coordinate[(int)position.x, (int)position.y] = children;
+            if(!ThereIsPlayer()) 
+            {
+                children.gameObject.tag = "Block";
+                GameManager.coordinate[(int)position.x, (int)position.y] = children;
+            }
         }
 
         dustEffect.transform.position = transform.position;

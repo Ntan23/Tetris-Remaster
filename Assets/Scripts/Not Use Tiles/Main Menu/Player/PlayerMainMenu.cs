@@ -57,37 +57,49 @@ public class PlayerMainMenu : MonoBehaviour
             HeroLandingEffect();
             if (isMoving) return;
 
-            if (Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[2] && detectionCollider[6])
-            {
-                transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
-                if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
-                else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
-                axis = Vector3.back;
-
-                StartCoroutine(RollCube(anchor, axis, true));
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[0] && detectionCollider[6])
-            {
-                transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
-                if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
-                else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
-                axis = Vector3.forward;
-
-                StartCoroutine(RollCube(anchor, axis, false));
-            }
+            if(Input.GetKeyDown(KeyCode.RightArrow) && !Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
+            if(Input.GetKeyDown(KeyCode.LeftArrow) && !Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
         }
 
     }
 
     //direction true = kanan 
     //!direction = kiri
+    private void MoveRight()
+    {
+        transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+
+        if (detectionCollider[4]) anchor = (Vector2)transform.position + new Vector2(0.5f, 0.5f);
+        else anchor = (Vector2)transform.position + new Vector2(0.5f, -0.5f);
+        axis = Vector3.back;
+
+                    
+        StartCoroutine(RollCube(anchor, axis, true));
+    }
+
+    private void MoveLeft()
+    {
+        transform.GetChild(0).transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = false;
+
+        if (detectionCollider[3]) anchor = (Vector2)transform.position + new Vector2(-0.5f, 0.5f);
+        else anchor = (Vector2)transform.position + new Vector2(-0.5f, -0.5f);
+        axis = Vector3.forward;
+
+
+        StartCoroutine(RollCube(anchor, axis, false));
+    }
+
+    //direction true = kanan 
+    //!direction = kiri
     private IEnumerator RollCube(Vector3 anchor, Vector3 axis, bool direction)
     {
+        audioManager.PlayPlayerMovementSFX();
+        rb.gravityScale = 0;
         float angleBefore = transform.rotation.z;
         float angleAfter;
         isMoving = true;
-        audioManager.PlayPlayerMovementSFX();
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
+
         if (detectionCollider[4] && direction) //kanan naik
         {
             for (int i = 0; i < (180 / rollSpeed); i++)
@@ -153,13 +165,10 @@ public class PlayerMainMenu : MonoBehaviour
                 yield return new WaitForSeconds(0.01f);
             }
         }
-        if (direction)
-        {
-            transform.position = new Vector2(Mathf.Round(transform.position.x) + 0.5f, Mathf.Round(transform.position.y) + 0.5f);
-        }
-        else transform.position = new Vector2(Mathf.Round(transform.position.x) - 0.5f, Mathf.Round(transform.position.y) + 0.5f);
 
+        transform.position = new Vector2(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y));
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Round(transform.eulerAngles.z));
+        rb.gravityScale = 1;
         gameObject.GetComponent<BoxCollider2D>().enabled = true;
         isMoving = false;
     }
