@@ -111,11 +111,11 @@ public class TetrisBlock : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Space)) 
         {
-            fallTimeDelay = 0.005f;
+            fallTimeDelay = 1/1000;
             isHardDropping = true;
         }
 
-        if(fallTimer > (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
+        if(fallTimer >= (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
         {
             Fall();
             
@@ -129,12 +129,8 @@ public class TetrisBlock : MonoBehaviour
         {
             hit = Physics2D.Raycast(children.position, Vector2.down);
 
-            Debug.DrawRay(children.position, Vector2.down * 100, Color.white);
-
             if(isHardDropping && playerMovement.IsMoving())
             {
-                //player.transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).gameObject.tag = "Player";
-
                 if(hit.collider != null)
                 {
                     if(hit.distance <= 0.5f && hit.collider.CompareTag("Player"))
@@ -147,22 +143,7 @@ public class TetrisBlock : MonoBehaviour
                     }
                 }
             }
-            else
-            {
-                // if(player.transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).gameObject.CompareTag("Player")) player.transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).gameObject.tag = "Untagged";
-
-                // if(hit.collider != null)
-                // {
-                //     if(hit.distance <= 0.5f && hit.collider.CompareTag("Player")) 
-                //     {
-                //         if(gm.IsPlaying()) 
-                //         {
-                //             Debug.Log("Hit");
-                //             gm.GameOver();
-                //         }
-                //     }
-                // }
-            }
+            
         }
     }
 

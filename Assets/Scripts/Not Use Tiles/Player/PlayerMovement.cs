@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private bool runOnce;
     private bool runFirstTime;
     private bool isFalling;
+    private bool isFallingFromHeight;
     private bool canCheckPosition;
     private bool moveFirstTime;
     #endregion
@@ -87,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(gm.GetCanLevelUp()) 
             {
-                gm.LevelUp();
+                gm.LevelUp(true);
                 StartCoroutine(WaitForPositionCheck());
             }
         } 
@@ -242,28 +243,38 @@ public class PlayerMovement : MonoBehaviour
     private void HeroLandingEffect()
     {
         //Debug.Log(distance + " Last Pos: " + firstPos.y);
-        if (!detectionCollider[6])
+        // if (!detectionCollider[6])
+        // {
+        //     if (!runOnce && !IsMoving())
+        //     {
+        //         firstPos.y = transform.position.y;
+        //         runOnce = true;
+        //     }
+        // }
+        // if (detectionCollider[6])
+        // {
+        //     lastPos.y = transform.position.y;
+        // }
+        // distance = firstPos.y - lastPos.y;
+        // if (detectionCollider[6] && distance > 4)
+        // {
+        //     runOnce = false;
+        //     firstPos.y = transform.position.y;
+        //     distance = 0;
+        //     cameraShake.ShakeCamera(2, 1);
+        //     audioManager.PlayHugeStomp();
+        //     dustEffect.Play();
+        // }
+
+        if(rb.velocity.y < -8.0f && !detectionCollider[6]) isFallingFromHeight = true;
+        
+        if(isFallingFromHeight && detectionCollider[6]) 
         {
-            if (!runOnce && !IsMoving())
-            {
-                firstPos.y = transform.position.y;
-                runOnce = true;
-            }
-        }
-        if (detectionCollider[6])
-        {
-            lastPos.y = transform.position.y;
-        }
-        distance = firstPos.y - lastPos.y;
-        if (detectionCollider[6] && distance > 4)
-        {
-            runOnce = false;
-            firstPos.y = transform.position.y;
-            distance = 0;
             cameraShake.ShakeCamera(2, 1);
             audioManager.PlayHugeStomp();
             dustEffect.Play();
-        }
+            isFallingFromHeight = false;
+        } 
     }
 
     private void ThannosSlap()

@@ -9,18 +9,24 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private bool[] playerChoice = new bool[2];
     [SerializeField] private GameObject blackScreen;
     [SerializeField] private GameObject settingMenu;
+    [SerializeField] private Button settingsButton;
     bool runOnceStart;
+    private bool pause;
+    private bool isFirstTimePause = true;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private PlayerMainMenu player;
+    private AudioManager audioManager;
+
     void Start()
     {
         runOnceStart = false;
+        audioManager = AudioManager.Instance;
         LeanTween.value(blackScreen, UpdateAlpha, 1f, 0f, 1f);
-        if(SceneManager.GetActiveScene().buildIndex == 0 )
-        {
-            playerAnimator.Play("TeleportIncoming");
-            StartCoroutine(DelayStart());
-        }
+
+        playerAnimator.Play("TeleportIncoming");
+        StartCoroutine(DelayStart());
+
+        StartCoroutine(FirstTimePauseDelay());
     }
 
     void Update()
@@ -35,10 +41,16 @@ public class MenuManager : MonoBehaviour
         }
         if(playerChoice[1] && !runOnceStart)
         {
-            Debug.Log("Choosen");
             LeanTween.value(blackScreen, UpdateAlpha, 0f, 1f, 1.5f);
             StartCoroutine(SecondChoice());
             runOnceStart = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape) && !pause && !isFirstTimePause) 
+        {
+            pause = true;
+            audioManager.PlayButtonClickSFX();
+            OpenCloseSetting();
         }
     }
 
@@ -61,51 +73,65 @@ public class MenuManager : MonoBehaviour
     IEnumerator FirstChoice(){
         yield return new WaitForSeconds(2f);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if(SceneManager.GetActiveScene().buildIndex == 3) SceneManager.LoadScene(4);
+        else if(SceneManager.GetActiveScene().buildIndex == 1) SceneManager.LoadScene(2);
+        else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
     }
 
     IEnumerator SecondChoice()
     {
         yield return new WaitForSeconds(2f);
 
-        if(SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-        }
+        if(SceneManager.GetActiveScene().buildIndex == 2 || SceneManager.GetActiveScene().buildIndex == 3) SceneManager.LoadScene(1);
         
-        if(SceneManager.GetActiveScene().buildIndex == 0)
+        if(SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1)
         {
             Debug.Log("Quit");
             Application.Quit();
         }
     }
 
-    public void ButtonSetting()
+    public void OpenCloseSetting()
     {
         if(settingMenu.activeInHierarchy)
         {
-            player.canMove = true;
+            Time.timeScale = 1f;
             LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
-            StartCoroutine(Delay());
+            StartCoroutine(Delay("Closing"));
         }
         else
         {
-            player.canMove = false;
             settingMenu.SetActive(true);
+            settingsButton.interactable = false;
             LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
+            StartCoroutine(Delay("Opening"));
         }
     }
 
     private IEnumerator DelayStart()
     {
         player.canMove = false;
-        yield return new WaitForSeconds(0.48f);
+        yield return new WaitForSeconds(0.5f);
         player.canMove = true;
     }
 
-    private IEnumerator Delay()
+    private IEnumerator Delay(string condition)
     {
-        yield return new WaitForSeconds(0.2f);
-        settingMenu.SetActive(false);
+        yield return new WaitForSeconds(0.25f);
+
+        if(condition == "Closing") 
+        {
+            settingMenu.SetActive(false);
+            settingsButton.interactable = true;
+        }
+        else if(condition == "Opening") Time.timeScale = 0f;
+
+        pause = false;
+    }
+
+    IEnumerator FirstTimePauseDelay()
+    {
+        yield return new WaitForSeconds(2.0f);
+        isFirstTimePause = false;
     }
 }

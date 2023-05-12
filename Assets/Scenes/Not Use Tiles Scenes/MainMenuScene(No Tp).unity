@@ -5688,6 +5688,7 @@ MonoBehaviour:
   playerChoice: 0000
   blackScreen: {fileID: 2139769211}
   settingMenu: {fileID: 598740409}
+  settingsButton: {fileID: 523365848}
   playerAnimator: {fileID: 594941901}
   player: {fileID: 594941907}
 --- !u!4 &312147399
@@ -6197,6 +6198,7 @@ GameObject:
   - component: {fileID: 523365850}
   - component: {fileID: 523365849}
   - component: {fileID: 523365848}
+  - component: {fileID: 523365852}
   - component: {fileID: 523365851}
   m_Layer: 5
   m_Name: Button
@@ -6264,14 +6266,14 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 523365849}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 312147398}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: ButtonSetting
+        m_MethodName: OpenCloseSetting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6348,6 +6350,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &523365852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523365846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d3086d2694122c42841e0e0fa764542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &593440735
 GameObject:
   m_ObjectHideFlags: 0
@@ -6568,7 +6582,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 594941900}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8035,7 +8049,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 312147398}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: ButtonSetting
+        m_MethodName: OpenCloseSetting
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

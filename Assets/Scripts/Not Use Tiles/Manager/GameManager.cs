@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,8 +29,9 @@ public class GameManager : MonoBehaviour
     private int lineCleared;
     private int bestLineCleared;
     private int emptyBlockCount;
-    private int levelIndex;
+    private int levelIndex = 1;
     private int score;
+    private int maxScore;
     private int highscore;
     private int savedPieceIndex;
     #endregion
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     private bool isSoundPlayed;
     private bool pause;
     private bool canLevelUp;
+    private bool isFirstTimePause = true;
     #endregion
 
     #region OtherVariables
@@ -57,9 +58,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform tetrominoesParent;
     [SerializeField] private Transform playerTransform;
     private TetrominoSpawnManager tetrominoSpawner;
-    public static Transform[,] coordinate = new Transform[boardWidth, boardHeight];
+    public static Transform[,] coordinate = new Transform[boardWidth, boardHeight + 2];
     [SerializeField] private ScoreUI scoreUI;
     [SerializeField] private LineClearedUI lineClearedUI;
+    [SerializeField] private LevelUI levelUI;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private GameObject blackScreen;
     private GhostPiece ghostPiece;
@@ -80,10 +83,12 @@ public class GameManager : MonoBehaviour
         gameState = State.IsPlaying;
         tetrominoSpawner = TetrominoSpawnManager.Instance;
 
-        levelIndex = 1;
         targetTimerDelay = 3.0f;
+        maxScore = 100;
 
         canLevelUp = true;
+
+        StartCoroutine(FirstTimePauseDelay());
     }
 
     void Update()
@@ -107,18 +112,17 @@ public class GameManager : MonoBehaviour
             }  
         } 
 
-        if(Input.GetKeyDown(KeyCode.Escape) && !pause) 
+        if(Input.GetKeyDown(KeyCode.Escape) && !pause && !isFirstTimePause) 
         {
             pause = true;
+            audioManager.PlayButtonClickSFX();
             PlayPauseGame();
         }
     }
 
     public void PlayPauseGame()
     {
-        audioManager.PlayBeepingSFX();
-
-        if (settingMenu.activeInHierarchy)
+        if(settingMenu.activeInHierarchy)
         {
             Time.timeScale = 1f;
             LeanTween.value(settingMenu, UpdateScale, 1f, 0f, 0.2f);
@@ -127,10 +131,12 @@ public class GameManager : MonoBehaviour
         else
         {
             settingMenu.SetActive(true);
+            settingsButton.interactable = false;
             LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
             StartCoroutine(Delay("activating"));
         }
     }
+
     public void ReturnToMenu()
     {
         Time.timeScale = 1f;
@@ -158,12 +164,13 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RotateBackPlayer());
     } 
 
-    public void LevelUp()
+    public void LevelUp(bool atTop)
     {   
         Debug.Log("Level Up");
-        DeleteAllBlocks();
+        if(atTop) DeleteAllBlocks();
 
         levelIndex++;
+        levelUI.UpdateLevelText();
         /*if (levelIndex % 2 == 0)
         {
             Debug.Log("changeTinttoRed");
@@ -173,7 +180,7 @@ public class GameManager : MonoBehaviour
             LeanTween.value(globalVolumeGameObject, Color.red, Color.blue, 1f);
         }*/
         audioManager.PlayLevelUpSFX();
-        if(blockFallDelay > 0.2f) blockFallDelay -= 0.1f;
+        if(blockFallDelay >= 0.1f) blockFallDelay -= 0.1f;
         if(targetTimerDelay > 0.5f) targetTimerDelay -= 0.25f;
         if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
 
@@ -265,37 +272,10 @@ public class GameManager : MonoBehaviour
 
     private void AddLineCompleteScore()
     {
-        if(levelIndex <= 3)
-        {
-            if(levelIndex == 1)
-            {
-                if(lineCount == 1) AddScore(40);
-                if(lineCount == 2) AddScore(100);
-                if(lineCount == 3) AddScore(300);
-                if(lineCount >= 4) AddScore(1200);
-            }
-            else if(levelIndex == 2)
-            {
-                if(lineCount == 1) AddScore(80);
-                if(lineCount == 2) AddScore(200);
-                if(lineCount == 3) AddScore(600);
-                if(lineCount >= 4) AddScore(2400);
-            }
-            else if(levelIndex == 3)
-            {
-                if(lineCount == 1) AddScore(120);
-                if(lineCount == 2) AddScore(300);
-                if(lineCount == 3) AddScore(900);
-                if(lineCount >= 4) AddScore(3600);
-            }
-        }
-        else if(levelIndex > 3)
-        {
-            if(lineCount == 1) AddScore(40 * (levelIndex + 1));
-            if(lineCount == 2) AddScore(100 * (levelIndex + 1));
-            if(lineCount == 3) AddScore(300 * (levelIndex + 1));
-            if(lineCount >= 4) AddScore(1200 * (levelIndex + 1));
-        }
+        if(lineCount == 1) AddScore(40 * levelIndex);
+        if(lineCount == 2) AddScore(100 * levelIndex);
+        if(lineCount == 3) AddScore(300 * levelIndex);
+        if(lineCount == 4) AddScore(1200 * levelIndex);
     }
 
     public void DeleteAllBlocks()
@@ -359,7 +339,19 @@ public class GameManager : MonoBehaviour
     {
         score += scoreToAdd;
 
+        CheckScoreToLevelUp();
         scoreUI.UpdateScoreText();
+    }
+
+    private void CheckScoreToLevelUp()
+    {
+        if(score >= maxScore) 
+        {
+            LevelUp(false);
+            maxScore *= 2;
+
+            CheckScoreToLevelUp();
+        }
     }
 
     IEnumerator WaitForNextSpawn()
@@ -397,6 +389,11 @@ public class GameManager : MonoBehaviour
         return savedPieceIndex;
     }
 
+    public int GetLevelIndex()
+    {
+        return levelIndex;
+    }
+
     public bool GetCanLevelUp()
     {
         return canLevelUp;
@@ -406,14 +403,12 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.25f);
 
-        if(condition == "deActivating")
+        if(condition == "deActivating") 
         {
             settingMenu.SetActive(false);
+            settingsButton.interactable = true;
         }
-        else if(condition == "activating")
-        {
-            Time.timeScale = 0f;
-        }
+        else if(condition == "activating") Time.timeScale = 0f;
 
         pause = false;
     }
@@ -424,15 +419,21 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         if(type == "Menu") SceneManager.LoadScene(0);
-        else if(type == "Selection") SceneManager.LoadScene(1);
+        else if(type == "Selection") SceneManager.LoadScene(3);
     }
 
     private IEnumerator RotateBackPlayer()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         playerTransform.rotation = Quaternion.Euler(0, 0, 0);
         playerAnimator.Play("Teleport");
         playerTransform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
         StartCoroutine(ImminantDelay("Selection"));
+    }
+
+    IEnumerator FirstTimePauseDelay()
+    {
+        yield return new WaitForSeconds(2.5f);
+        isFirstTimePause = false;
     }
 }

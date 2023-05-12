@@ -6,12 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenuScene.unity
+    path: Assets/Scenes/Not Use Tiles Scenes/MainMenuScene.unity
     guid: ca2be414e4b8cc947bd08a0b3181acaf
   - enabled: 1
-    path: Assets/Scenes/GameModeSelection.unity
+    path: Assets/Scenes/Not Use Tiles Scenes/MainMenuScene(No Tp).unity
+    guid: a9d98275a2cd58740b681e881718cf9a
+  - enabled: 1
+    path: Assets/Scenes/Not Use Tiles Scenes/GameModeSelection.unity
     guid: ccd6d4fd1d047384ca046425943c06fe
   - enabled: 1
-    path: Assets/Scenes/GameSceneWithoutTiles.unity
+    path: Assets/Scenes/Not Use Tiles Scenes/GameModeSelection(Tp).unity
+    guid: 9180e894d598dbe419f135bb0215f713
+  - enabled: 1
+    path: Assets/Scenes/Not Use Tiles Scenes/GameSceneWithoutTiles.unity
     guid: 4ec322ccd5aa4324abd19a16fe559cda
   m_configObjects: {}
