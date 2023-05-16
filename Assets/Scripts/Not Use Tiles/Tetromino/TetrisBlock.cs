@@ -7,7 +7,6 @@ public class TetrisBlock : MonoBehaviour
     #region FloatVariables
     private float fallTimer;
     private float fallTimeDelay;
-    private float originalFallTimeDelay;
     private float maxDistance;
     #endregion
 
@@ -55,7 +54,6 @@ public class TetrisBlock : MonoBehaviour
         fallTimeDelay = gm.GetBlockFallDelay();
         cameraShake = FindObjectOfType<CameraShake>();
 
-        originalFallTimeDelay = fallTimeDelay;
         isHardDropping = false;
     }
 
@@ -109,7 +107,7 @@ public class TetrisBlock : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Space) && !playerMovement.IsFalling()) 
         {
-            fallTimeDelay = 1/1000;
+            fallTimeDelay = 0;
             isHardDropping = true;
         }
 
@@ -123,11 +121,8 @@ public class TetrisBlock : MonoBehaviour
 
     private void Fall()
     {
-        if(IsValidMove()) 
-        {
-            if(ThereIsPlayer()) return;
-            else if(!ThereIsPlayer()) transform.position += Vector3.down;
-        }
+        transform.position += Vector3.down;
+        
 
         if(!IsValidMove()) 
         {
@@ -217,6 +212,7 @@ public class TetrisBlock : MonoBehaviour
             {
                 children.gameObject.tag = "Block";
                 GameManager.coordinate[(int)position.x, (int)position.y] = children;
+                Time.timeScale = 1.0f;
             }
         }
 

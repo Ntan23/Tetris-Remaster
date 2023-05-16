@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         gameState = State.IsPlaying;
         tetrominoSpawner = TetrominoSpawnManager.Instance;
 
-        maxScore = 100;
+        maxScore = 1500;
 
         canLevelUp = true;
 
@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
         {
             if(PlayerInSideBlock() && gameState == State.IsPlaying) 
             {
-                Debug.Log("Game Over Because Palyer Inside Block");
+                Debug.Log("Game Over Because Player Inside Block");
                 GameOver();
             }
         }

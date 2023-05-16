@@ -9,9 +9,11 @@ public class LevelUpUI : MonoBehaviour
     IEnumerator FadeInFadeOut()
     {
         void UpdateAlpha(float alpha) => GetComponent<CanvasGroup>().alpha = alpha;
-        
-        LeanTween.value(gameObject, UpdateAlpha, 0f, 1f, 1.0f);
-        yield return new WaitForSeconds(1.5f);
-        LeanTween.value(gameObject, UpdateAlpha, 1f, 0f, 1.0f);
+
+        GetComponent<RectTransform>().localPosition = new Vector3(0, -50, 0);
+        GetComponent<CanvasGroup>().alpha = 1.0f;
+        yield return new WaitForSeconds(0.1f);
+        LeanTween.value(gameObject, UpdateAlpha, 1f, 0f, 0.5f);
+        LeanTween.moveLocalY(gameObject, 150f, 1.0f);
     }
 }
