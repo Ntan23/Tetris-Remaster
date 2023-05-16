@@ -55,16 +55,12 @@ public class PlayerMovement : MonoBehaviour
         runFirstTime = true;
         moveFirstTime = true;
         timer = 0.5f;
+
+        StartCoroutine(Wait());
     }
 
     void Update()
     {
-        if(runFirstTime)
-        {
-            StartCoroutine(Wait());
-            runFirstTime = false;
-        }
-
         DetectCollision();
         HeroLandingEffect();
 
@@ -79,11 +75,15 @@ public class PlayerMovement : MonoBehaviour
             isFalling = false;
         }   
 
-        if(Input.GetKeyDown(KeyCode.RightArrow) && !Input.GetKeyDown(KeyCode.LeftArrow) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
-        if(Input.GetKeyDown(KeyCode.LeftArrow) && !Input.GetKeyDown(KeyCode.RightArrow) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
+        if(!isFalling)
+        {
+            if((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.RightBracket)) && (!Input.GetKeyDown(KeyCode.LeftArrow) || !Input.GetKeyDown(KeyCode.LeftBracket)) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
 
-        if (!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
-    
+            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
+        }
+
+        if(!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
+
         if(AtTheTop() && canCheckPosition)
         {
             if(gm.GetCanLevelUp()) 
@@ -236,7 +236,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool AtTheTop()
     {
-        if(Mathf.RoundToInt(transform.position.y) == 18) return true;
+        if(Mathf.Round(transform.position.y) >= 18) return true;
         else return false;
     }
 
@@ -277,6 +277,10 @@ public class PlayerMovement : MonoBehaviour
         } 
     }
 
+    public bool IsFalling()
+    {
+        return isFalling;
+    }
     private void ThannosSlap()
     {
         gameObject.SetActive(false);
@@ -295,7 +299,7 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator WaitForPositionCheck()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
         gm.ChangeBackCanLevelUp();
     }
 }

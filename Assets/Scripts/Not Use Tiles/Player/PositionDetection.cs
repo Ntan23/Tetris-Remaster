@@ -9,11 +9,11 @@ public class PositionDetection : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.CompareTag("Block")) isInside = true;
+        if(collision.CompareTag("Block") || collision.CompareTag("Ground")) isInside = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.CompareTag("Block")) isInside = false;
+        if(collision.CompareTag("Block") || collision.CompareTag("Ground")) isInside = false;
     }
 }

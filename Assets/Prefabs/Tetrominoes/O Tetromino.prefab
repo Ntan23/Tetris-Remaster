@@ -50,9 +50,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationPoint: {x: 0.5, y: 0.5, z: 0}
-  playerLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &-2381337971579307069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,6 +73,7 @@ GameObject:
   - component: {fileID: 7198087783660109958}
   - component: {fileID: 4393440628967196407}
   - component: {fileID: 8484156340232226833}
+  - component: {fileID: 4165046953244095124}
   m_Layer: 0
   m_Name: Block
   m_TagString: FallingBlock
@@ -176,6 +174,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4165046953244095124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806457926636798850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc2d33d1f438a49a84668b60c78193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2672694882450313245
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,6 +197,7 @@ GameObject:
   - component: {fileID: 8475621369367311980}
   - component: {fileID: 6115693934708181445}
   - component: {fileID: 6789839990684643520}
+  - component: {fileID: 6915378298869200436}
   m_Layer: 0
   m_Name: Block
   m_TagString: FallingBlock
@@ -287,6 +298,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6915378298869200436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672694882450313245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc2d33d1f438a49a84668b60c78193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4286953446329182759
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,6 +321,7 @@ GameObject:
   - component: {fileID: 1665870797194505070}
   - component: {fileID: 4415077201973121935}
   - component: {fileID: 292521850255889655}
+  - component: {fileID: 4435976856329272799}
   m_Layer: 0
   m_Name: Block
   m_TagString: FallingBlock
@@ -398,6 +422,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4435976856329272799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286953446329182759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc2d33d1f438a49a84668b60c78193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5915032550292425012
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,6 +445,7 @@ GameObject:
   - component: {fileID: 8814611091695086136}
   - component: {fileID: 7535957863619262896}
   - component: {fileID: 2407037223438884486}
+  - component: {fileID: 7488134062796748288}
   m_Layer: 0
   m_Name: Block
   m_TagString: FallingBlock
@@ -509,3 +546,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7488134062796748288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5915032550292425012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc2d33d1f438a49a84668b60c78193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

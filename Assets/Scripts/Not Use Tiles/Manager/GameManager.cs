@@ -38,8 +38,6 @@ public class GameManager : MonoBehaviour
     
     #region FloatVariables
     [SerializeField] private float blockFallDelay;
-    [SerializeField] private float targetTimerDelay;
-    [SerializeField] private float deathTime;
     private float startTimer;
     #endregion
 
@@ -49,21 +47,28 @@ public class GameManager : MonoBehaviour
     private bool isSoundPlayed;
     private bool pause;
     private bool canLevelUp;
-    private bool isFirstTimePause = true;
+    private bool isFirstTime = true;
     #endregion
 
     #region OtherVariables
+    [Header("Particles FX")]
     [SerializeField] private GameObject particles;
+    [SerializeField] private ParticleSystem levelUpParticles;
     private ParticleSystem dustEffect;
-    [SerializeField] private Transform tetrominoesParent;
+    [Header("Player")]
+    [SerializeField] private Animator playerAnimator;
     [SerializeField] private Transform playerTransform;
+    
+    [Header("Tetromino")]
+    [SerializeField] private Transform tetrominoesParent;
     private TetrominoSpawnManager tetrominoSpawner;
     public static Transform[,] coordinate = new Transform[boardWidth, boardHeight + 2];
+    [Header("UI")]
     [SerializeField] private ScoreUI scoreUI;
     [SerializeField] private LineClearedUI lineClearedUI;
     [SerializeField] private LevelUI levelUI;
+    [SerializeField] private LevelUpUI levelUpUI;
     [SerializeField] private Button settingsButton;
-    [SerializeField] private Animator playerAnimator;
     [SerializeField] private GameObject blackScreen;
     private GhostPiece ghostPiece;
     private AudioManager audioManager;
@@ -83,7 +88,6 @@ public class GameManager : MonoBehaviour
         gameState = State.IsPlaying;
         tetrominoSpawner = TetrominoSpawnManager.Instance;
 
-        targetTimerDelay = 3.0f;
         maxScore = 100;
 
         canLevelUp = true;
@@ -112,11 +116,23 @@ public class GameManager : MonoBehaviour
             }  
         } 
 
-        if(Input.GetKeyDown(KeyCode.Escape) && !pause && !isFirstTimePause) 
+        if(Input.GetKeyDown(KeyCode.Escape) && !pause && !isFirstTime) 
         {
             pause = true;
             audioManager.PlayButtonClickSFX();
             PlayPauseGame();
+        }
+    }
+
+    void LateUpdate()
+    {
+        if(!isFirstTime)
+        {
+            if(PlayerInSideBlock() && gameState == State.IsPlaying) 
+            {
+                Debug.Log("Game Over Because Palyer Inside Block");
+                GameOver();
+            }
         }
     }
 
@@ -167,7 +183,14 @@ public class GameManager : MonoBehaviour
     public void LevelUp(bool atTop)
     {   
         Debug.Log("Level Up");
-        if(atTop) DeleteAllBlocks();
+        levelUpUI.ShowLeveUpUI();
+        levelUpParticles.Play();
+
+        if(atTop) 
+        {
+            DeleteAllBlocks();
+            canLevelUp = false;
+        }
 
         levelIndex++;
         levelUI.UpdateLevelText();
@@ -181,10 +204,7 @@ public class GameManager : MonoBehaviour
         }*/
         audioManager.PlayLevelUpSFX();
         if(blockFallDelay >= 0.1f) blockFallDelay -= 0.1f;
-        if(targetTimerDelay > 0.5f) targetTimerDelay -= 0.25f;
         if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
-
-        canLevelUp = false;
     }
 
     public bool ChangeBackCanLevelUp() => canLevelUp = true;
@@ -310,6 +330,15 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    private bool PlayerInSideBlock()
+    {
+        Vector2 position = RoundPosition(playerTransform.position);
+
+        if(coordinate[(int) position.x, (int) position.y] != null) return true;
+
+        return false;
+    }
+
     private void CheckScore()
     {
         if(score > highscore) PlayerPrefs.SetInt("Highscore", score);
@@ -332,7 +361,7 @@ public class GameManager : MonoBehaviour
 
     public Vector2 RoundPosition(Vector2 position)
     {
-        return new Vector2(Mathf.Round(position.x), Mathf.Round(position.y));
+        return new Vector2(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y));
     }
 
     public void AddScore(int scoreToAdd)
@@ -377,11 +406,6 @@ public class GameManager : MonoBehaviour
     public Vector3 GetPlayerPosition()
     {
         return new Vector3(Mathf.Abs(playerTransform.position.x), Mathf.Abs(playerTransform.position.y));
-    }
-
-    public float GetTargetTimerDelay()
-    {
-        return targetTimerDelay;
     }
 
     public int GetSavedPieceIndex()
@@ -434,6 +458,6 @@ public class GameManager : MonoBehaviour
     IEnumerator FirstTimePauseDelay()
     {
         yield return new WaitForSeconds(2.5f);
-        isFirstTimePause = false;
+        isFirstTime = false;
     }
 }

@@ -8,8 +8,7 @@ public class TetrisBlock : MonoBehaviour
     private float fallTimer;
     private float fallTimeDelay;
     private float originalFallTimeDelay;
-    private float targetTimer;
-    private float targetTimeDelay;
+    private float maxDistance;
     #endregion
 
     #region IntegerVariables
@@ -54,7 +53,6 @@ public class TetrisBlock : MonoBehaviour
         audioManager = AudioManager.Instance;
 
         fallTimeDelay = gm.GetBlockFallDelay();
-        targetTimeDelay = gm.GetTargetTimerDelay();
         cameraShake = FindObjectOfType<CameraShake>();
 
         originalFallTimeDelay = fallTimeDelay;
@@ -109,7 +107,7 @@ public class TetrisBlock : MonoBehaviour
 
             if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
         }
-        else if(Input.GetKeyDown(KeyCode.Space)) 
+        else if(Input.GetKeyDown(KeyCode.Space) && !playerMovement.IsFalling()) 
         {
             fallTimeDelay = 1/1000;
             isHardDropping = true;
@@ -120,30 +118,6 @@ public class TetrisBlock : MonoBehaviour
             Fall();
             
             fallTimer = 0.0f;
-        }
-    }
-
-    void FixedUpdate()
-    {
-        foreach(Transform children in transform) 
-        {
-            hit = Physics2D.Raycast(children.position, Vector2.down);
-
-            if(isHardDropping && playerMovement.IsMoving())
-            {
-                if(hit.collider != null)
-                {
-                    if(hit.distance <= 0.5f && hit.collider.CompareTag("Player"))
-                    {
-                        if(gm.IsPlaying())
-                        {
-                            Debug.Log("Hit When HardDropping & Player Move");
-                            gm.GameOver();
-                        }
-                    }
-                }
-            }
-            
         }
     }
 
