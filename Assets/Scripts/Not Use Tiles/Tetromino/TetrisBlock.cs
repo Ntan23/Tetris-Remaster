@@ -63,6 +63,12 @@ public class TetrisBlock : MonoBehaviour
         
         fallTimer += Time.deltaTime;
 
+        if(Input.GetKeyDown(KeyCode.Space) && !playerMovement.IsFalling()) 
+        {
+            fallTimeDelay = 0.0f;
+            isHardDropping = true;
+        }
+        
         if(Input.GetKeyDown(KeyCode.A)) 
         {
             isMovingLeft = true;
@@ -105,11 +111,6 @@ public class TetrisBlock : MonoBehaviour
 
             if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
         }
-        else if(Input.GetKeyDown(KeyCode.Space) && !playerMovement.IsFalling()) 
-        {
-            fallTimeDelay = 0;
-            isHardDropping = true;
-        }
 
         if(fallTimer >= (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
         {
@@ -121,8 +122,15 @@ public class TetrisBlock : MonoBehaviour
 
     private void Fall()
     {
-        transform.position += Vector3.down;
-        
+        if(IsValidMove() && !ThereIsPlayer())
+        {
+            transform.position += Vector3.down;
+
+            if(isHardDropping)
+            {
+                if(IsValidMove() && !ThereIsPlayer()) transform.position += Vector3.down;
+            } 
+        }
 
         if(!IsValidMove()) 
         {

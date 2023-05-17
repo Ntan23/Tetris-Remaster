@@ -5,21 +5,22 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    public SpriteRenderer debugSquare;
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
-    private bool runOnce;
-    private bool runFirstTime;
+    // private bool runOnce;
+    // private bool runFirstTime;
     private bool isFalling;
     private bool isFallingFromHeight;
     private bool canCheckPosition;
-    private bool moveFirstTime;
+    // private bool moveFirstTime;
     #endregion
 
     #region FloatVariables
     [SerializeField] private float rollSpeed;
     [SerializeField] private float distance;
-    private float timer;
     #endregion
 
     #region VectorVariables
@@ -52,9 +53,8 @@ public class PlayerMovement : MonoBehaviour
         gm = GameManager.Instance;
         transform.position = new Vector2(5, 25);
 
-        runFirstTime = true;
-        moveFirstTime = true;
-        timer = 0.5f;
+        // runFirstTime = true;
+        // moveFirstTime = true;
 
         StartCoroutine(Wait());
     }
@@ -81,6 +81,9 @@ public class PlayerMovement : MonoBehaviour
 
             if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
         }
+
+        if(!isFalling) debugSquare.color = Color.red; 
+        else debugSquare.color = Color.white;
 
         if(!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
 
@@ -266,7 +269,7 @@ public class PlayerMovement : MonoBehaviour
         //     dustEffect.Play();
         // }
 
-        if(rb.velocity.y < -8.0f && !detectionCollider[6]) isFallingFromHeight = true;
+        if(rb.velocity.y < -5.0f && !detectionCollider[6]) isFallingFromHeight = true;
         
         if(isFallingFromHeight && detectionCollider[6]) 
         {

@@ -24,7 +24,6 @@ public class MenuManager : MonoBehaviour
         LeanTween.value(blackScreen, UpdateAlpha, 1f, 0f, 1f);
 
         playerAnimator.Play("TeleportIncoming");
-        StartCoroutine(DelayStart());
 
         StartCoroutine(FirstTimePauseDelay());
     }
@@ -106,13 +105,6 @@ public class MenuManager : MonoBehaviour
             LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
             StartCoroutine(Delay("Opening"));
         }
-    }
-
-    private IEnumerator DelayStart()
-    {
-        player.canMove = false;
-        yield return new WaitForSeconds(0.5f);
-        player.canMove = true;
     }
 
     private IEnumerator Delay(string condition)

@@ -97,9 +97,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        startTimer += Time.deltaTime;
+        if(startTimer < 4.0f) startTimer += Time.deltaTime;
 
-        if(startTimer > 3.0f)
+        if(startTimer >= 4.0f)
         {
             if(Input.GetKeyDown(KeyCode.C) && !isSwapped)
             {

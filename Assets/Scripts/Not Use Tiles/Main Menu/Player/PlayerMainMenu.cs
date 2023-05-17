@@ -14,6 +14,7 @@ public class PlayerMainMenu : MonoBehaviour
     #region FloatVariables
     [SerializeField] private float rollSpeed;
     private float distance;
+    private float timer;
     #endregion
 
     #region VectorVariables
@@ -44,17 +45,19 @@ public class PlayerMainMenu : MonoBehaviour
         gm = GameManager.Instance;
         cameraShake = FindObjectOfType<CameraShake>();
         audioManager = AudioManager.Instance;
+
         StartCoroutine(Delay());
     }
 
 
     void Update()
     {
+        HeroLandingEffect();
+
         //Only for Start
         if(canMove)
         {
             DetectCollision();
-            HeroLandingEffect();
             if (isMoving) return;
 
             if((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.RightBracket)) && (!Input.GetKeyDown(KeyCode.LeftArrow) || !Input.GetKeyDown(KeyCode.LeftBracket)) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
@@ -212,9 +215,9 @@ public class PlayerMainMenu : MonoBehaviour
         }
     }
 
-    IEnumerator Delay()
+    IEnumerator Delay() 
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
         canMove = true;
     }
 }
