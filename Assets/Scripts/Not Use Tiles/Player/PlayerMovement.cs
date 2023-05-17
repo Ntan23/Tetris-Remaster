@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
-    public SpriteRenderer debugSquare;
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
@@ -81,9 +79,6 @@ public class PlayerMovement : MonoBehaviour
 
             if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
         }
-
-        if(!isFalling) debugSquare.color = Color.red; 
-        else debugSquare.color = Color.white;
 
         if(!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
 
@@ -284,6 +279,7 @@ public class PlayerMovement : MonoBehaviour
     {
         return isFalling;
     }
+
     private void ThannosSlap()
     {
         gameObject.SetActive(false);

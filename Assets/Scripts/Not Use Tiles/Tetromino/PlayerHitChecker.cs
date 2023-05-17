@@ -17,7 +17,7 @@ public class PlayerHitChecker : MonoBehaviour
 
             if(hit.collider != null)
             {
-                if(hit.distance <= 0.5f && hit.collider.CompareTag("Player"))
+                if(hit.distance <= 0.5f && hit.collider.CompareTag("HeadCollisionDetector"))
                 {
                     if(gm.IsPlaying())
                     {

@@ -8,6 +8,7 @@ TagManager:
   - FallingBlock
   - HardDropParticle
   - Ground
+  - HeadCollisionDetector
   layers:
   - Default
   - TransparentFX

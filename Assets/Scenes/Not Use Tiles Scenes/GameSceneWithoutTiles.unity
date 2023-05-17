@@ -11641,7 +11641,7 @@ GameObject:
   - component: {fileID: 585613564}
   m_Layer: 6
   m_Name: DustEffect
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16706,7 +16706,7 @@ GameObject:
   - component: {fileID: 823355842}
   m_Layer: 6
   m_Name: PositionHitbox (1)
-  m_TagString: Player
+  m_TagString: HeadCollisionDetector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -23810,7 +23810,7 @@ GameObject:
   - component: {fileID: 1528568295}
   m_Layer: 6
   m_Name: Non-RotatingPart
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24595,7 +24595,7 @@ GameObject:
   - component: {fileID: 1834700865}
   m_Layer: 6
   m_Name: Eyes
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -24715,7 +24715,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1861410967
 Transform:
   m_ObjectHideFlags: 0
@@ -25423,7 +25423,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d7afa42327779d4486ee8356d177afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugSquare: {fileID: 1861410968}
   detectionCollider: 0000000000000000
   rollSpeed: 10
   distance: 0
