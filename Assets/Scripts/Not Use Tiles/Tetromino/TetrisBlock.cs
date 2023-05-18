@@ -225,6 +225,7 @@ public class TetrisBlock : MonoBehaviour
         }
 
         dustEffect.transform.position = transform.position;
+        audioManager.PlayBlockRotateSFX();
     }
 
     // private void TargetPlayer()

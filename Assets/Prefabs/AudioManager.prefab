@@ -122,3 +122,10 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
     audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
+  - name: LineClear
+    clip: {fileID: 8300000, guid: 4bdf628538a9e5348aa62a1aa7e1e300, type: 3}
+    volume: 1
+    pitch: 0.68
+    loop: 0
+    source: {fileID: 0}
+    audioMixer: {fileID: 3625779646458327426, guid: 4683b0e491ccf144cabb91ab173a1412, type: 2}
