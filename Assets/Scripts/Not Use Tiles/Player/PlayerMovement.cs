@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     #region BoolVariables
     private bool isMoving;
     public bool[] detectionCollider = new bool[8];
+    public bool[] isFallingDetected = new bool[2];
     // private bool runOnce;
     // private bool runFirstTime;
     private bool isFalling;
@@ -77,7 +78,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.RightBracket)) && (!Input.GetKeyDown(KeyCode.LeftArrow) || !Input.GetKeyDown(KeyCode.LeftBracket)) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
 
-            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
+            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) {MoveLeft();
+            Debug.Log("Run");}
         }
 
         if(!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
@@ -205,6 +207,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void DetectCollision()
     {
+        isFallingDetected[0] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(0).GetComponent<PositionDetection>().isFallingBlock;
+        isFallingDetected[1] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).GetComponent<PositionDetection>().isFallingBlock;
         for(int i = 0; i < detectionCollider.Length; i++) detectionCollider[i] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
     }
 
@@ -213,14 +217,14 @@ public class PlayerMovement : MonoBehaviour
         //Ensure that the player is grounded too
         if (detectionCollider[6])
         {
-            if (Mathf.RoundToInt(transform.position.x) == 0) if (detectionCollider[2]) return false;
+            if (Mathf.RoundToInt(transform.position.x) == 0) if (detectionCollider[2] && !isFallingDetected[1]) return false;
 
-            if (Mathf.RoundToInt(transform.position.x) == 9) if (detectionCollider[0]) return false;
+            if (Mathf.RoundToInt(transform.position.x) == 9) if (detectionCollider[0] && !isFallingDetected[0]) return false;
 
             if (Mathf.RoundToInt(transform.position.x) > 0 && Mathf.RoundToInt(transform.position.x) < 9)
             {
-                if (detectionCollider[0] && detectionCollider[2]) return false;
-                if (detectionCollider[0] && detectionCollider[2] && detectionCollider[3] && detectionCollider[4]) return false;
+                if ((detectionCollider[0] && detectionCollider[2]) && !isFallingDetected[0] && !isFallingDetected[1]) return false;
+                if (detectionCollider[0] && detectionCollider[2] && detectionCollider[3] && detectionCollider[4] && !(isFallingDetected[0] && isFallingDetected[1])) return false;
             }
         }
 

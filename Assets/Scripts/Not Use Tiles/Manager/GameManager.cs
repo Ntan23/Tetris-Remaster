@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PlayPauseGame()
+    private void PlayPauseGame()
     {
         if(settingMenu.activeInHierarchy)
         {
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
         {
             settingMenu.SetActive(true);
             settingsButton.interactable = false;
-            LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.2f);
+            LeanTween.value(settingMenu, UpdateScale, 0f, 1f, 0.5f).setEaseOutBounce();
             StartCoroutine(Delay("activating"));
         }
     }
@@ -242,6 +242,7 @@ public class GameManager : MonoBehaviour
         {
             if(HasLine(i)) 
             {
+                audioManager.PlayLineClear();
                 lineCleared++;
                 lineCount++;
                 DeleteLine(i);
@@ -249,7 +250,6 @@ public class GameManager : MonoBehaviour
                 CheckPlayerInLine();
             }
         }
-
         AddLineCompleteScore();
         lineClearedUI.UpdateLineClearedText();
         lineCount = 0;
@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    private void DeleteLine(int verticalCoordinate)
+        private void DeleteLine(int verticalCoordinate)
     {
         for(int i = 0; i < boardWidth; i++)
         {
@@ -425,7 +425,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Delay(string condition)
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.5f);
 
         if(condition == "deActivating") 
         {

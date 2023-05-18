@@ -1058,7 +1058,7 @@ ParticleSystem:
           m_RotationOrder: 4
     arc:
       value: 360
-      mode: 3
+      mode: 0
       spread: 0
       speed:
         serializedVersion: 2
@@ -16544,6 +16544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &587907973
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16739,6 +16740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &823355843
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16800,7 +16802,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 321.89996, y: -113}
+  m_AnchoredPosition: {x: 321.8999, y: -113}
   m_SizeDelta: {x: 622.52, y: 95.589966}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &898306299
@@ -17248,6 +17250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &993712331
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17473,6 +17476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &1033146843
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23433,6 +23437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &1424881295
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23696,6 +23701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &1479483754
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -23953,6 +23959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &1552026549
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24417,7 +24424,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 228.44592, y: -47.796997}
+  m_AnchoredPosition: {x: 228.4458, y: -47.796875}
   m_SizeDelta: {x: 456.892, y: 95.594}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1775230871
@@ -24479,6 +24486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInside: 0
+  isFallingBlock: 0
 --- !u!61 &1799825786
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -25424,6 +25432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionCollider: 0000000000000000
+  isFallingDetected: 0000
   rollSpeed: 10
   distance: 0
 --- !u!212 &2010761982
@@ -25800,7 +25809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -359.8, y: 107.399994}
+  m_AnchoredPosition: {x: -359.8, y: 107.3999}
   m_SizeDelta: {x: 108.73999, y: 111.78003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2106015068

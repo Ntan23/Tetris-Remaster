@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 public class AudioManager : MonoBehaviour
 {
     #region Singleton
@@ -49,4 +48,6 @@ public class AudioManager : MonoBehaviour
     public void PlayButtonClickSFX() => Play("ButtonClick");
     public void PlayHugeStomp() => Play("HugeStomp");
     public void PlayTeleport() => Play("Teleport");
+    public void PlayLineClear() => Play("LineClear");
 }
+
