@@ -12,12 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Not Use Tiles Scenes/MainMenuScene(No Tp).unity
     guid: a9d98275a2cd58740b681e881718cf9a
   - enabled: 1
-    path: Assets/Scenes/Not Use Tiles Scenes/GameModeSelection.unity
+    path: Assets/Scenes/Not Use Tiles Scenes/GameControls&Highscore.unity
     guid: ccd6d4fd1d047384ca046425943c06fe
   - enabled: 1
-    path: Assets/Scenes/Not Use Tiles Scenes/GameModeSelection(Tp).unity
+    path: Assets/Scenes/Not Use Tiles Scenes/GameControl&Highscore(Tp).unity
     guid: 9180e894d598dbe419f135bb0215f713
   - enabled: 1
-    path: Assets/Scenes/Not Use Tiles Scenes/GameSceneWithoutTiles.unity
+    path: Assets/Scenes/Not Use Tiles Scenes/GameScene.unity
     guid: 4ec322ccd5aa4324abd19a16fe559cda
   m_configObjects: {}
