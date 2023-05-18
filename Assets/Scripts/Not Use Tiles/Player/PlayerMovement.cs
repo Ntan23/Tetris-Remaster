@@ -78,8 +78,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.RightBracket)) && (!Input.GetKeyDown(KeyCode.LeftArrow) || !Input.GetKeyDown(KeyCode.LeftBracket)) && !detectionCollider[2] && detectionCollider[6]) MoveRight();
 
-            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) {MoveLeft();
-            Debug.Log("Run");}
+            if((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftBracket)) && (!Input.GetKeyDown(KeyCode.RightArrow) || !Input.GetKeyDown(KeyCode.RightBracket)) && !detectionCollider[0] && detectionCollider[6]) MoveLeft();
         }
 
         if(!IsTherePossibleMove() && gm.IsPlaying()) gm.GameOver();
@@ -209,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isFallingDetected[0] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(0).GetComponent<PositionDetection>().isFallingBlock;
         isFallingDetected[1] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(2).GetComponent<PositionDetection>().isFallingBlock;
+
         for(int i = 0; i < detectionCollider.Length; i++) detectionCollider[i] = transform.GetChild(0).transform.GetChild(1).transform.GetChild(i).GetComponent<PositionDetection>().isInside;
     }
 

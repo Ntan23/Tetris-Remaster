@@ -15,7 +15,8 @@ public class PositionDetection : MonoBehaviour
             isFallingBlock = false;
             isInside = true;
         }
-        else if(collision.CompareTag("FallingBlock")){
+        else if(collision.CompareTag("FallingBlock"))
+        {
             isInside = true; 
             isFallingBlock = true;
         } 
