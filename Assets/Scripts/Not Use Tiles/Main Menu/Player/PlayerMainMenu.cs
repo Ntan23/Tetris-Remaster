@@ -194,7 +194,7 @@ public class PlayerMainMenu : MonoBehaviour
         {
             if (!runOnce && !isMoving)
             {
-                Debug.Log("Change First Pos");
+                // Debug.Log("Change First Pos");
                 firstPos.y = transform.position.y;
                 runOnce = true;
             }
