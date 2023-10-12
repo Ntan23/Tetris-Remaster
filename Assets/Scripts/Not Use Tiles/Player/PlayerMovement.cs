@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -296,10 +297,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.CompareTag("DeathArea"))
-        {
-            gm.GameOver();
-        }
+        
     }
     
     IEnumerator Wait()

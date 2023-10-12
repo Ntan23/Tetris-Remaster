@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     #region FloatVariables
     [SerializeField] private float blockFallDelay;
     private float startTimer;
+    private float colorTime;
     #endregion
 
     #region BoolVariables
@@ -73,10 +75,14 @@ public class GameManager : MonoBehaviour
     private GhostPiece ghostPiece;
     private AudioManager audioManager;
     [SerializeField] private GameObject settingMenu;
+    [SerializeField] private Light2D globalColor;
+    private Color lerpedColor;
+    private int testNumber = 1;
     #endregion
 
     void Start()
-    {
+    { 
+        globalColor = GameObject.Find("GlobalLight").GetComponent<Light2D>();
         dustEffect = particles.GetComponent<ParticleSystem>();
         highscore = PlayerPrefs.GetInt("Highscore",0);
         bestLineCleared = PlayerPrefs.GetInt("BestLineCleared",0);
@@ -97,6 +103,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.V)){
+            StartCoroutine(TurnColor(testNumber));
+            testNumber++;
+        }
         if(startTimer < 4.0f) startTimer += Time.deltaTime;
 
         if(startTimer >= 4.0f)
@@ -203,7 +213,8 @@ public class GameManager : MonoBehaviour
             LeanTween.value(globalVolumeGameObject, Color.red, Color.blue, 1f);
         }*/
         audioManager.PlayLevelUpSFX();
-        if(blockFallDelay >= 0.1f) blockFallDelay -= 0.1f;
+        StartCoroutine(TurnColor(levelIndex));
+        if (blockFallDelay >= 0.1f) blockFallDelay -= 0.1f;
         if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
     }
 
@@ -460,4 +471,77 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         isFirstTime = false;
     }
+
+    IEnumerator TurnColor(int currentLevel)
+    {
+        colorTime = 0f;
+        //Light Blue
+        if (currentLevel %4 == 1)
+        {
+            while (colorTime <= 1f)
+            {
+                colorTime += Time.deltaTime / 5f;
+                lerpedColor = Color.Lerp(globalColor.color, new Color(0f, 0.8194222f, 1f), colorTime / 25);
+                globalColor.color = lerpedColor;
+                Debug.Log(colorTime);
+                yield return null;
+            }
+            colorTime = 0f;
+        }
+        //Magenta
+        if (currentLevel %4 == 2)
+        {
+            while (colorTime <= 1f)
+            {
+                colorTime += Time.deltaTime / 5f;
+                lerpedColor = Color.Lerp(globalColor.color, new Color(1f , 0f, 0.9910693f), colorTime / 25);
+                globalColor.color = lerpedColor;
+                Debug.Log(colorTime);
+                yield return null;
+            }
+            colorTime = 0f;
+        }
+        //Yellow
+        if (currentLevel %4 == 3)
+        {
+            while (colorTime <= 1f)
+            {
+                colorTime += Time.deltaTime / 5f;
+                lerpedColor = Color.Lerp(globalColor.color, new Color(1f, 1f, 0f), colorTime / 25);
+                globalColor.color = lerpedColor;
+                Debug.Log(colorTime);
+                yield return null;
+            }
+            colorTime = 0f;
+        }
+        //Green
+        if (currentLevel %4 == 0)
+        {
+            while (colorTime <= 1f)
+            {
+                colorTime += Time.deltaTime / 5f;
+                lerpedColor = Color.Lerp(globalColor.color, new Color(0.02832089f, 0.9056604f, 0f), colorTime / 25);
+                globalColor.color = lerpedColor;
+                Debug.Log(colorTime);
+                yield return null;
+            }
+            colorTime = 0f;
+        }
+        Debug.Log("reached End");
+        yield return null;
+    }
+
+    public void DefaultColors(int option) 
+    {   
+        float globalSaturation = 50f;
+        float globalValue = 100f;
+
+
+        float lightSaturation = 82f;
+        float lightValue = 100f;
+
+        float effectSaturation = 84f;
+        float effectValue = 34f;
+    }
+
 }
