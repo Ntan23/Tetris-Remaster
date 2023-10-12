@@ -9,6 +9,7 @@ TagManager:
   - HardDropParticle
   - Ground
   - HeadCollisionDetector
+  - DeathArea
   layers:
   - Default
   - TransparentFX
