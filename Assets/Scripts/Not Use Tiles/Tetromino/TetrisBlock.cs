@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
@@ -95,22 +96,45 @@ public class TetrisBlock : MonoBehaviour
                 if(!IsValidMove()) transform.position -= Vector3.right;
             }
         }
-        else if(Input.GetKeyDown(KeyCode.Q))
+        if (!gm.inverted)
         {
-            transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
 
-            if(IsValidMove() )audioManager.PlayBlockRotateSFX();
+                if (IsValidMove()) audioManager.PlayBlockRotateSFX();
 
-            if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
-        } 
-        else if(Input.GetKeyDown(KeyCode.E))
-        {
-            transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
-                
-            if(IsValidMove()) audioManager.PlayBlockRotateSFX();
+                if (!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
 
-            if(!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+                if (IsValidMove()) audioManager.PlayBlockRotateSFX();
+
+                if (!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+            }
         }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+
+                if (IsValidMove()) audioManager.PlayBlockRotateSFX();
+
+                if (!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, 90);
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+
+                if (IsValidMove()) audioManager.PlayBlockRotateSFX();
+
+                if (!IsValidMove()) transform.RotateAround(transform.TransformPoint(rotationPoint), Vector3.forward, -90);
+            }
+        }
+
 
         if(fallTimer >= (Input.GetKey(KeyCode.S) ? fallTimeDelay / 10 : fallTimeDelay))
         {

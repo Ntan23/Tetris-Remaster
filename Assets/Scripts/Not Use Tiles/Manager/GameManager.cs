@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float blockFallDelay;
     private float startTimer;
     private float colorTime;
+    [SerializeField] private float colorChangeDuration;
     #endregion
 
     #region BoolVariables
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
     private bool pause;
     private bool canLevelUp;
     private bool isFirstTime = true;
+    public bool inverted;
     #endregion
 
     #region OtherVariables
@@ -76,12 +78,13 @@ public class GameManager : MonoBehaviour
     private AudioManager audioManager;
     [SerializeField] private GameObject settingMenu;
     [SerializeField] private Light2D globalColor;
+    [SerializeField] private ParticleSystem backgroundParticleEffect;
     private Color lerpedColor;
     private int testNumber = 1;
     #endregion
 
     void Start()
-    { 
+    {
         globalColor = GameObject.Find("GlobalLight").GetComponent<Light2D>();
         dustEffect = particles.GetComponent<ParticleSystem>();
         highscore = PlayerPrefs.GetInt("Highscore",0);
@@ -103,10 +106,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V)){
-            StartCoroutine(TurnColor(testNumber));
-            testNumber++;
-        }
         if(startTimer < 4.0f) startTimer += Time.deltaTime;
 
         if(startTimer >= 4.0f)
@@ -474,18 +473,21 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TurnColor(int currentLevel)
     {
+        var main = backgroundParticleEffect.main;
         colorTime = 0f;
         //Light Blue
         if (currentLevel %4 == 1)
         {
             while (colorTime <= 1f)
             {
-                colorTime += Time.deltaTime / 5f;
-                lerpedColor = Color.Lerp(globalColor.color, new Color(0f, 0.8194222f, 1f), colorTime / 25);
+                colorTime += Time.deltaTime / colorChangeDuration;
+                lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(208f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
+                main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(208f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
                 Debug.Log(colorTime);
                 yield return null;
             }
+            //globalColor.color = new Color(0f, 0.8194222f, 1f);
             colorTime = 0f;
         }
         //Magenta
@@ -493,12 +495,14 @@ public class GameManager : MonoBehaviour
         {
             while (colorTime <= 1f)
             {
-                colorTime += Time.deltaTime / 5f;
-                lerpedColor = Color.Lerp(globalColor.color, new Color(1f , 0f, 0.9910693f), colorTime / 25);
+                colorTime += Time.deltaTime / colorChangeDuration;
+                lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(299f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
+                main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(299f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
                 Debug.Log(colorTime);
                 yield return null;
             }
+            //globalColor.color = new Color(1f, 0f, 0.9910693f);
             colorTime = 0f;
         }
         //Yellow
@@ -506,12 +510,14 @@ public class GameManager : MonoBehaviour
         {
             while (colorTime <= 1f)
             {
-                colorTime += Time.deltaTime / 5f;
-                lerpedColor = Color.Lerp(globalColor.color, new Color(1f, 1f, 0f), colorTime / 25);
+                colorTime += Time.deltaTime / colorChangeDuration;
+                lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(57f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
+                main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(57f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
                 Debug.Log(colorTime);
                 yield return null;
             }
+            //globalColor.color = new Color(1f, 1f, 0f);
             colorTime = 0f;
         }
         //Green
@@ -519,29 +525,19 @@ public class GameManager : MonoBehaviour
         {
             while (colorTime <= 1f)
             {
-                colorTime += Time.deltaTime / 5f;
-                lerpedColor = Color.Lerp(globalColor.color, new Color(0.02832089f, 0.9056604f, 0f), colorTime / 25);
+                colorTime += Time.deltaTime / colorChangeDuration;
+                lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(115f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
+                main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(115f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
                 Debug.Log(colorTime);
                 yield return null;
             }
+            //globalColor.color = new Color(0.02832089f, 0.9056604f, 0f);
             colorTime = 0f;
         }
         Debug.Log("reached End");
         yield return null;
     }
 
-    public void DefaultColors(int option) 
-    {   
-        float globalSaturation = 50f;
-        float globalValue = 100f;
-
-
-        float lightSaturation = 82f;
-        float lightValue = 100f;
-
-        float effectSaturation = 84f;
-        float effectValue = 34f;
-    }
 
 }
