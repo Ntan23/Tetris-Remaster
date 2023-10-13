@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     private float startTimer;
     private float colorTime;
     [SerializeField] private float colorChangeDuration;
+    [SerializeField] private float intensityDuration;
     #endregion
 
     #region BoolVariables
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
     private GhostPiece ghostPiece;
     private AudioManager audioManager;
     [SerializeField] private GameObject settingMenu;
+    [SerializeField] private GameObject globalLight;
     [SerializeField] private Light2D globalColor;
     [SerializeField] private ParticleSystem backgroundParticleEffect;
     private Color lerpedColor;
@@ -85,7 +87,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        globalColor = GameObject.Find("GlobalLight").GetComponent<Light2D>();
+        globalLight = GameObject.Find("GlobalLight");
+        globalColor = globalLight.GetComponent<Light2D>();
         dustEffect = particles.GetComponent<ParticleSystem>();
         highscore = PlayerPrefs.GetInt("Highscore",0);
         bestLineCleared = PlayerPrefs.GetInt("BestLineCleared",0);
@@ -187,7 +190,9 @@ public class GameManager : MonoBehaviour
         CheckLineCleared();
         gameState = State.GameOver;
         StartCoroutine(RotateBackPlayer());
-    } 
+    }
+
+    private void UpdateIntensityLight(float intensity) => globalLight.GetComponent<Light2D>().intensity = intensity;
 
     public void LevelUp(bool atTop)
     {   
@@ -213,6 +218,7 @@ public class GameManager : MonoBehaviour
         }*/
         audioManager.PlayLevelUpSFX();
         StartCoroutine(TurnColor(levelIndex));
+        LeanTween.value(globalLight, UpdateIntensityLight, 5f, 2f, intensityDuration);
         if (blockFallDelay >= 0.1f) blockFallDelay -= 0.1f;
         if(tetrominoesParent.childCount == 0) StartCoroutine(WaitForNextSpawn());
     }
@@ -484,7 +490,6 @@ public class GameManager : MonoBehaviour
                 lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(208f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
                 main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(208f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
-                Debug.Log(colorTime);
                 yield return null;
             }
             //globalColor.color = new Color(0f, 0.8194222f, 1f);
@@ -499,7 +504,6 @@ public class GameManager : MonoBehaviour
                 lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(299f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
                 main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(299f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
-                Debug.Log(colorTime);
                 yield return null;
             }
             //globalColor.color = new Color(1f, 0f, 0.9910693f);
@@ -514,7 +518,6 @@ public class GameManager : MonoBehaviour
                 lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(57f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
                 main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(57f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
-                Debug.Log(colorTime);
                 yield return null;
             }
             //globalColor.color = new Color(1f, 1f, 0f);
@@ -529,7 +532,6 @@ public class GameManager : MonoBehaviour
                 lerpedColor = Color.Lerp(globalColor.color, Color.HSVToRGB(115f / 360, 100f / 100, 91f / 100), colorTime * Time.deltaTime);
                 main.startColor = Color.Lerp(backgroundParticleEffect.startColor, Color.HSVToRGB(115f / 360, 84f / 100, 34f / 100), colorTime * Time.deltaTime);
                 globalColor.color = lerpedColor;
-                Debug.Log(colorTime);
                 yield return null;
             }
             //globalColor.color = new Color(0.02832089f, 0.9056604f, 0f);
